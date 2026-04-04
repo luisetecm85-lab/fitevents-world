@@ -1,0 +1,9 @@
+*{box-sizing:border-box;margin:0;padding:0}
+html,body,#root{min-height:100%;background:#0f0f0f;color:#f0f0f0;font-family:'Barlow',sans-serif}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:#1a1a1a}
+::-webkit-scrollbar-thumb{background:#FF6B2B;border-radius:2px}
+select,input,textarea{color:#f0f0f0;background:#1e1e1e;border:1px solid rgba(255,255,255,0.1);border-radius:6px;font-family:'Barlow',sans-serif;font-size:14px;outline:none}
+select:focus,input:focus,textarea:focus{border-color:#FF6B2B}
+button{cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.5px}
+@keyframes spin{to{transform:rotate(360deg)}}
