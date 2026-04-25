@@ -1,7 +1,10 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react'
+import { db, auth } from './firebase'
+import { collection, doc, getDocs, setDoc, updateDoc, onSnapshot, writeBatch } from 'firebase/firestore'
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, updateProfile } from 'firebase/auth'
 
 
-const DISC_COLORS={CrossFit:"#FF6B2B",Hyrox:"#4DA6FF",OCR:"#4CAF50",Fuerza:"#B56AFF",Functional:"#FFB300"};
+const DISC_COLORS={CrossFit:"#FF6500",Hyrox:"#4DA6FF",OCR:"#4CAF50",Fuerza:"#B56AFF",Functional:"#FFB300"};
 const DISCIPLINES=["Todos","CrossFit","Hyrox","OCR","Fuerza","Functional"];
 const FORMATS=["Individual","Parejas","Trios","Cuartetos","Equipos +4"];
 const SCORE_KEYS=["precio","dificultad","organizacion","ambiente","categorias"];
@@ -9,7 +12,7 @@ const SLABELS={precio:"Precio/calidad",dificultad:"Dificultad",organizacion:"Org
 const ADMIN_PASS="fitevents2026";
 
 const ADS=[
-  {id:1,brand:"PICSIL",claim:"Equipamiento tecnico para atletas de elite",cta:"Ver productos",url:"https://picsil.com",color:"#FF6B2B",logo:"💪"},
+  {id:1,brand:"PICSIL",claim:"Equipamiento tecnico para atletas de elite",cta:"Ver productos",url:"https://picsil.com",color:"#FF6500",logo:"💪"},
   {id:2,brand:"ON RUNNING",claim:"Zapatillas disenadas para rendimiento hibrido",cta:"Descubrir",url:"https://on-running.com",color:"#4DA6FF",logo:"👟"},
   {id:3,brand:"BAREBELLS",claim:"Proteina sin azucar. Sabor sin compromiso.",cta:"Probar ahora",url:"https://barebells.com",color:"#B56AFF",logo:"🍫"},
 ];
@@ -266,7 +269,7 @@ const avgS=(arr,k)=>arr.length?arr.reduce((s,r)=>s+r.scores[k],0)/arr.length:0;
 const overall=(r)=>!r.length?0:SCORE_KEYS.reduce((s,k)=>s+avgS(r,k),0)/SCORE_KEYS.length;
 const f1=(n)=>n.toFixed(1);
 const fd=(d)=>{if(!d)return"";const[y,m,dy]=d.split("-");const mn=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];return`${parseInt(dy)} ${mn[parseInt(m)-1]} ${y}`;};
-const Stars=({n,sz=12})=><span>{[1,2,3,4,5].map(i=><span key={i} style={{color:i<=Math.round(n)?"#FF6B2B":"#2a2a2a",fontSize:sz}}>★</span>)}</span>;
+const Stars=({n,sz=12})=><span>{[1,2,3,4,5].map(i=><span key={i} style={{color:i<=Math.round(n)?"#FF6500":"#2a2a2a",fontSize:sz}}>★</span>)}</span>;
 const Badge=({disc,sm})=><span style={{background:DISC_COLORS[disc]||"#555",color:"#fff",padding:sm?"1px 5px":"3px 8px",borderRadius:4,fontSize:sm?9:11,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,display:"inline-block"}}>{disc}</span>;
 const VBadge=({sm})=><span style={{background:"rgba(77,166,255,0.15)",color:"#4DA6FF",border:"1px solid rgba(77,166,255,0.3)",padding:sm?"1px 5px":"2px 7px",borderRadius:3,fontSize:sm?9:10,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700}}>✓ VERIFICADO</span>;
 const FBadge=({sm})=><span style={{background:"rgba(255,193,7,0.12)",color:"#FFB300",border:"1px solid rgba(255,193,7,0.25)",padding:sm?"1px 5px":"2px 7px",borderRadius:3,fontSize:sm?9:10,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700}}>⭐ DESTACADO</span>;
@@ -323,16 +326,16 @@ function ContactForm({onClose}){
         <div style={{fontSize:36,marginBottom:10}}>✓</div>
         <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:22,fontWeight:800,color:"#4CAF50",marginBottom:6}}>Solicitud enviada</div>
         <p style={{fontSize:13,color:"#888",marginBottom:18}}>Te contactamos en menos de 24h para confirmar y gestionar el pago.</p>
-        <button onClick={onClose} style={{background:"#FF6B2B",color:"#fff",border:"none",padding:"8px 20px",borderRadius:6,fontSize:14,fontWeight:600,cursor:"pointer"}}>Cerrar</button>
+        <button onClick={onClose} style={{background:"#FF6500",color:"#fff",border:"none",padding:"8px 20px",borderRadius:6,fontSize:14,fontWeight:600,cursor:"pointer"}}>Cerrar</button>
       </div>:<>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:14}}>
           <div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:21,fontWeight:800,marginBottom:2}}>Verifica tu evento</div><p style={{fontSize:12,color:"#888"}}>Aumenta la visibilidad y confianza en FitEvents World</p></div>
           <button onClick={onClose} style={{background:"none",border:"none",color:"#555",fontSize:20,padding:"0 4px"}}>✕</button>
         </div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>
-          {PLANS.map(p=><div key={p.id} onClick={()=>setF(x=>({...x,plan:p.id}))} style={{background:f.plan===p.id?"rgba(255,107,43,0.1)":"#1a1a1a",border:`1px solid ${f.plan===p.id?"#FF6B2B":"rgba(255,255,255,0.07)"}`,borderRadius:8,padding:11,cursor:"pointer"}}>
-            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:f.plan===p.id?"#FF6B2B":"#f0f0f0",marginBottom:2}}>{p.label}</div>
-            <div style={{fontSize:16,fontWeight:800,color:"#FF6B2B",marginBottom:4}}>{p.price}</div>
+          {PLANS.map(p=><div key={p.id} onClick={()=>setF(x=>({...x,plan:p.id}))} style={{background:f.plan===p.id?"rgba(255,107,43,0.1)":"#1a1a1a",border:`1px solid ${f.plan===p.id?"#FF6500":"rgba(255,255,255,0.07)"}`,borderRadius:8,padding:11,cursor:"pointer"}}>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:f.plan===p.id?"#FF6500":"#f0f0f0",marginBottom:2}}>{p.label}</div>
+            <div style={{fontSize:16,fontWeight:800,color:"#FF6500",marginBottom:4}}>{p.price}</div>
             <div style={{fontSize:11,color:"#777",lineHeight:1.4}}>{p.desc}</div>
           </div>)}
         </div>
@@ -340,7 +343,7 @@ function ContactForm({onClose}){
         <input value={f.email} onChange={e=>setF(x=>({...x,email:e.target.value}))} placeholder="Email de contacto *" style={{width:"100%",padding:"8px 11px",marginBottom:8}}/>
         <input value={f.event} onChange={e=>setF(x=>({...x,event:e.target.value}))} placeholder="Nombre del evento *" style={{width:"100%",padding:"8px 11px",marginBottom:8}}/>
         <textarea value={f.msg} onChange={e=>setF(x=>({...x,msg:e.target.value}))} placeholder="Informacion adicional o preguntas..." style={{width:"100%",padding:"8px 11px",height:66,resize:"none",marginBottom:12}}/>
-        <button onClick={()=>{if(!f.name||!f.email||!f.event)return;setSent(true);}} style={{background:"#FF6B2B",color:"#fff",border:"none",padding:"9px 0",borderRadius:6,fontSize:14,fontWeight:700,cursor:"pointer",width:"100%"}}>Enviar solicitud</button>
+        <button onClick={()=>{if(!f.name||!f.email||!f.event)return;setSent(true);}} style={{background:"#FF6500",color:"#fff",border:"none",padding:"9px 0",borderRadius:6,fontSize:14,fontWeight:700,cursor:"pointer",width:"100%"}}>Enviar solicitud</button>
         <p style={{fontSize:11,color:"#555",textAlign:"center",marginTop:7}}>Te contactamos en menos de 24h · Pago tras confirmacion</p>
       </>}
     </div>
@@ -350,11 +353,11 @@ function ContactForm({onClose}){
 function AdminEventEditor({ev,onSave,onClose}){
   const[d,setD]=useState({...ev});
   const IN2={width:"100%",padding:"7px 10px",marginBottom:7};
-  const PL2=(a)=>({background:a?"#FF6B2B":"#1a1a1a",color:a?"#fff":"#777",border:`1px solid ${a?"#FF6B2B":"rgba(255,255,255,0.1)"}`,padding:"3px 8px",borderRadius:16,fontSize:11,cursor:"pointer"});
+  const PL2=(a)=>({background:a?"#FF6500":"#1a1a1a",color:a?"#fff":"#777",border:`1px solid ${a?"#FF6500":"rgba(255,255,255,0.1)"}`,padding:"3px 8px",borderRadius:16,fontSize:11,cursor:"pointer"});
   return<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.96)",zIndex:1100,display:"flex",alignItems:"center",justifyContent:"center",padding:12}}>
     <div style={{background:"#161616",border:"1px solid rgba(255,107,43,0.25)",borderRadius:12,padding:20,width:"100%",maxWidth:520,maxHeight:"92vh",overflowY:"auto"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
-        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:18,fontWeight:800,color:"#FF6B2B"}}>Editar evento #{ev.id}</div>
+        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:18,fontWeight:800,color:"#FF6500"}}>Editar evento #{ev.id}</div>
         <button onClick={onClose} style={{background:"none",border:"none",color:"#555",fontSize:18,cursor:"pointer"}}>✕</button>
       </div>
 
@@ -413,7 +416,7 @@ function AdminEventEditor({ev,onSave,onClose}){
 
       {/* Botones guardar / cancelar */}
       <div style={{display:"flex",gap:8}}>
-        <button onClick={()=>onSave(d)} style={{flex:1,background:"#FF6B2B",color:"#fff",border:"none",padding:"9px 0",borderRadius:6,fontSize:13,fontWeight:700,cursor:"pointer"}}>Guardar cambios</button>
+        <button onClick={()=>onSave(d)} style={{flex:1,background:"#FF6500",color:"#fff",border:"none",padding:"9px 0",borderRadius:6,fontSize:13,fontWeight:700,cursor:"pointer"}}>Guardar cambios</button>
         <button onClick={onClose} style={{background:"#2a2a2a",color:"#fff",border:"none",padding:"9px 16px",borderRadius:6,fontSize:13,fontWeight:600,cursor:"pointer"}}>Cancelar</button>
       </div>
     </div>
@@ -423,8 +426,8 @@ function AdminEventEditor({ev,onSave,onClose}){
 function AdminPanel({evs,setEvs,onClose}){
   const[pass,setPass]=useState("");const[auth,setAuth]=useState(false);
   const[search,setSearch]=useState("");const[editing,setEditing]=useState(null);
-  const toggle=(id,field)=>setEvs(x=>x.map(e=>e.id===id?{...e,[field]:!e[field]}:e));
-  const saveEdit=(updated)=>{setEvs(x=>x.map(e=>e.id===updated.id?updated:e));setEditing(null);};
+  const toggle=async(id,field)=>{const ev=evs.find(e=>e.id===id);if(!ev)return;await updateDoc(doc(db,"events",String(id)),{[field]:!ev[field]});};
+  const saveEdit=async(updated)=>{await updateDoc(doc(db,"events",String(updated.id)),updated);setEditing(null);};
   const filtered=evs.filter(e=>e.name.toLowerCase().includes(search.toLowerCase()));
 
   if(!auth)return<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.92)",zIndex:999,display:"flex",alignItems:"center",justifyContent:"center"}}>
@@ -432,7 +435,7 @@ function AdminPanel({evs,setEvs,onClose}){
       <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:20,fontWeight:800,marginBottom:12}}>Panel Admin</div>
       <input type="password" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==="Enter"&&pass===ADMIN_PASS&&setAuth(true)} placeholder="Contrasena" style={{width:"100%",padding:"8px 11px",marginBottom:10}}/>
       <div style={{display:"flex",gap:8}}>
-        <button onClick={()=>{if(pass===ADMIN_PASS)setAuth(true);}} style={{flex:1,background:"#FF6B2B",color:"#fff",border:"none",padding:"8px 0",borderRadius:6,fontSize:13,fontWeight:600}}>Entrar</button>
+        <button onClick={()=>{if(pass===ADMIN_PASS)setAuth(true);}} style={{flex:1,background:"#FF6500",color:"#fff",border:"none",padding:"8px 0",borderRadius:6,fontSize:13,fontWeight:600}}>Entrar</button>
         <button onClick={onClose} style={{flex:1,background:"#2a2a2a",color:"#fff",border:"none",padding:"8px 0",borderRadius:6,fontSize:13,fontWeight:600}}>Cancelar</button>
       </div>
     </div>
@@ -442,7 +445,7 @@ function AdminPanel({evs,setEvs,onClose}){
     {editing&&<AdminEventEditor ev={editing} onSave={saveEdit} onClose={()=>setEditing(null)}/>}
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.95)",zIndex:999,display:"flex",flexDirection:"column"}}>
       <div style={{background:"#141414",borderBottom:"1px solid rgba(255,107,43,0.2)",padding:"10px 18px",display:"flex",alignItems:"center",gap:10,flexShrink:0}}>
-        <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:17,fontWeight:800,color:"#FF6B2B"}}>⚙ ADMIN — FitEvents World</span>
+        <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:17,fontWeight:800,color:"#FF6500"}}>⚙ ADMIN — FitEvents World</span>
         <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Buscar evento..." style={{padding:"5px 10px",flex:1,maxWidth:280}}/>
         <span style={{fontSize:12,color:"#555"}}>{filtered.length} eventos</span>
         <button onClick={onClose} style={{background:"#2a2a2a",color:"#fff",border:"none",padding:"5px 12px",borderRadius:6,fontSize:12,fontWeight:600,marginLeft:"auto"}}>Cerrar</button>
@@ -452,7 +455,7 @@ function AdminPanel({evs,setEvs,onClose}){
         <span style={{fontSize:10,color:"#4DA6FF",fontWeight:700,textAlign:"center"}}>VERIF.</span>
         <span style={{fontSize:10,color:"#FFB300",fontWeight:700,textAlign:"center"}}>DEST.</span>
         <span style={{fontSize:10,color:"#4CAF50",fontWeight:700,textAlign:"center"}}>LOGO</span>
-        <span style={{fontSize:10,color:"#FF6B2B",fontWeight:700,textAlign:"center"}}>EDITAR</span>
+        <span style={{fontSize:10,color:"#FF6500",fontWeight:700,textAlign:"center"}}>EDITAR</span>
       </div>
       <div style={{flex:1,overflowY:"auto",padding:"4px 18px 16px"}}>
         {filtered.map(ev=><div key={ev.id} style={{display:"grid",gridTemplateColumns:"1fr 80px 80px 80px 80px",gap:6,padding:"6px 0",borderBottom:"1px solid rgba(255,255,255,0.04)",alignItems:"center"}}>
@@ -483,7 +486,7 @@ function AdminPanel({evs,setEvs,onClose}){
             {ev.logo&&<button onClick={()=>setEvs(x=>x.map(ev2=>ev2.id===ev.id?{...ev2,logo:null}:ev2))} style={{display:"block",margin:"1px auto 0",background:"none",border:"none",color:"#555",fontSize:9,cursor:"pointer"}}>✕</button>}
           </div>
           <div style={{textAlign:"center"}}>
-            <button onClick={()=>setEditing(ev)} style={{background:"rgba(255,107,43,0.12)",border:"1px solid rgba(255,107,43,0.25)",color:"#FF6B2B",padding:"3px 8px",borderRadius:5,fontSize:10,fontWeight:700,cursor:"pointer"}}>
+            <button onClick={()=>setEditing(ev)} style={{background:"rgba(255,107,43,0.12)",border:"1px solid rgba(255,107,43,0.25)",color:"#FF6500",padding:"3px 8px",borderRadius:5,fontSize:10,fontWeight:700,cursor:"pointer"}}>
               ✏ Edit
             </button>
           </div>
@@ -517,7 +520,7 @@ function MapView({events,onCity}){
       const g=document.createElementNS("http://www.w3.org/2000/svg","g");
       g.setAttribute("transform",`translate(${sx},${sy})`);g.style.cursor="pointer";
       const ci=document.createElementNS("http://www.w3.org/2000/svg","circle");
-      ci.setAttribute("r","11");ci.setAttribute("fill",p.v?"#4DA6FF":"#FF6B2B");ci.setAttribute("stroke","#fff");ci.setAttribute("stroke-width","2");
+      ci.setAttribute("r","11");ci.setAttribute("fill",p.v?"#4DA6FF":"#FF6500");ci.setAttribute("stroke","#fff");ci.setAttribute("stroke-width","2");
       const tx=document.createElementNS("http://www.w3.org/2000/svg","text");
       tx.setAttribute("text-anchor","middle");tx.setAttribute("dy","4");tx.setAttribute("fill","#fff");tx.setAttribute("font-size","9");tx.setAttribute("font-weight","700");tx.setAttribute("font-family","Barlow Condensed,sans-serif");tx.textContent=p.n;
       g.addEventListener("mouseenter",()=>{ci.setAttribute("r","13");});g.addEventListener("mouseleave",()=>{ci.setAttribute("r","11");});
@@ -551,7 +554,7 @@ function MapView({events,onCity}){
   },[st,drawPins]);
   const go=(t)=>{if(!tRef.current)return;const{d3,proj,iT}=tRef.current;const svg=d3.select(svgRef.current);const zoom=d3.zoom().scaleExtent([0.8,20]).on("zoom",e=>{d3.select(svgRef.current).select("g").attr("transform",e.transform);drawPins(proj,e.transform);});svg.call(zoom);svg.transition().duration(600).call(zoom.transform,t==="es"?iT:d3.zoomIdentity);};
   return<div style={{position:"relative",background:"#0d1117",borderRadius:10,overflow:"hidden",border:"1px solid rgba(255,255,255,0.08)"}}>
-    {st==="loading"&&<div style={{height:380,display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:8}}><div style={{width:30,height:30,border:"3px solid #333",borderTopColor:"#FF6B2B",borderRadius:"50%",animation:"spin 1s linear infinite"}}/><span style={{color:"#666",fontSize:13}}>Cargando mapa...</span></div>}
+    {st==="loading"&&<div style={{height:380,display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:8}}><div style={{width:30,height:30,border:"3px solid #333",borderTopColor:"#FF6500",borderRadius:"50%",animation:"spin 1s linear infinite"}}/><span style={{color:"#666",fontSize:13}}>Cargando mapa...</span></div>}
     {st==="error"&&<div style={{height:380,display:"flex",alignItems:"center",justifyContent:"center",color:"#555"}}>No se pudo cargar el mapa</div>}
     {st==="ready"&&<>
       <svg ref={svgRef} width="100%" height="400" style={{display:"block",cursor:"grab"}}><g ref={pinRef}/></svg>
@@ -561,7 +564,7 @@ function MapView({events,onCity}){
       </div>
       <div style={{padding:"5px 12px",display:"flex",gap:12,fontSize:11,color:"#555"}}>
         <span><span style={{color:"#4DA6FF"}}>●</span> Verificado</span>
-        <span><span style={{color:"#FF6B2B"}}>●</span> Sin verificar</span>
+        <span><span style={{color:"#FF6500"}}>●</span> Sin verificar</span>
         <span style={{marginLeft:"auto"}}>Scroll = zoom · Click = filtrar</span>
       </div>
     </>}
@@ -570,7 +573,33 @@ function MapView({events,onCity}){
 
 export default function App(){
   const[evs,setEvs]=useState(EVENTS);
-  const[users,setUsers]=useState([{u:"ana_garcia",name:"Ana Garcia",p:"1234"},{u:"carlos_m",name:"Carlos M.",p:"1234"},{u:"maria_fit",name:"Maria Fit",p:"1234"}]);
+  const[loading,setLoading]=useState(true);
+
+  useEffect(()=>{
+    const unsub=onAuthStateChanged(auth,(user)=>{
+      if(user){setMe({u:user.uid,name:user.displayName||user.email.split("@")[0],email:user.email});}
+      else{setMe(null);}
+    });
+    return unsub;
+  },[]);
+
+  useEffect(()=>{
+    const seed=async()=>{
+      const snap=await getDocs(collection(db,"events"));
+      if(snap.empty){
+        const batch=writeBatch(db);
+        EVENTS.forEach(ev=>{batch.set(doc(db,"events",String(ev.id)),ev);});
+        await batch.commit();
+      }
+    };
+    seed().catch(console.error);
+    const unsub=onSnapshot(collection(db,"events"),(snap)=>{
+      const data=snap.docs.map(d=>({...d.data(),id:Number(d.id)||d.id}));
+      if(data.length>0){setEvs(data);}
+      setLoading(false);
+    });
+    return unsub;
+  },[]);
   const[me,setMe]=useState(null);
   const[aMode,setAMode]=useState("login");const[aF,setAF]=useState({u:"",name:"",p:"",p2:""});
   const[aErr,setAErr]=useState("");const[aOk,setAOk]=useState("");
@@ -582,7 +611,6 @@ export default function App(){
   const[cmpIds,setCmpIds]=useState([]);const[rkDisc,setRkDisc]=useState("Todos");const[rkFmts,setRkFmts]=useState([]);
   const[nEv,setNEv]=useState({name:"",disc:"CrossFit",city:"",prov:"Madrid",country:"Espana",date:"",price:"",desc:"",fmts:[],logo:null});
   const[evErr,setEvErr]=useState("");const[evOk,setEvOk]=useState("");
-  const[att,setAtt]=useState({});
   const[rSc,setRSc]=useState({precio:0,dificultad:0,organizacion:0,ambiente:0,categorias:0});const[rCom,setRCom]=useState("");const[rErr,setRErr]=useState("");
   const[showContact,setShowContact]=useState(false);const[showAdmin,setShowAdmin]=useState(false);
   const today=new Date().toISOString().split("T")[0];
@@ -607,16 +635,16 @@ export default function App(){
   const ranked=useMemo(()=>{let l=evs.filter(e=>e.ratings.length>0);if(rkDisc!=="Todos")l=l.filter(e=>e.disc===rkDisc);if(rkFmts.length)l=l.filter(e=>(e.fmts||[]).some(f=>rkFmts.includes(f)));return l.sort((a,b)=>overall(b.ratings)-overall(a.ratings));},[evs,rkDisc,rkFmts]);
   const cmpEvs=useMemo(()=>cmpIds.map(id=>evs.find(e=>e.id===id)).filter(Boolean),[cmpIds,evs]);
   const clr=()=>{setFDisc("Todos");setFCountry("Todos");setFCities([]);setSearch("");setSort("date");setMaxP(500);setOnlyFut(false);setOnlyNew(false);setFFmts([]);};
-  const login=()=>{setAErr("");const u=users.find(x=>x.u===aF.u&&x.p===aF.p);if(!u)return setAErr("Datos incorrectos");setMe(u);setView("list");setAF({u:"",name:"",p:"",p2:""});};
-  const reg=()=>{setAErr("");if(!aF.u||!aF.name||!aF.p)return setAErr("Rellena todos los campos");if(aF.p!==aF.p2)return setAErr("Contrasenas no coinciden");if(users.find(x=>x.u===aF.u))return setAErr("Usuario ya existe");const nu={u:aF.u,name:aF.name,p:aF.p};setUsers(x=>[...x,nu]);setMe(nu);setAOk(`Bienvenido/a, ${nu.name}`);setTimeout(()=>{setAOk("");setView("list");},2000);setAF({u:"",name:"",p:"",p2:""});};
-  const rate=(ev)=>{setRErr("");if(!me)return setRErr("Inicia sesion");if(SCORE_KEYS.some(k=>!rSc[k]))return setRErr("Puntua todas las categorias");if(ev.ratings.find(r=>r.user===me.u))return setRErr("Ya has valorado");const nr={user:me.u,date:today,scores:{...rSc},comment:rCom};setEvs(x=>x.map(e=>e.id===ev.id?{...e,ratings:[...e.ratings,nr]}:e));setSel(x=>({...x,ratings:[...x.ratings,nr]}));setRSc({precio:0,dificultad:0,organizacion:0,ambiente:0,categorias:0});setRCom("");};
-  const tog=(id)=>{if(!me)return;setAtt(x=>{const l=x[id]||[];return{...x,[id]:l.includes(me.u)?l.filter(u=>u!==me.u):[...l,me.u]};});};
-  const addEv=()=>{setEvErr("");if(!nEv.name||!nEv.city||!nEv.date)return setEvErr("Nombre, ciudad y fecha obligatorios");const c=PC[nEv.prov]||{lat:40.42,lon:-3.70};setEvs(x=>[...x,{...nEv,id:Date.now(),price:Number(nEv.price)||0,ratings:[],lat:c.lat,lon:c.lon,feat:false,verified:false}]);setNEv({name:"",disc:"CrossFit",city:"",prov:"Madrid",country:"Espana",date:"",price:"",desc:"",fmts:[],logo:null});setEvOk("Evento anadido");setTimeout(()=>{setEvOk("");setView("list");},2000);};
+  const login=async()=>{setAErr("");try{await signInWithEmailAndPassword(auth,aF.u,aF.p);setView("list");setAF({u:"",name:"",p:"",p2:""});}catch(e){setAErr("Email o contraseña incorrectos");}};
+  const reg=async()=>{setAErr("");if(!aF.u||!aF.name||!aF.p)return setAErr("Rellena todos los campos");if(aF.p!==aF.p2)return setAErr("Contrasenas no coinciden");if(aF.p.length<6)return setAErr("Min 6 caracteres");try{const cred=await createUserWithEmailAndPassword(auth,aF.u,aF.p);await updateProfile(cred.user,{displayName:aF.name});setAOk(`Bienvenido/a, ${aF.name}`);setTimeout(()=>{setAOk("");setView("list");},2000);setAF({u:"",name:"",p:"",p2:""});}catch(e){if(e.code==="auth/email-already-in-use")setAErr("Email ya registrado");else setAErr("Error al crear cuenta");}};
+  const rate=async(ev)=>{setRErr("");if(!me)return setRErr("Inicia sesion");if(SCORE_KEYS.some(k=>!rSc[k]))return setRErr("Puntua todas las categorias");if(ev.ratings&&ev.ratings.find(r=>r.user===me.u))return setRErr("Ya has valorado");const nr={user:me.u,date:today,scores:{...rSc},comment:rCom};const updated={...ev,ratings:[...(ev.ratings||[]),nr]};await updateDoc(doc(db,"events",String(ev.id)),{ratings:updated.ratings});setSel(updated);setRSc({precio:0,dificultad:0,organizacion:0,ambiente:0,categorias:0});setRCom("");};
+  const tog=async(id)=>{if(!me)return;const ev=evs.find(e=>e.id===id);if(!ev)return;const att2=ev.attendance||[];const updated=att2.includes(me.u)?att2.filter(u=>u!==me.u):[...att2,me.u];await updateDoc(doc(db,"events",String(id)),{attendance:updated});};
+  const addEv=async()=>{setEvErr("");if(!nEv.name||!nEv.city||!nEv.date)return setEvErr("Nombre, ciudad y fecha obligatorios");const c=PC[nEv.prov]||{lat:40.42,lon:-3.70};const newEvent={...nEv,id:Date.now(),price:Number(nEv.price)||0,ratings:[],attendance:[],lat:c.lat,lon:c.lon,feat:false,verified:false};await setDoc(doc(db,"events",String(newEvent.id)),newEvent);setNEv({name:"",disc:"CrossFit",city:"",prov:"Madrid",country:"Espana",date:"",price:"",desc:"",fmts:[],logo:null});setEvOk("Evento anadido");setTimeout(()=>{setEvOk("");setView("list");},2000);};
 
-  const BT=(v)=>({background:v==="p"?"#FF6B2B":v==="d"?"#EF5350":v==="s"?"#4CAF50":"#242424",color:"#fff",border:"none",padding:"8px 14px",borderRadius:6,cursor:"pointer",fontSize:13,fontWeight:600});
-  const PL=(a)=>({background:a?"#FF6B2B":"#1a1a1a",color:a?"#fff":"#777",border:`1px solid ${a?"#FF6B2B":"rgba(255,255,255,0.08)"}`,padding:"4px 9px",borderRadius:20,fontSize:12,cursor:"pointer"});
+  const BT=(v)=>({background:v==="p"?"#FF6500":v==="d"?"#EF5350":v==="s"?"#4CAF50":"#242424",color:"#fff",border:"none",padding:"8px 14px",borderRadius:6,cursor:"pointer",fontSize:13,fontWeight:600});
+  const PL=(a)=>({background:a?"#FF6500":"#1a1a1a",color:a?"#fff":"#777",border:`1px solid ${a?"#FF6500":"rgba(255,255,255,0.08)"}`,padding:"4px 9px",borderRadius:20,fontSize:12,cursor:"pointer"});
   const IN={width:"100%",padding:"8px 11px",marginBottom:9};
-  const CRD={background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,overflow:"hidden",marginBottom:9,cursor:"pointer"};
+  const CRD={background:"#1e1e1e",border:"1px solid #333",borderRadius:12,overflow:"hidden",marginBottom:10,cursor:"pointer",transition:"transform 0.15s,box-shadow 0.15s"};
   const TABS=[{id:"list",l:"Eventos"},{id:"map",l:"Mapa"},{id:"upc",l:"Proximos"},{id:"rnk",l:"Ranking"},{id:"cmp",l:"Comparar"},{id:"add",l:"+ Anadir"},...(me?[{id:"prof",l:me.name}]:[{id:"auth",l:"Entrar"}])];
 
   const listWithAds=useMemo(()=>{
@@ -625,22 +653,23 @@ export default function App(){
     return r;
   },[filtered]);
 
-  return<div style={{minHeight:"100vh",background:"#0f0f0f",display:"flex",flexDirection:"column"}}>
+  if(loading)return<div style={{minHeight:"100vh",background:"#0a0a0a",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:12}}><div style={{width:36,height:36,border:"3px solid #222",borderTopColor:"#FF6500",borderRadius:"50%",animation:"spin 1s linear infinite"}}/><span style={{color:"#444",fontSize:13,fontFamily:"'Barlow Condensed',sans-serif",letterSpacing:1}}>CARGANDO...</span></div>;
+  return<div style={{minHeight:"100vh",background:"#0a0a0a",display:"flex",flexDirection:"column"}}>
     {showContact&&<ContactForm onClose={()=>setShowContact(false)}/>}
     {showAdmin&&<AdminPanel evs={evs} setEvs={setEvs} onClose={()=>setShowAdmin(false)}/>}
 
-    <header style={{background:"#141414",borderBottom:"1px solid rgba(255,107,43,0.2)",padding:"0 14px",height:52,display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,flexShrink:0}}>
-      <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:19,fontWeight:800,letterSpacing:1}}>🏋️ FIT<span style={{color:"#FF6B2B"}}>EVENTS</span> WORLD</span>
+    <header style={{background:"#0d0d0d",borderBottom:"1px solid #1e1e1e",padding:"0 20px",height:62,display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,flexShrink:0}}>
+      <div style={{display:"flex",flexDirection:"column",lineHeight:1}}><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:24,fontWeight:900,letterSpacing:2,textTransform:"uppercase"}}>FIT<span style={{color:"#FF6500"}}>EVENTS</span> WORLD</span><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,letterSpacing:3,color:"#444",textTransform:"uppercase",marginTop:2}}>DESCUBRE · COMPARA · COMPITE</span></div>
       <div style={{display:"flex",gap:7,alignItems:"center"}}>
-        <button onClick={()=>setShowContact(true)} style={{background:"rgba(255,107,43,0.12)",color:"#FF6B2B",border:"1px solid rgba(255,107,43,0.25)",padding:"4px 11px",borderRadius:6,fontSize:11,fontWeight:700}}>✓ Verificar evento</button>
-        {me&&<span style={{fontSize:11,color:"#777"}}>Hola, <strong style={{color:"#FF6B2B"}}>{me.name}</strong></span>}
+        <button onClick={()=>setShowContact(true)} style={{background:"rgba(255,107,43,0.12)",color:"#FF6500",border:"1px solid rgba(255,107,43,0.25)",padding:"4px 11px",borderRadius:6,fontSize:11,fontWeight:700}}>✓ Verificar evento</button>
+        {me&&<span style={{fontSize:11,color:"#777"}}>Hola, <strong style={{color:"#FF6500"}}>{me.name}</strong></span>}
         <button onClick={()=>setShowAdmin(true)} style={{background:"none",border:"none",color:"#2a2a2a",fontSize:15,padding:"2px 5px"}} title="Admin">⚙</button>
       </div>
     </header>
     <nav style={{background:"#141414",borderBottom:"1px solid rgba(255,255,255,0.05)",padding:"0 10px",display:"flex",overflowX:"auto",flexShrink:0}}>
-      {TABS.map(t=><button key={t.id} onClick={()=>setView(t.id)} style={{background:"transparent",color:(view===t.id||(view==="det"&&t.id==="list"))?"#f0f0f0":"#555",border:"none",padding:"9px 10px",borderBottom:(view===t.id||(view==="det"&&t.id==="list"))?"2px solid #FF6B2B":"2px solid transparent",borderRadius:0,cursor:"pointer",whiteSpace:"nowrap",fontSize:12,fontWeight:view===t.id?700:400}}>{t.l}</button>)}
+      {TABS.map(t=><button key={t.id} onClick={()=>setView(t.id)} style={{background:"transparent",color:(view===t.id||(view==="det"&&t.id==="list"))?"#fff":"#888",border:"none",padding:"9px 10px",borderBottom:(view===t.id||(view==="det"&&t.id==="list"))?"2px solid #FF6500":"2px solid transparent",borderRadius:0,cursor:"pointer",whiteSpace:"nowrap",fontSize:12,fontWeight:view===t.id?700:400}}>{t.l}</button>)}
     </nav>
-    <main style={{flex:1,padding:"14px 12px",maxWidth:900,margin:"0 auto",width:"100%"}}>
+    <main style={{flex:1,padding:"16px 20px",maxWidth:1200,margin:"0 auto",width:"100%"}}>
 
       {view==="list"&&<div>
         <SponsorSlot/>
@@ -649,27 +678,22 @@ export default function App(){
           <button onClick={()=>setFCities([])} style={{...BT(""),padding:"1px 7px",fontSize:11}}>✕</button>
         </div>}
         <div style={{display:"flex",gap:5,marginBottom:5,flexWrap:"wrap"}}>
-          <div style={{position:"relative",flex:"1 1 150px"}}>
-            <span style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",color:"#444",fontSize:12}}>🔍</span>
-            <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Buscar..." style={{...IN,paddingLeft:26,marginBottom:0}}/>
-          </div>
-          <select value={fDisc} onChange={e=>setFDisc(e.target.value)} style={{padding:"7px 7px"}}>{DISCIPLINES.map(d=><option key={d}>{d}</option>)}</select>
-          <select value={fCountry} onChange={e=>{setFCountry(e.target.value);setFCities([]);}} style={{padding:"7px 7px"}}>{countries.map(c=><option key={c}>{c}</option>)}</select>
-          <select value={sort} onChange={e=>setSort(e.target.value)} style={{padding:"7px 7px"}}>
-            <option value="date">Fecha</option><option value="rating">Valoracion</option><option value="price">Precio</option>
-          </select>
+          <div style={{display:"flex",flexDirection:"column",gap:3,flex:"1 1 180px"}}><span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"#555",textTransform:"uppercase"}}>Buscar evento</span><div style={{position:"relative"}}><span style={{position:"absolute",left:9,top:"50%",transform:"translateY(-50%)",color:"#555",fontSize:12}}>🔍</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Nombre, ciudad..." style={{...IN,paddingLeft:28,marginBottom:0}}/></div></div>
+          <div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"#555",textTransform:"uppercase"}}>Disciplina</span><select value={fDisc} onChange={e=>setFDisc(e.target.value)} style={{padding:"8px 10px",minWidth:120}}>{DISCIPLINES.map(d=><option key={d}>{d}</option>)}</select></div>
+          <div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"#555",textTransform:"uppercase"}}>País</span><select value={fCountry} onChange={e=>{setFCountry(e.target.value);setFCities([]);}} style={{padding:"8px 10px",minWidth:100}}>{countries.map(c=><option key={c}>{c}</option>)}</select></div>
+          <div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"#555",textTransform:"uppercase"}}>Ordenar por</span><select value={sort} onChange={e=>setSort(e.target.value)} style={{padding:"8px 10px",minWidth:110}}><option value="date">📅 Fecha</option><option value="rating">⭐ Valoración</option><option value="price">💶 Precio</option></select></div>
         </div>
         <div style={{display:"flex",gap:5,marginBottom:6,alignItems:"center"}}>
           <button onClick={()=>setShowAdv(x=>!x)} style={{...BT(""),padding:"3px 9px",fontSize:11}}>{showAdv?"▲":"▼"} Filtros</button>
           <button onClick={clr} style={{...BT(""),padding:"3px 9px",fontSize:11}}>Limpiar</button>
-          <span style={{fontSize:11,color:"#444",marginLeft:"auto"}}><strong style={{color:"#FF6B2B"}}>{filtered.length}</strong> eventos</span>
+          <span style={{fontSize:11,color:"#444",marginLeft:"auto"}}><strong style={{color:"#FF6500"}}>{filtered.length}</strong> eventos</span>
         </div>
         {showAdv&&<div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:8,padding:11,marginBottom:8}}>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9,marginBottom:7}}>
-            <label style={{fontSize:11,color:"#888"}}>Max: <strong style={{color:"#FF6B2B"}}>{maxP}EUR</strong><input type="range" min={0} max={500} value={maxP} onChange={e=>setMaxP(Number(e.target.value))} style={{width:"100%",marginTop:3,accentColor:"#FF6B2B"}}/></label>
+            <label style={{fontSize:11,color:"#888"}}>Max: <strong style={{color:"#FF6500"}}>{maxP}EUR</strong><input type="range" min={0} max={500} value={maxP} onChange={e=>setMaxP(Number(e.target.value))} style={{width:"100%",marginTop:3,accentColor:"#FF6500"}}/></label>
             <div style={{display:"flex",flexDirection:"column",gap:4}}>
-              <label style={{fontSize:11,color:"#888",display:"flex",gap:5,cursor:"pointer"}}><input type="checkbox" checked={onlyFut} onChange={e=>setOnlyFut(e.target.checked)} style={{accentColor:"#FF6B2B"}}/>Solo futuros</label>
-              <label style={{fontSize:11,color:"#888",display:"flex",gap:5,cursor:"pointer"}}><input type="checkbox" checked={onlyNew} onChange={e=>setOnlyNew(e.target.checked)} style={{accentColor:"#FF6B2B"}}/>Sin valorar</label>
+              <label style={{fontSize:11,color:"#888",display:"flex",gap:5,cursor:"pointer"}}><input type="checkbox" checked={onlyFut} onChange={e=>setOnlyFut(e.target.checked)} style={{accentColor:"#FF6500"}}/>Solo futuros</label>
+              <label style={{fontSize:11,color:"#888",display:"flex",gap:5,cursor:"pointer"}}><input type="checkbox" checked={onlyNew} onChange={e=>setOnlyNew(e.target.checked)} style={{accentColor:"#FF6500"}}/>Sin valorar</label>
             </div>
           </div>
           <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{FORMATS.map(f=><button key={f} onClick={()=>setFFmts(x=>x.includes(f)?x.filter(y=>y!==f):[...x,f])} style={PL(fFmts.includes(f))}>{f}</button>)}</div>
@@ -677,9 +701,9 @@ export default function App(){
         {listWithAds.length===0?<div style={{textAlign:"center",padding:"50px 0",color:"#333"}}>Sin resultados</div>:
         listWithAds.map((item,idx)=>{
           if(item.type==="ad")return<AdBanner key={`ad${idx}`} ad={item.ad}/>;
-          const ev=item.ev,oa=overall(ev.ratings),al=att[ev.id]||[],ia=me&&al.includes(me.u),dc=DISC_COLORS[ev.disc]||"#555";
+          const ev=item.ev,oa=overall(ev.ratings),al=(ev.attendance||[]),ia=me&&al.includes(me.u),dc=DISC_COLORS[ev.disc]||"#555";
           const borderColor=ev.verified?"#4DA6FF":ev.feat?"#FFB300":dc;
-          return<div key={ev.id} style={{...CRD,borderLeft:`3px solid ${borderColor}`}} onClick={()=>{setSel(ev);setView("det");}}>
+          return<div key={ev.id} style={{...CRD,borderLeft:`4px solid ${borderColor}`,boxShadow:"0 2px 12px rgba(0,0,0,0.5)"}} onClick={()=>{setSel(ev);setView("det");}}>
             <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"9px 12px",gap:9}}>
               <EventLogo ev={ev} size={36}/>
               <div style={{flex:1,minWidth:0}}>
@@ -687,21 +711,21 @@ export default function App(){
                   <Badge disc={ev.disc}/>
                   {ev.verified&&<VBadge sm/>}
                   {ev.feat&&!ev.verified&&<FBadge sm/>}
-                  {(ev.fmts||[]).map(f=><span key={f} style={{fontSize:9,color:"#555",background:"#1a1a1a",padding:"1px 4px",borderRadius:3}}>{f}</span>)}
+                  {(ev.fmts||[]).map(f=><span key={f} style={{fontSize:9,color:"#999",background:"#2a2a2a",padding:"2px 6px",borderRadius:3,border:"1px solid #3a3a3a"}}>{f}</span>)}
                 </div>
-                <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,marginBottom:2}}>{ev.name}</div>
-                <div style={{fontSize:11,color:"#555",display:"flex",gap:7,flexWrap:"wrap"}}>
+                <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:18,fontWeight:900,marginBottom:3,textTransform:"uppercase",letterSpacing:0.5}}>{ev.name}</div>
+                <div style={{fontSize:12,color:"#aaa",display:"flex",gap:7,flexWrap:"wrap"}}>
                   <span>{ev.city}</span><span>{fd(ev.date)}</span><span>{ev.price===0?"Gratis":`${ev.price}EUR`}</span>
                   {al.length>0&&<span style={{color:"#4CAF50"}}>+{al.length}</span>}
                 </div>
               </div>
               <div style={{textAlign:"center",minWidth:52,marginLeft:7}}>
-                <div style={{fontSize:17,fontWeight:800,color:oa>0?"#FF6B2B":"#2a2a2a",fontFamily:"'Barlow Condensed',sans-serif"}}>{oa>0?f1(oa):"—"}</div>
+                <div style={{fontSize:24,fontWeight:900,color:oa>0?"#FF6500":"#2a2a2a",fontFamily:"'Barlow Condensed',sans-serif",lineHeight:1}}>{oa>0?f1(oa):"—"}</div>
                 <Stars n={oa} sz={9}/>
                 <div style={{fontSize:9,color:"#444"}}>{ev.ratings.length}op</div>
                 <div style={{display:"flex",gap:2,marginTop:3,justifyContent:"center"}}>
                   <button onClick={e=>{e.stopPropagation();if(!me){setView("auth");return;}tog(ev.id);}} style={{fontSize:12,background:"none",border:"none"}}>{ia?"💚":"🤍"}</button>
-                  <button onClick={e=>{e.stopPropagation();setCmpIds(x=>x.includes(ev.id)?x.filter(i=>i!==ev.id):[...x.slice(-1),ev.id]);setView("cmp");}} style={{fontSize:10,background:cmpIds.includes(ev.id)?"rgba(255,107,43,0.12)":"none",border:cmpIds.includes(ev.id)?"1px solid #FF6B2B":"1px solid #333",borderRadius:4,padding:"2px 4px",color:cmpIds.includes(ev.id)?"#FF6B2B":"#555"}}>⚖</button>
+                  <button onClick={e=>{e.stopPropagation();setCmpIds(x=>x.includes(ev.id)?x.filter(i=>i!==ev.id):[...x.slice(-1),ev.id]);setView("cmp");}} style={{fontSize:10,background:cmpIds.includes(ev.id)?"rgba(255,107,43,0.12)":"none",border:cmpIds.includes(ev.id)?"1px solid #FF6500":"1px solid #333",borderRadius:4,padding:"2px 4px",color:cmpIds.includes(ev.id)?"#FF6500":"#555"}}>⚖</button>
                 </div>
               </div>
             </div>
@@ -710,7 +734,7 @@ export default function App(){
       </div>}
 
       {view==="det"&&sel&&(()=>{
-        const ev=sel,oa=overall(ev.ratings),al=att[ev.id]||[],ia=me&&al.includes(me.u),hasR=me&&ev.ratings.find(r=>r.user===me.u),dc=DISC_COLORS[ev.disc]||"#555";
+        const ev=sel,oa=overall(ev.ratings),al=(ev.attendance||[]),ia=me&&al.includes(me.u),hasR=me&&ev.ratings.find(r=>r.user===me.u),dc=DISC_COLORS[ev.disc]||"#555";
         return<div>
           <button onClick={()=>setView("list")} style={{...BT(""),marginBottom:11,padding:"4px 10px",fontSize:12}}>Volver</button>
           <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,overflow:"hidden"}}>
@@ -729,7 +753,7 @@ export default function App(){
                   </div>
                 </div>
                 <div style={{textAlign:"center"}}>
-                  <div style={{fontSize:28,fontWeight:800,color:oa>0?"#FF6B2B":"#2a2a2a",fontFamily:"'Barlow Condensed',sans-serif"}}>{oa>0?f1(oa):"—"}</div>
+                  <div style={{fontSize:28,fontWeight:800,color:oa>0?"#FF6500":"#2a2a2a",fontFamily:"'Barlow Condensed',sans-serif"}}>{oa>0?f1(oa):"—"}</div>
                   <Stars n={oa} sz={13}/><div style={{fontSize:10,color:"#444",marginBottom:7}}>{ev.ratings.length} val.</div>
                   <button onClick={()=>tog(ev.id)} style={{...BT(ia?"s":""),padding:"5px 12px",fontSize:12}}>{ia?"Asistire":"Quiero ir"}</button>
                   {al.length>0&&<div style={{fontSize:10,color:"#4CAF50",marginTop:3}}>{al.length} personas</div>}
@@ -741,8 +765,8 @@ export default function App(){
               <div style={{fontSize:10,fontWeight:700,letterSpacing:2,color:"#444",textTransform:"uppercase",marginBottom:8}}>Puntuacion media</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"4px 15px"}}>
                 {SCORE_KEYS.map(k=><div key={k} style={{marginBottom:5}}>
-                  <div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}><span style={{fontSize:11,color:"#888"}}>{SLABELS[k]}</span><span style={{fontSize:11,color:"#FF6B2B",fontWeight:600}}>{avgS(ev.ratings,k)>0?f1(avgS(ev.ratings,k)):"—"}</span></div>
-                  <div style={{background:"#222",borderRadius:4,height:5}}><div style={{width:`${avgS(ev.ratings,k)?avgS(ev.ratings,k)/5*100:0}%`,height:"100%",background:"linear-gradient(90deg,#FF6B2B,#FF9A5C)",borderRadius:4}}/></div>
+                  <div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}><span style={{fontSize:11,color:"#888"}}>{SLABELS[k]}</span><span style={{fontSize:11,color:"#FF6500",fontWeight:600}}>{avgS(ev.ratings,k)>0?f1(avgS(ev.ratings,k)):"—"}</span></div>
+                  <div style={{background:"#222",borderRadius:4,height:5}}><div style={{width:`${avgS(ev.ratings,k)?avgS(ev.ratings,k)/5*100:0}%`,height:"100%",background:"linear-gradient(90deg,#FF6500,#FF9A5C)",borderRadius:4}}/></div>
                 </div>)}
               </div>
             </div>}
@@ -767,7 +791,7 @@ export default function App(){
                 <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"3px 11px",marginBottom:7}}>
                   {SCORE_KEYS.map(k=><div key={k} style={{marginBottom:4}}>
                     <div style={{fontSize:11,color:"#888",marginBottom:2}}>{SLABELS[k]}</div>
-                    <div style={{display:"flex",gap:3}}>{[1,2,3,4,5].map(n=><button key={n} onClick={()=>setRSc(x=>({...x,[k]:n}))} style={{width:23,height:23,borderRadius:3,border:"none",background:rSc[k]>=n?"#FF6B2B":"#222",color:"#fff",fontSize:11,cursor:"pointer"}}>★</button>)}</div>
+                    <div style={{display:"flex",gap:3}}>{[1,2,3,4,5].map(n=><button key={n} onClick={()=>setRSc(x=>({...x,[k]:n}))} style={{width:23,height:23,borderRadius:3,border:"none",background:rSc[k]>=n?"#FF6500":"#222",color:"#fff",fontSize:11,cursor:"pointer"}}>★</button>)}</div>
                   </div>)}
                 </div>
                 <textarea value={rCom} onChange={e=>setRCom(e.target.value)} placeholder="Comentario..." style={{...IN,height:48,resize:"none"}}/>
@@ -795,12 +819,12 @@ export default function App(){
             const dL=Math.ceil((new Date(ev.date)-new Date())/86400000),urg=dL<=30,dc=DISC_COLORS[ev.disc]||"#555";
             const bc=ev.verified?"#4DA6FF":ev.feat?"#FFB300":dc;
             return<div key={ev.id} style={{background:"#161616",border:`1px solid ${urg?"rgba(255,107,43,0.28)":"rgba(255,255,255,0.06)"}`,borderRadius:10,padding:11,cursor:"pointer",borderLeft:`4px solid ${bc}`}} onClick={()=>{setSel(ev);setView("det");}}>
-              <div style={{display:"flex",justifyContent:"space-between",marginBottom:6,alignItems:"center"}}><EventLogo ev={ev} size={30}/><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:11,fontWeight:700,color:urg?"#FF6B2B":"#4CAF50"}}>{dL<=0?"Hoy":dL===1?"Manana":`${dL}d`}</span></div>
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:6,alignItems:"center"}}><EventLogo ev={ev} size={30}/><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:11,fontWeight:700,color:urg?"#FF6500":"#4CAF50"}}>{dL<=0?"Hoy":dL===1?"Manana":`${dL}d`}</span></div>
               <div style={{marginBottom:3}}><Badge disc={ev.disc}/>{ev.verified&&<span style={{marginLeft:4}}><VBadge sm/></span>}</div>
               <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700,marginBottom:2}}>{ev.name}</div>
               <div style={{fontSize:11,color:"#555"}}>{fd(ev.date)} · {ev.city}</div>
               <div style={{fontSize:11,color:"#555",marginBottom:8}}>{ev.price===0?"Gratis":`${ev.price}EUR`}</div>
-              <button onClick={e=>{e.stopPropagation();if(!me){setView("auth");return;}tog(ev.id);}} style={{...BT((att[ev.id]||[]).includes(me?.u)?"s":""),padding:"4px 9px",fontSize:11,width:"100%"}}>{(att[ev.id]||[]).includes(me?.u)?"Asistire":"Quiero ir"}</button>
+              <button onClick={e=>{e.stopPropagation();if(!me){setView("auth");return;}tog(ev.id);}} style={{...BT(((ev.attendance||[])).includes(me?.u)?"s":""),padding:"4px 9px",fontSize:11,width:"100%"}}>{((ev.attendance||[])).includes(me?.u)?"Asistire":"Quiero ir"}</button>
             </div>;
           })}
         </div>
@@ -818,14 +842,14 @@ export default function App(){
         ranked.map((ev,i)=>{
           const oa=overall(ev.ratings),medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":null,dc=DISC_COLORS[ev.disc]||"#555";
           return<div key={ev.id} style={{...CRD,borderLeft:`3px solid ${ev.verified?"#4DA6FF":dc}`,display:"flex",alignItems:"center",padding:"8px 12px",gap:9}} onClick={()=>{setSel(ev);setView("det");}}>
-            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:15,fontWeight:800,color:medal?"#FF6B2B":"#333",minWidth:22}}>{medal||`#${i+1}`}</div>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:15,fontWeight:800,color:medal?"#FF6500":"#333",minWidth:22}}>{medal||`#${i+1}`}</div>
             <EventLogo ev={ev} size={32}/>
             <div style={{flex:1}}>
               <div style={{display:"flex",gap:3,marginBottom:2,alignItems:"center"}}><Badge disc={ev.disc} sm/>{ev.verified&&<VBadge sm/>}</div>
               <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700}}>{ev.name}</div>
               <div style={{fontSize:10,color:"#555"}}>{ev.city} · {fd(ev.date)}</div>
             </div>
-            <div style={{textAlign:"center",minWidth:44}}><div style={{fontSize:16,fontWeight:800,color:"#FF6B2B",fontFamily:"'Barlow Condensed',sans-serif"}}>{f1(oa)}</div><Stars n={oa} sz={9}/></div>
+            <div style={{textAlign:"center",minWidth:44}}><div style={{fontSize:16,fontWeight:800,color:"#FF6500",fontFamily:"'Barlow Condensed',sans-serif"}}>{f1(oa)}</div><Stars n={oa} sz={9}/></div>
           </div>;
         })}
       </div>}
@@ -912,16 +936,16 @@ export default function App(){
           <div style={{fontSize:10,fontWeight:700,letterSpacing:2,color:"#444",textTransform:"uppercase",marginBottom:7}}>Mis valoraciones</div>
           {evs.filter(e=>e.ratings.find(r=>r.user===me.u)).map(ev=><div key={ev.id} style={{...CRD,padding:"7px 11px",display:"flex",gap:7,alignItems:"center"}} onClick={()=>{setSel(ev);setView("det");}}><Badge disc={ev.disc} sm/><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700}}>{ev.name}</div></div>)}
         </div>}
-        {evs.filter(e=>(att[e.id]||[]).includes(me.u)).length>0&&<div>
+        {evs.filter(e=>((e.attendance||[])).includes(me.u)).length>0&&<div>
           <div style={{fontSize:10,fontWeight:700,letterSpacing:2,color:"#444",textTransform:"uppercase",marginBottom:7}}>Quiero asistir</div>
-          {evs.filter(e=>(att[e.id]||[]).includes(me.u)).map(ev=><div key={ev.id} style={{...CRD,padding:"7px 11px",display:"flex",gap:7,alignItems:"center"}} onClick={()=>{setSel(ev);setView("det");}}><Badge disc={ev.disc} sm/><div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700}}>{ev.name}</div><div style={{fontSize:10,color:"#555"}}>{fd(ev.date)} · {ev.city}</div></div></div>)}
+          {evs.filter(e=>((e.attendance||[])).includes(me.u)).map(ev=><div key={ev.id} style={{...CRD,padding:"7px 11px",display:"flex",gap:7,alignItems:"center"}} onClick={()=>{setSel(ev);setView("det");}}><Badge disc={ev.disc} sm/><div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700}}>{ev.name}</div><div style={{fontSize:10,color:"#555"}}>{fd(ev.date)} · {ev.city}</div></div></div>)}
         </div>}
       </div>}
 
       {view==="auth"&&<div style={{maxWidth:310,margin:"0 auto"}}>
         <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,padding:17}}>
           <div style={{display:"flex",gap:0,marginBottom:13,background:"#111",borderRadius:7,padding:3}}>
-            {["login","register"].map(m=><button key={m} onClick={()=>{setAMode(m);setAErr("");setAOk("");}} style={{flex:1,background:aMode===m?"#FF6B2B":"transparent",color:aMode===m?"#fff":"#555",border:"none",padding:"5px 0",borderRadius:5,fontSize:12,fontWeight:600}}>{m==="login"?"Entrar":"Registrarse"}</button>)}
+            {["login","register"].map(m=><button key={m} onClick={()=>{setAMode(m);setAErr("");setAOk("");}} style={{flex:1,background:aMode===m?"#FF6500":"transparent",color:aMode===m?"#fff":"#555",border:"none",padding:"5px 0",borderRadius:5,fontSize:12,fontWeight:600}}>{m==="login"?"Entrar":"Registrarse"}</button>)}
           </div>
           {aOk?<div style={{background:"rgba(76,175,80,0.09)",border:"1px solid rgba(76,175,80,0.18)",borderRadius:8,padding:13,textAlign:"center"}}><div style={{fontSize:20,marginBottom:4}}>✓</div><div style={{color:"#4CAF50",fontWeight:600}}>Registro completado</div><div style={{color:"#888",fontSize:12,marginTop:3}}>{aOk}</div></div>:
           <div>
@@ -940,11 +964,10 @@ export default function App(){
     <footer style={{background:"#141414",borderTop:"1px solid rgba(255,255,255,0.04)",padding:"9px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:7}}>
       <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:12,color:"#444"}}>FitEvents World 2026</span>
       <div style={{display:"flex",gap:10,alignItems:"center"}}>
-        <button onClick={()=>setShowContact(true)} style={{background:"none",border:"none",color:"#FF6B2B",fontSize:11,fontWeight:700,padding:0}}>✓ Verificar mi evento</button>
+        <button onClick={()=>setShowContact(true)} style={{background:"none",border:"none",color:"#FF6500",fontSize:11,fontWeight:700,padding:0}}>✓ Verificar mi evento</button>
         <span style={{color:"#333",fontSize:11}}>·</span>
         <span style={{color:"#444",fontSize:11}}>contacto@fiteventsworld.com</span>
       </div>
     </footer>
   </div>;
 }
-
