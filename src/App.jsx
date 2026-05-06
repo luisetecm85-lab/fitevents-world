@@ -1,4 +1,6 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react'
+import * as d3 from 'd3'
+import * as topojson from 'topojson-client'
 import { db, auth } from './firebase'
 import { collection, doc, getDocs, setDoc, updateDoc, onSnapshot, writeBatch } from 'firebase/firestore'
 import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, updateProfile } from 'firebase/auth'
@@ -512,7 +514,7 @@ function MapView({events,onCity}){
     return Object.values(m);
   },[events]);
   const drawPins=useCallback((proj,t)=>{
-    const c=pinRef.current;if(!c)return;
+    const svg=d3.select(svgRef.current);let c=svg.select(".pins-layer").node();if(!c){svg.append("g").attr("class","pins-layer");c=svg.select(".pins-layer").node();}if(!c)return;
     while(c.firstChild)c.removeChild(c.firstChild);
     pins.forEach(p=>{
       const xy=proj([p.lon,p.lat]);if(!xy)return;
@@ -532,32 +534,32 @@ function MapView({events,onCity}){
     if(_gc.ok&&_gc.geo){setSt("ready");return;}
     let dead=false;
     const load=(src)=>new Promise((r,j)=>{if(document.querySelector(`script[src="${src}"]`)){r();return;}const s=document.createElement("script");s.src=src;s.onload=r;s.onerror=j;document.head.appendChild(s);});
-    (async()=>{try{if(!_gc.ok){await load("https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js");await load("https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js");_gc.ok=true;}if(!_gc.geo){_gc.geo=await window.d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json");}if(!dead)setSt("ready");}catch(e){if(!dead)setSt("error");}})();
+    (async()=>{try{if(!_gc.ok){_gc.ok=true;}if(!_gc.geo){const r=await fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json");_gc.geo=await r.json();}if(!dead)setSt("ready");}catch(e){if(!dead)setSt("error");}})();
     return()=>{dead=true;};
   },[]);
   useEffect(()=>{
-    if(st!=="ready"||!svgRef.current)return;
+    if(st!=="ready"||!svgRef.current)return;(async()=>{
     const W=svgRef.current.clientWidth||800,H=400;
-    const d3=window.d3,tp=window.topojson;
-    const proj=d3.geoNaturalEarth1().scale(140).translate([W/2,H/2]);
+    const tp=topojson;
+    const proj=d3.geoNaturalEarth1().scale(140).translate([W/2,H/2]);const feature=tp.feature;const mesh=tp.mesh;
     const path=d3.geoPath().projection(proj);
     const sp=proj([-3.7,40.4]);
     const iT=d3.zoomIdentity.translate(W/2-sp[0]*4,H/2-sp[1]*4).scale(4);
     tRef.current={proj,iT,d3};
     const svg=d3.select(svgRef.current);svg.selectAll("*").remove();
-    const ctries=tp.feature(_gc.geo,_gc.geo.objects.countries);
+    const ctries=feature(_gc.geo,_gc.geo.objects.countries);
     const zoom=d3.zoom().scaleExtent([0.8,20]).on("zoom",e=>{gm.attr("transform",e.transform);drawPins(proj,e.transform);});
     svg.call(zoom);
     const gm=svg.append("g");
     gm.selectAll("path").data(ctries.features).enter().append("path").attr("d",path).attr("fill","#1e2530").attr("stroke","#2d3748").attr("stroke-width",0.5);
     svg.call(zoom.transform,iT);drawPins(proj,iT);
-  },[st,drawPins]);
+  })();},[st,drawPins]);
   const go=(t)=>{if(!tRef.current)return;const{d3,proj,iT}=tRef.current;const svg=d3.select(svgRef.current);const zoom=d3.zoom().scaleExtent([0.8,20]).on("zoom",e=>{d3.select(svgRef.current).select("g").attr("transform",e.transform);drawPins(proj,e.transform);});svg.call(zoom);svg.transition().duration(600).call(zoom.transform,t==="es"?iT:d3.zoomIdentity);};
   return<div style={{position:"relative",background:"#0d1117",borderRadius:10,overflow:"hidden",border:"1px solid rgba(255,255,255,0.08)"}}>
     {st==="loading"&&<div style={{height:380,display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:8}}><div style={{width:30,height:30,border:"3px solid #333",borderTopColor:"#FF6500",borderRadius:"50%",animation:"spin 1s linear infinite"}}/><span style={{color:"#666",fontSize:13}}>Cargando mapa...</span></div>}
     {st==="error"&&<div style={{height:380,display:"flex",alignItems:"center",justifyContent:"center",color:"#555"}}>No se pudo cargar el mapa</div>}
     {st==="ready"&&<>
-      <svg ref={svgRef} width="100%" height="400" style={{display:"block",cursor:"grab"}}><g ref={pinRef}/></svg>
+      <svg ref={svgRef} width="100%" height="400" style={{display:"block",cursor:"grab"}}></svg>
       <div style={{position:"absolute",top:10,right:10,display:"flex",gap:6}}>
         <button onClick={()=>go("es")} style={{padding:"5px 9px",background:"rgba(0,0,0,0.8)",border:"1px solid rgba(255,255,255,0.15)",borderRadius:6,color:"#f0f0f0",fontSize:11}}>España</button>
         <button onClick={()=>go("w")} style={{padding:"5px 9px",background:"rgba(0,0,0,0.8)",border:"1px solid rgba(255,255,255,0.15)",borderRadius:6,color:"#f0f0f0",fontSize:11}}>Mundo</button>
