@@ -18,7 +18,6 @@ const ADS=[
   {id:2,brand:"ON RUNNING",claim:"Zapatillas disenadas para rendimiento hibrido",cta:"Descubrir",url:"https://on-running.com",color:"#4DA6FF",logo:"👟"},
   {id:3,brand:"BAREBELLS",claim:"Proteina sin azucar. Sabor sin compromiso.",cta:"Probar ahora",url:"https://barebells.com",color:"#B56AFF",logo:"🍫"},
 ];
-const RANK_SPONSOR={brand:"GARMIN",claim:"Mide tu rendimiento. Supera tus limites.",logo:"⌚",url:"https://garmin.com"};
 
 const PC={
   "Alava":{lat:42.85,lon:-2.67},"Albacete":{lat:38.99,lon:-1.86},"Alicante":{lat:38.35,lon:-0.48},
@@ -119,7 +118,6 @@ const EVENTS=[
   {id:78,name:"LAUCEB Games Winter 2025",disc:"CrossFit",city:"Argentona",prov:"Barcelona",country:"España",date:"2025-12-13",price:90,fmts:["Parejas"],desc:"Lauceb Games en Argentona.",feat:true,verified:false,ratings:[]},
   {id:79,name:"Por Ellas Throwdown 2025",disc:"CrossFit",city:"Pineda del Mar",prov:"Barcelona",country:"España",date:"2025-11-22",price:70,fmts:["Trios"],desc:"Throwdown solidario femenino en Barcelona.",feat:true,verified:false,ratings:[]},
   {id:80,name:"Barbatyr Games 2025",disc:"CrossFit",city:"Pedrera",prov:"Sevilla",country:"España",date:"2025-08-29",price:114,fmts:["Parejas"],desc:"Barbatyr Games en Pedrera, Sevilla.",feat:true,verified:false,ratings:[]},
-  // --- NUEVOS de Wodbuster (actuales) ---
   {id:101,name:"EXPERIENCE II CrossGames",disc:"CrossFit",city:"Almansa",prov:"Albacete",country:"España",date:"2026-03-28",price:70,fmts:["Parejas"],desc:"CrossGames Experience II en Almansa, Albacete.",feat:false,verified:false,ratings:[]},
   {id:102,name:"Hibrid-Bou",disc:"Functional",city:"Valls",prov:"Tarragona",country:"España",date:"2026-03-28",price:10,fmts:["Parejas"],desc:"Evento hibrido en Valls, Tarragona.",feat:false,verified:false,ratings:[]},
   {id:103,name:"Duo Challenge No Pain No Rest",disc:"Functional",city:"Altea",prov:"Alicante",country:"España",date:"2026-03-28",price:0,fmts:["Parejas"],desc:"Duo challenge presencial en Altea, Alicante.",feat:false,verified:false,ratings:[]},
@@ -167,7 +165,7 @@ const EVENTS=[
   {id:145,name:"Vera Summer Showdown Ind 2026",disc:"CrossFit",city:"Vera",prov:"Almeria",country:"España",date:"2026-05-23",price:75,fmts:["Individual"],desc:"Vera Summer Showdown Individual 2026 en Vera, Almeria.",feat:false,verified:false,ratings:[]},
   {id:146,name:"SPARK GAMES",disc:"CrossFit",city:"Sevilla",prov:"Sevilla",country:"España",date:"2026-05-16",price:60,fmts:["Parejas"],desc:"Spark Games en Sevilla.",feat:true,verified:false,ratings:[]},
   {id:147,name:"SEVILLA THROWDOWN INDIVIDUAL 2026",disc:"CrossFit",city:"Sevilla",prov:"Sevilla",country:"España",date:"2026-04-11",price:60,fmts:["Individual"],desc:"Sevilla Throwdown Individual 2026.",feat:true,verified:false,ratings:[]},
-  {id:148,name:"Flamingo Invitational 2026",disc:"CrossFit",city:"San Javier",prov:"Murcia",country:"España",date:"2026-04-11",price:150,fmts:["Parejas","Trios"],desc:"Flamingo Invitational 2026 en San Javier, Murcia.",feat:true,verified:false,ratings:[]},
+  {id:148,name:"Flamingo Invitational 2026",disc:"CrossFit",city:"San Javier",prov:"Murcia",country:"España",date:"2026-04-11",price:150,fmts:["Parejas","Trios"],desc:"Flamingo Invitacional 2026 en San Javier, Murcia.",feat:true,verified:false,ratings:[]},
   {id:149,name:"Healthy & Fit Games 2026",disc:"CrossFit",city:"Vilamarxant",prov:"Valencia",country:"España",date:"2026-04-11",price:120,fmts:["Individual","Parejas"],desc:"Healthy & Fit Games 2026 en Vilamarxant, Valencia.",feat:true,verified:false,ratings:[]},
   {id:150,name:"LANZAROTE SUMMER CHALLENGE 2026",disc:"CrossFit",city:"Arrecife",prov:"Las Palmas",country:"España",date:"2026-07-11",price:120,fmts:["Parejas"],desc:"Lanzarote Summer Challenge 2026 en Arrecife, Lanzarote.",feat:true,verified:false,ratings:[]},
   {id:151,name:"BRAVE CHALLENGE HYBRID II",disc:"Functional",city:"Blanes",prov:"Girona",country:"España",date:"2026-05-09",price:50,fmts:["Parejas"],desc:"Brave Challenge Hybrid II en Blanes, Girona.",feat:true,verified:false,ratings:[]},
@@ -213,7 +211,6 @@ const EVENTS=[
   {id:191,name:"GIBRALTAR FITNESS GAMES",disc:"CrossFit",city:"Gibraltar",prov:"Malaga",country:"Gibraltar",date:"2026-10-24",price:140,fmts:["Parejas"],desc:"Gibraltar Fitness Games en Gibraltar.",feat:true,verified:false,ratings:[]},
   {id:192,name:"North Ox Trials",disc:"Functional",city:"Oviedo",prov:"Asturias",country:"España",date:"2026-09-11",price:100,fmts:["Parejas"],desc:"North Ox Trials en Oviedo, Asturias.",feat:false,verified:false,ratings:[]},
   {id:193,name:"VTD27",disc:"CrossFit",city:"Valencia",prov:"Valencia",country:"España",date:"2027-03-12",price:275,fmts:["Parejas","Cuartetos"],desc:"Valencia Throwdown 2027 - ya abierto el registro.",feat:true,verified:false,ratings:[]},
-  // --- Pasados relevantes de Wodbuster ---
   {id:200,name:"Road to Athens Throwdown 2025",disc:"CrossFit",city:"Murcia",prov:"Murcia",country:"España",date:"2025-03-15",price:60,fmts:["Individual","Trios"],desc:"Road to Athens Throwdown en Murcia.",feat:true,verified:false,ratings:[]},
   {id:201,name:"February Challenge Leon 2025",disc:"CrossFit",city:"Leon",prov:"Leon",country:"España",date:"2025-01-31",price:299,fmts:["Trios","Equipos +4"],desc:"February Challenge Leon Edition 2025.",feat:true,verified:false,ratings:[]},
   {id:202,name:"Castilla Throwdown 2025",disc:"CrossFit",city:"Valladolid",prov:"Valladolid",country:"España",date:"2025-03-15",price:175,fmts:["Parejas"],desc:"Castilla Throwdown 2025 en Valladolid.",feat:true,verified:false,ratings:[]},
@@ -276,14 +273,12 @@ const Badge=({disc,sm})=><span style={{background:DISC_COLORS[disc]||"#555",colo
 const VBadge=({sm})=><span style={{background:"rgba(77,166,255,0.15)",color:"#00D264",border:"1px solid rgba(0,210,100,0.35)",padding:sm?"1px 5px":"2px 7px",borderRadius:3,fontSize:sm?9:10,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700}}>✓ VERIFICADO</span>;
 const FBadge=({sm})=><span style={{background:"rgba(255,193,7,0.12)",color:"#FFB300",border:"1px solid rgba(255,193,7,0.25)",padding:sm?"1px 5px":"2px 7px",borderRadius:3,fontSize:sm?9:10,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700}}>⭐ DESTACADO</span>;
 
-// Componente logo de evento — muestra imagen si existe, si no placeholder con inicial
 const EventLogo=({ev,size=36})=>{
   const dc=DISC_COLORS[ev.disc]||"#555";
   if(ev.logo)return<img src={ev.logo} alt={ev.name} style={{width:size,height:size,borderRadius:6,objectFit:"cover",border:`1px solid rgba(255,255,255,0.1)`,flexShrink:0}}/>;
   return<div style={{width:size,height:size,borderRadius:6,background:`${dc}22`,border:`1px solid ${dc}44`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Barlow Condensed',sans-serif",fontSize:size*0.44,fontWeight:800,color:dc,flexShrink:0}}>{ev.name.charAt(0).toUpperCase()}</div>;
 };
 
-// Helper para leer un File como base64
 const fileToB64=(file)=>new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsDataURL(file);});
 
 function AdBanner({ad}){
@@ -302,16 +297,6 @@ function SponsorSlot(){
     <span style={{fontSize:20}}>{ad.logo}</span>
     <div style={{flex:1}}><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:800,color:ad.color}}>{ad.brand}</span><span style={{fontSize:12,color:"#777",marginLeft:8}}>{ad.claim}</span></div>
     <a href={ad.url} target="_blank" rel="noopener noreferrer" style={{color:ad.color,border:`1px solid ${ad.color}`,background:"transparent",padding:"4px 11px",borderRadius:5,fontSize:11,fontWeight:700,textDecoration:"none",fontFamily:"'Barlow Condensed',sans-serif"}}>Ver mas</a>
-  </div>;
-}
-
-function RankSponsor(){
-  return<div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:8,padding:"7px 14px",marginBottom:12,display:"flex",alignItems:"center",gap:10,position:"relative"}}>
-    <div style={{position:"absolute",top:0,right:0,background:"rgba(0,0,0,0.6)",padding:"1px 7px",fontSize:9,color:"#555",borderBottomLeftRadius:5,fontFamily:"'Barlow Condensed',sans-serif"}}>RANKING PATROCINADO POR</div>
-    <span style={{fontSize:17}}>{RANK_SPONSOR.logo}</span>
-    <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:800,color:"#4DA6FF"}}>{RANK_SPONSOR.brand}</span>
-    <span style={{fontSize:11,color:"#666"}}>{RANK_SPONSOR.claim}</span>
-    <a href={RANK_SPONSOR.url} target="_blank" rel="noopener noreferrer" style={{marginLeft:"auto",color:"#4DA6FF",fontSize:11,fontWeight:700,textDecoration:"none"}}>Descubrir →</a>
   </div>;
 }
 
@@ -362,40 +347,24 @@ function AdminEventEditor({ev,onSave,onClose}){
         <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:18,fontWeight:800,color:"#FF6500"}}>Editar evento #{ev.id}</div>
         <button onClick={onClose} style={{background:"none",border:"none",color:"#555",fontSize:18,cursor:"pointer"}}>✕</button>
       </div>
-
-      {/* Nombre y disciplina */}
       <input value={d.name} onChange={e=>setD(x=>({...x,name:e.target.value}))} placeholder="Nombre" style={IN2}/>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:7}}>
-        <select value={d.disc} onChange={e=>setD(x=>({...x,disc:e.target.value}))} style={IN2}>
-          {DISCIPLINES.slice(1).map(ds=><option key={ds}>{ds}</option>)}
-        </select>
+        <select value={d.disc} onChange={e=>setD(x=>({...x,disc:e.target.value}))} style={IN2}>{DISCIPLINES.slice(1).map(ds=><option key={ds}>{ds}</option>)}</select>
         <input value={d.country} onChange={e=>setD(x=>({...x,country:e.target.value}))} placeholder="Pais" style={IN2}/>
       </div>
-
-      {/* Ciudad y provincia */}
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:7}}>
         <input value={d.city} onChange={e=>setD(x=>({...x,city:e.target.value}))} placeholder="Ciudad" style={IN2}/>
-        <select value={d.prov} onChange={e=>setD(x=>({...x,prov:e.target.value}))} style={IN2}>
-          {Object.keys(PC).map(p=><option key={p}>{p}</option>)}
-        </select>
+        <select value={d.prov} onChange={e=>setD(x=>({...x,prov:e.target.value}))} style={IN2}>{Object.keys(PC).map(p=><option key={p}>{p}</option>)}</select>
       </div>
-
-      {/* Fecha y precio */}
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:7}}>
         <input type="date" value={d.date} onChange={e=>setD(x=>({...x,date:e.target.value}))} style={IN2}/>
         <input type="number" value={d.price} onChange={e=>setD(x=>({...x,price:Number(e.target.value)}))} placeholder="Precio (0=Gratis)" style={IN2}/>
       </div>
-
-      {/* Formatos */}
       <div style={{fontSize:11,color:"#888",marginBottom:5}}>Formatos:</div>
       <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10}}>
         {FORMATS.map(f=><button key={f} onClick={()=>setD(x=>({...x,fmts:x.fmts.includes(f)?x.fmts.filter(y=>y!==f):[...x.fmts,f]}))} style={PL2((d.fmts||[]).includes(f))}>{f}</button>)}
       </div>
-
-      {/* Descripcion */}
       <textarea value={d.desc} onChange={e=>setD(x=>({...x,desc:e.target.value}))} placeholder="Descripcion..." style={{...IN2,height:60,resize:"none"}}/>
-
-      {/* Toggles verificado / destacado */}
       <div style={{display:"flex",gap:8,marginBottom:10}}>
         <button onClick={()=>setD(x=>({...x,verified:!x.verified}))} style={{flex:1,background:d.verified?"rgba(77,166,255,0.15)":"#1a1a1a",border:`1px solid ${d.verified?"#4DA6FF":"rgba(255,255,255,0.1)"}`,color:d.verified?"#4DA6FF":"#555",padding:"7px 0",borderRadius:6,fontSize:12,fontWeight:700,cursor:"pointer"}}>
           {d.verified?"✓ VERIFICADO ON":"VERIFICADO OFF"}
@@ -404,8 +373,6 @@ function AdminEventEditor({ev,onSave,onClose}){
           {d.feat?"⭐ DESTACADO ON":"DESTACADO OFF"}
         </button>
       </div>
-
-      {/* Logo */}
       <div style={{marginBottom:12}}>
         <div style={{fontSize:11,color:"#888",marginBottom:5}}>Logo del evento:</div>
         <label style={{display:"flex",alignItems:"center",gap:9,cursor:"pointer",background:"#1a1a1a",border:"1px dashed rgba(255,255,255,0.1)",borderRadius:7,padding:"7px 11px"}}>
@@ -415,8 +382,6 @@ function AdminEventEditor({ev,onSave,onClose}){
           <input type="file" accept="image/*" style={{display:"none"}} onChange={async e=>{const f=e.target.files[0];if(!f||f.size>2*1024*1024)return;const b64=await fileToB64(f);setD(x=>({...x,logo:b64}));}}/>
         </label>
       </div>
-
-      {/* Botones guardar / cancelar */}
       <div style={{display:"flex",gap:8}}>
         <button onClick={()=>onSave(d)} style={{flex:1,background:"#FF6500",color:"#fff",border:"none",padding:"9px 0",borderRadius:6,fontSize:13,fontWeight:700,cursor:"pointer"}}>Guardar cambios</button>
         <button onClick={onClose} style={{background:"#2a2a2a",color:"#fff",border:"none",padding:"9px 16px",borderRadius:6,fontSize:13,fontWeight:600,cursor:"pointer"}}>Cancelar</button>
@@ -533,7 +498,6 @@ function MapView({events,onCity}){
   useEffect(()=>{
     if(_gc.ok&&_gc.geo){setSt("ready");return;}
     let dead=false;
-    const load=(src)=>new Promise((r,j)=>{if(document.querySelector(`script[src="${src}"]`)){r();return;}const s=document.createElement("script");s.src=src;s.onload=r;s.onerror=j;document.head.appendChild(s);});
     (async()=>{try{if(!_gc.ok){_gc.ok=true;}if(!_gc.geo){const r=await fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json");_gc.geo=await r.json();}if(!dead)setSt("ready");}catch(e){if(!dead)setSt("error");}})();
     return()=>{dead=true;};
   },[]);
@@ -541,7 +505,7 @@ function MapView({events,onCity}){
     if(st!=="ready"||!svgRef.current)return;(async()=>{
     const W=svgRef.current.clientWidth||800,H=400;
     const tp=topojson;
-    const proj=d3.geoNaturalEarth1().scale(140).translate([W/2,H/2]);const feature=tp.feature;const mesh=tp.mesh;
+    const proj=d3.geoNaturalEarth1().scale(140).translate([W/2,H/2]);const feature=tp.feature;
     const path=d3.geoPath().projection(proj);
     const sp=proj([-3.7,40.4]);
     const iT=d3.zoomIdentity.translate(W/2-sp[0]*4,H/2-sp[1]*4).scale(4);
@@ -662,7 +626,7 @@ export default function App(){
 
     <header style={{background:"#0d0d0d",borderBottom:"1px solid #1e1e1e",padding:"0 20px",height:62,display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,flexShrink:0,position:"relative"}}>
       <div style={{display:"flex",flexDirection:"column",lineHeight:1,position:"absolute",left:"50%",transform:"translateX(-50%)",alignItems:"center"}}><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:24,fontWeight:900,letterSpacing:2,textTransform:"uppercase"}}>FIT<span style={{color:"#FF6500"}}>EVENTS</span> WORLD</span><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,letterSpacing:3,color:"#444",textTransform:"uppercase",marginTop:2}}>DESCUBRE · COMPARA · COMPITE</span></div>
-      <div style={{display:"flex",gap:7,alignItems:"center",marginLeft:"auto"}}> 
+      <div style={{display:"flex",gap:7,alignItems:"center",marginLeft:"auto"}}>
         <button onClick={()=>setShowContact(true)} style={{background:"rgba(0,210,100,0.15)",color:"#00D264",border:"1px solid rgba(0,210,100,0.35)",padding:"4px 11px",borderRadius:6,fontSize:11,fontWeight:700}}>✓ Verificar evento</button>
         {me&&<span style={{fontSize:11,color:"#777"}}>Hola, <strong style={{color:"#FF6500"}}>{me.name}</strong></span>}
         <button onClick={()=>setShowAdmin(true)} style={{background:"none",border:"none",color:"#888",fontSize:20,padding:"2px 5px"}} title="Admin">⚙</button>
@@ -682,9 +646,9 @@ export default function App(){
         </div>}
         <div style={{display:"flex",gap:8,marginBottom:8,flexWrap:"wrap",alignItems:"flex-end"}}>
           <div style={{display:"flex",flexDirection:"column",gap:3,flex:"1 1 180px"}}><span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"#888",textTransform:"uppercase"}}>Buscar evento</span><div style={{position:"relative"}}><span style={{position:"absolute",left:9,top:"50%",transform:"translateY(-50%)",color:"#555",fontSize:12}}>🔍</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Nombre, ciudad..." style={{...IN,paddingLeft:28,marginBottom:0}}/></div></div>
-          <div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"#555",textTransform:"uppercase",color:"#888"}}>Disciplina</span><select value={fDisc} onChange={e=>setFDisc(e.target.value)} style={{padding:"8px 10px",minWidth:120}}>{DISCIPLINES.map(d=><option key={d}>{d}</option>)}</select></div>
-          <div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"#555",textTransform:"uppercase",color:"#888"}}>País</span><select value={fCountry} onChange={e=>{setFCountry(e.target.value);setFCities([]);}} style={{padding:"8px 10px",minWidth:100}}>{countries.map(c=><option key={c}>{c}</option>)}</select></div>
-          <div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"#555",textTransform:"uppercase",color:"#888"}}>Ordenar por</span><select value={sort} onChange={e=>setSort(e.target.value)} style={{padding:"8px 10px",minWidth:110}}><option value="date">📅 Fecha</option><option value="rating">⭐ Valoración</option><option value="price">💶 Precio</option></select></div>
+          <div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"#888",textTransform:"uppercase"}}>Disciplina</span><select value={fDisc} onChange={e=>setFDisc(e.target.value)} style={{padding:"8px 10px",minWidth:120}}>{DISCIPLINES.map(d=><option key={d}>{d}</option>)}</select></div>
+          <div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"#888",textTransform:"uppercase"}}>País</span><select value={fCountry} onChange={e=>{setFCountry(e.target.value);setFCities([]);}} style={{padding:"8px 10px",minWidth:100}}>{countries.map(c=><option key={c}>{c}</option>)}</select></div>
+          <div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"#888",textTransform:"uppercase"}}>Ordenar por</span><select value={sort} onChange={e=>setSort(e.target.value)} style={{padding:"8px 10px",minWidth:110}}><option value="date">📅 Fecha</option><option value="rating">⭐ Valoración</option><option value="price">💶 Precio</option></select></div>
         </div>
         <div style={{display:"flex",gap:5,marginBottom:6,alignItems:"center"}}>
           <button onClick={()=>setShowAdv(x=>!x)} style={{...BT(""),padding:"3px 9px",fontSize:11}}>{showAdv?"▲":"▼"} Filtros</button>
@@ -816,32 +780,31 @@ export default function App(){
       })()}
 
       {view==="map"&&<div>
-        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:19,fontWeight:700,marginBottom:11}}>Mapa de eventos</div>
+        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Mapa de eventos</div>
         <MapView events={evs} onCity={c=>{setFCities(c);setView("list");}}/>
       </div>}
 
       {view==="upc"&&<div>
-        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:19,fontWeight:700,marginBottom:11}}>Proximos eventos</div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))",gap:9}}>
+        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Proximos eventos</div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))",gap:16}}>
           {upcoming.map(ev=>{
             const dL=Math.ceil((new Date(ev.date)-new Date())/86400000),urg=dL<=30,dc=DISC_COLORS[ev.disc]||"#555";
             const bc=ev.verified?"#4DA6FF":ev.feat?"#FFB300":dc;
-            return<div key={ev.id} style={{background:"#161616",border:`1px solid ${urg?"rgba(255,107,43,0.28)":"rgba(255,255,255,0.06)"}`,borderRadius:10,padding:11,cursor:"pointer",borderLeft:`4px solid ${bc}`}} onClick={()=>{setSel(ev);setView("det");}}>
-              <div style={{display:"flex",justifyContent:"space-between",marginBottom:6,alignItems:"center"}}><EventLogo ev={ev} size={30}/><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:11,fontWeight:700,color:urg?"#FF6500":"#4CAF50"}}>{dL<=0?"Hoy":dL===1?"Manana":`${dL}d`}</span></div>
-              <div style={{marginBottom:3}}><Badge disc={ev.disc}/>{ev.verified&&<span style={{marginLeft:4}}><VBadge sm/></span>}</div>
-              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700,marginBottom:2}}>{ev.name}</div>
-              <div style={{fontSize:11,color:"#555"}}>{fd(ev.date)} · {ev.city}</div>
-              <div style={{fontSize:11,color:"#555",marginBottom:8}}>{ev.price===0?"Gratis":`${ev.price}EUR`}</div>
-              <button onClick={e=>{e.stopPropagation();if(!me){setView("auth");return;}tog(ev.id);}} style={{...BT(((ev.attendance||[])).includes(me?.u)?"s":""),padding:"4px 9px",fontSize:11,width:"100%"}}>{((ev.attendance||[])).includes(me?.u)?"Asistire":"Quiero ir"}</button>
+            return<div key={ev.id} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",borderRadius:12,padding:16,cursor:"pointer",borderTop:`4px solid ${bc}`}} onClick={()=>{setSel(ev);setView("det");}}>
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:8,alignItems:"center"}}><EventLogo ev={ev} size={36}/><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700,color:urg?"#FF6500":"#4CAF50"}}>{dL<=0?"Hoy":dL===1?"Manana":`${dL}d`}</span></div>
+              <div style={{marginBottom:5}}><Badge disc={ev.disc}/>{ev.verified&&<span style={{marginLeft:4}}><VBadge sm/></span>}</div>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:16,fontWeight:800,textTransform:"uppercase",marginBottom:4,lineHeight:1.1}}>{ev.name}</div>
+              <div style={{fontSize:12,color:"#888",marginBottom:2}}>{fd(ev.date)} · {ev.city}</div>
+              <div style={{fontSize:12,color:ev.price===0?"#4CAF50":"#888",fontWeight:ev.price===0?700:400,marginBottom:10}}>{ev.price===0?"GRATIS":`${ev.price} €`}</div>
+              <button onClick={e=>{e.stopPropagation();if(!me){setView("auth");return;}tog(ev.id);}} style={{...BT(((ev.attendance||[])).includes(me?.u)?"s":""),padding:"5px 9px",fontSize:11,width:"100%"}}>{((ev.attendance||[])).includes(me?.u)?"Asistire":"Quiero ir"}</button>
             </div>;
           })}
         </div>
       </div>}
 
       {view==="rnk"&&<div>
-        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:19,fontWeight:700,marginBottom:11}}>Ranking</div>
-        <RankSponsor/>
-        <div style={{display:"flex",gap:5,marginBottom:9,flexWrap:"wrap",alignItems:"center"}}>
+        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Ranking</div>
+        <div style={{display:"flex",gap:5,marginBottom:12,flexWrap:"wrap",alignItems:"center"}}>
           <select value={rkDisc} onChange={e=>setRkDisc(e.target.value)} style={{padding:"6px 7px"}}>{DISCIPLINES.map(d=><option key={d}>{d}</option>)}</select>
           <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{FORMATS.map(f=><button key={f} onClick={()=>setRkFmts(x=>x.includes(f)?x.filter(y=>y!==f):[...x,f])} style={PL(rkFmts.includes(f))}>{f}</button>)}</div>
           <span style={{fontSize:11,color:"#444",marginLeft:"auto"}}>{ranked.length}</span>
@@ -849,21 +812,25 @@ export default function App(){
         {ranked.length===0?<div style={{textAlign:"center",padding:"50px 0",color:"#333"}}>Sin eventos valorados</div>:
         ranked.map((ev,i)=>{
           const oa=overall(ev.ratings),medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":null,dc=DISC_COLORS[ev.disc]||"#555";
-          return<div key={ev.id} style={{...CRD,borderLeft:`3px solid ${ev.verified?"#4DA6FF":dc}`,display:"flex",alignItems:"center",padding:"8px 12px",gap:9}} onClick={()=>{setSel(ev);setView("det");}}>
-            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:15,fontWeight:800,color:medal?"#FF6500":"#333",minWidth:22}}>{medal||`#${i+1}`}</div>
-            <EventLogo ev={ev} size={32}/>
+          return<div key={ev.id} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",borderLeft:`4px solid ${ev.verified?"#4DA6FF":dc}`,borderRadius:10,display:"flex",alignItems:"center",padding:"14px 16px",gap:14,marginBottom:8,cursor:"pointer"}} onClick={()=>{setSel(ev);setView("det");}}>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:18,fontWeight:800,color:medal?"#FF6500":"#444",minWidth:28}}>{medal||`#${i+1}`}</div>
+            <EventLogo ev={ev} size={36}/>
             <div style={{flex:1}}>
-              <div style={{display:"flex",gap:3,marginBottom:2,alignItems:"center"}}><Badge disc={ev.disc} sm/>{ev.verified&&<VBadge sm/>}</div>
-              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700}}>{ev.name}</div>
-              <div style={{fontSize:10,color:"#555"}}>{ev.city} · {fd(ev.date)}</div>
+              <div style={{display:"flex",gap:3,marginBottom:3,alignItems:"center"}}><Badge disc={ev.disc} sm/>{ev.verified&&<VBadge sm/>}</div>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:16,fontWeight:800,textTransform:"uppercase",lineHeight:1.1}}>{ev.name}</div>
+              <div style={{fontSize:11,color:"#666",marginTop:2}}>{ev.city} · {fd(ev.date)}</div>
             </div>
-            <div style={{textAlign:"center",minWidth:44}}><div style={{fontSize:16,fontWeight:800,color:"#FF6500",fontFamily:"'Barlow Condensed',sans-serif"}}>{f1(oa)}</div><Stars n={oa} sz={9}/></div>
+            <div style={{textAlign:"center",minWidth:70,marginLeft:"auto"}}>
+              <div style={{fontSize:28,fontWeight:900,color:"#FF6500",fontFamily:"'Barlow Condensed',sans-serif",lineHeight:1}}>{f1(oa)}</div>
+              <Stars n={oa} sz={11}/>
+              <div style={{fontSize:10,color:"#555",marginTop:2}}>{ev.ratings.length} val.</div>
+            </div>
           </div>;
         })}
       </div>}
 
       {view==="cmp"&&<div>
-        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:19,fontWeight:700,marginBottom:11}}>Comparar</div>
+        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Comparar</div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:11}}>
           {[0,1].map(i=><div key={i}><div style={{fontSize:11,color:"#888",marginBottom:3}}>Evento {i+1}</div>
             <select value={cmpIds[i]||""} onChange={e=>{const id=Number(e.target.value);setCmpIds(x=>{const n=[...x];n[i]=id;return n.filter(Boolean);});}} style={{width:"100%",padding:"6px 7px"}}>
@@ -897,7 +864,7 @@ export default function App(){
       </div>}
 
       {view==="add"&&<div style={{maxWidth:470}}>
-        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:19,fontWeight:700,marginBottom:11}}>Anadir evento</div>
+        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Anadir evento</div>
         {!me?<div style={{textAlign:"center",padding:"40px 0"}}><p style={{color:"#888",marginBottom:11,fontSize:13}}>Inicia sesion para anadir eventos</p><button onClick={()=>setView("auth")} style={{...BT("p"),padding:"6px 13px"}}>Entrar</button></div>:
         <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,padding:15}}>
           <input value={nEv.name} onChange={e=>setNEv(x=>({...x,name:e.target.value}))} placeholder="Nombre *" style={IN}/>
