@@ -463,6 +463,76 @@ function AdminPanel({evs,setEvs,onClose}){
   </>;
 }
 
+function CmpSearchBox({evs,selectedId,otherId,onSelect,label}){
+  const[q,setQ]=useState("");const[open,setOpen]=useState(false);
+  const selected=evs.find(e=>e.id===selectedId);
+  const results=useMemo(()=>{
+    const base=evs.filter(e=>e.id!==otherId);
+    if(!q.trim())return base.slice(0,12);
+    return base.filter(e=>e.name.toLowerCase().includes(q.toLowerCase())||e.city.toLowerCase().includes(q.toLowerCase())).slice(0,12);
+  },[evs,q,otherId]);
+  return<div style={{position:"relative"}}>
+    <div style={{fontSize:11,color:"#aaa",marginBottom:5,fontWeight:700,letterSpacing:1,textTransform:"uppercase"}}>{label}</div>
+    {selected?<div style={{background:"#1a1a1a",border:"1px solid #FF6500",borderRadius:8,padding:"10px 14px",display:"flex",alignItems:"center",gap:10}}>
+      <EventLogo ev={selected} size={36}/>
+      <div style={{flex:1}}>
+        <div style={{display:"flex",gap:4,marginBottom:3,alignItems:"center"}}><Badge disc={selected.disc} sm/>{selected.verified&&<VBadge sm/>}</div>
+        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:800,textTransform:"uppercase",color:"#fff"}}>{selected.name}</div>
+        <div style={{fontSize:11,color:"#bbb"}}>{selected.city} · {fd(selected.date)}</div>
+      </div>
+      <button onClick={()=>{onSelect(null);setQ("");}} style={{background:"none",border:"none",color:"#888",fontSize:16,cursor:"pointer",padding:"0 4px"}}>✕</button>
+    </div>:
+    <div>
+      <div style={{position:"relative"}}>
+        <span style={{position:"absolute",left:10,top:"50%",transform:"translateY(-50%)",color:"#666",fontSize:13}}>🔍</span>
+        <input value={q} onChange={e=>{setQ(e.target.value);setOpen(true);}} onFocus={()=>setOpen(true)} onBlur={()=>setTimeout(()=>setOpen(false),200)} placeholder="Buscar evento por nombre o ciudad..." style={{width:"100%",padding:"10px 10px 10px 34px",background:"#1a1a1a",border:"1px solid #444",borderRadius:8,color:"#fff",fontSize:13}}/>
+      </div>
+      {open&&<div style={{position:"absolute",top:"100%",left:0,right:0,background:"#1e1e1e",border:"1px solid #444",borderRadius:8,zIndex:50,marginTop:4,overflow:"auto",maxHeight:320,boxShadow:"0 8px 24px rgba(0,0,0,0.7)"}}>
+        {results.length>0?results.map(ev=><div key={ev.id} onMouseDown={()=>{onSelect(ev.id);setQ("");setOpen(false);}} style={{padding:"10px 14px",display:"flex",alignItems:"center",gap:10,cursor:"pointer",borderBottom:"1px solid rgba(255,255,255,0.05)"}}>
+          <EventLogo ev={ev} size={30}/>
+          <div style={{flex:1}}>
+            <div style={{display:"flex",gap:4,marginBottom:2}}><Badge disc={ev.disc} sm/>{ev.verified&&<VBadge sm/>}</div>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700,textTransform:"uppercase",color:"#fff"}}>{ev.name}</div>
+            <div style={{fontSize:10,color:"#bbb"}}>{ev.city} · {fd(ev.date)} · {ev.price===0?"Gratis":`${ev.price}€`}</div>
+          </div>
+        </div>):<div style={{padding:"14px",color:"#666",fontSize:12,textAlign:"center"}}>Sin resultados para "{q}"</div>}
+      </div>}
+    </div>}
+  </div>;
+}
+
+function CmpView({evs,cmpIds,setCmpIds,cmpEvs,setSel,setView}){
+  const[a,b]=cmpEvs.length===2?cmpEvs:[null,null];
+  const rows=a&&b?[
+    {l:"Disciplina",va:<Badge disc={a.disc} sm/>,vb:<Badge disc={b.disc} sm/>},
+    {l:"Verificado",va:a.verified?<VBadge sm/>:<span style={{color:"#aaa",fontSize:11}}>No</span>,vb:b.verified?<VBadge sm/>:<span style={{color:"#aaa",fontSize:11}}>No</span>},
+    {l:"Ciudad",va:<span style={{color:"#eee"}}>{a.city}</span>,vb:<span style={{color:"#eee"}}>{b.city}</span>},{l:"Fecha",va:<span style={{color:"#eee"}}>{fd(a.date)}</span>,vb:<span style={{color:"#eee"}}>{fd(b.date)}</span>},
+    {l:"Precio",va:a.price===0?"Gratis":`${a.price}€`,vb:b.price===0?"Gratis":`${b.price}€`,cmp:(x,y)=>x.price<y.price},
+    {l:"Puntuacion",va:overall(a.ratings)>0?f1(overall(a.ratings)):"—",vb:overall(b.ratings)>0?f1(overall(b.ratings)):"—",cmp:(x,y)=>overall(x.ratings)>overall(y.ratings)},
+    ...SCORE_KEYS.map(k=>({l:SLABELS[k],va:avgS(a.ratings,k)>0?f1(avgS(a.ratings,k)):"—",vb:avgS(b.ratings,k)>0?f1(avgS(b.ratings,k)):"—",cmp:(x,y)=>avgS(x.ratings,k)>avgS(y.ratings,k)})),
+  ]:[];
+  return<div>
+    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Comparar</div>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:16}}>
+      <CmpSearchBox evs={evs} selectedId={cmpIds[0]} otherId={cmpIds[1]} onSelect={id=>setCmpIds(x=>{const n=[...x];n[0]=id;return n.filter(Boolean);})} label="Evento 1"/>
+      <CmpSearchBox evs={evs} selectedId={cmpIds[1]} otherId={cmpIds[0]} onSelect={id=>setCmpIds(x=>{const n=[...x];n[1]=id;return n.filter(Boolean);})} label="Evento 2"/>
+    </div>
+    {a&&b?<div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,overflow:"hidden"}}>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",background:"#1a1a1a"}}>
+        <div style={{padding:"10px 14px",fontSize:10,color:"#bbb",fontWeight:700,letterSpacing:1}}>CATEGORÍA</div>
+        {[a,b].map((ev,i)=><div key={i} onClick={()=>{setSel(ev);setView("det");}} style={{padding:"10px 14px",textAlign:"center",borderLeft:"1px solid rgba(255,255,255,0.06)",cursor:"pointer"}}>
+          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:800,color:DISC_COLORS[ev.disc]||"#f0f0f0",textTransform:"uppercase"}}>{ev.name}</div>
+          <div style={{fontSize:10,color:"#bbb",marginTop:2}}>{ev.city}</div>
+        </div>)}
+      </div>
+      {rows.map((r,i)=><div key={i} style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",borderTop:"1px solid rgba(255,255,255,0.04)"}}>
+        <div style={{padding:"9px 14px",fontSize:11,color:"#ccc",fontWeight:600}}>{r.l}</div>
+        {[a,b].map((ev,j)=>{const w=r.cmp&&r.cmp(j===0?a:b,j===0?b:a);return<div key={j} style={{padding:"9px 14px",textAlign:"center",borderLeft:"1px solid rgba(255,255,255,0.04)",background:w?"rgba(76,175,80,0.07)":"transparent",color:w?"#4CAF50":"#eee",fontSize:12,fontWeight:w?700:400}}>{j===0?r.va:r.vb}{w&&<span style={{marginLeft:4,fontSize:10}}>✓</span>}</div>;})}
+      </div>)}
+    </div>:<div style={{textAlign:"center",padding:"60px 0",color:"#333",fontSize:13}}>Busca y selecciona dos eventos para compararlos</div>}
+  </div>;
+}
+
 let _gc={ok:false,geo:null};
 function MapView({events,onCity}){
   const svgRef=useRef(null);const pinRef=useRef(null);
@@ -829,38 +899,8 @@ export default function App(){
         })}
       </div>}
 
-      {view==="cmp"&&<div>
-        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Comparar</div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:11}}>
-          {[0,1].map(i=><div key={i}><div style={{fontSize:11,color:"#888",marginBottom:3}}>Evento {i+1}</div>
-            <select value={cmpIds[i]||""} onChange={e=>{const id=Number(e.target.value);setCmpIds(x=>{const n=[...x];n[i]=id;return n.filter(Boolean);});}} style={{width:"100%",padding:"6px 7px"}}>
-              <option value="">Seleccionar</option>
-              {evs.filter(e=>!cmpIds[1-i]||e.id!==cmpIds[1-i]).map(e=><option key={e.id} value={e.id}>{e.name}{e.verified?" (V)":""}</option>)}
-            </select>
-          </div>)}
-        </div>
-        {cmpEvs.length===2&&(()=>{
-          const[a,b]=cmpEvs;
-          const rows=[
-            {l:"Disciplina",va:<Badge disc={a.disc} sm/>,vb:<Badge disc={b.disc} sm/>},
-            {l:"Verificado",va:a.verified?<VBadge sm/>:<span style={{color:"#555",fontSize:10}}>No</span>,vb:b.verified?<VBadge sm/>:<span style={{color:"#555",fontSize:10}}>No</span>},
-            {l:"Ciudad",va:a.city,vb:b.city},{l:"Fecha",va:fd(a.date),vb:fd(b.date)},
-            {l:"Precio",va:a.price===0?"Gratis":`${a.price}EUR`,vb:b.price===0?"Gratis":`${b.price}EUR`,cmp:(x,y)=>x.price<y.price},
-            {l:"Puntuacion",va:overall(a.ratings)>0?f1(overall(a.ratings)):"—",vb:overall(b.ratings)>0?f1(overall(b.ratings)):"—",cmp:(x,y)=>overall(x.ratings)>overall(y.ratings)},
-            ...SCORE_KEYS.map(k=>({l:SLABELS[k],va:avgS(a.ratings,k)>0?f1(avgS(a.ratings,k)):"—",vb:avgS(b.ratings,k)>0?f1(avgS(b.ratings,k)):"—",cmp:(x,y)=>avgS(x.ratings,k)>avgS(y.ratings,k)})),
-          ];
-          return<div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,overflow:"hidden"}}>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",background:"#1a1a1a"}}>
-              <div style={{padding:"7px 11px",fontSize:9,color:"#444"}}>CAT.</div>
-              {[a,b].map((ev,i)=><div key={i} style={{padding:"7px 11px",textAlign:"center",borderLeft:"1px solid rgba(255,255,255,0.04)"}}><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:11,fontWeight:700,color:DISC_COLORS[ev.disc]||"#f0f0f0"}}>{ev.name}</div></div>)}
-            </div>
-            {rows.map((r,i)=><div key={i} style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",borderTop:"1px solid rgba(255,255,255,0.03)"}}>
-              <div style={{padding:"6px 11px",fontSize:10,color:"#555"}}>{r.l}</div>
-              {[a,b].map((ev,j)=>{const w=r.cmp&&r.cmp(j===0?a:b,j===0?b:a);return<div key={j} style={{padding:"6px 11px",textAlign:"center",borderLeft:"1px solid rgba(255,255,255,0.03)",background:w?"rgba(76,175,80,0.05)":"transparent",color:w?"#4CAF50":"#f0f0f0",fontSize:11}}>{j===0?r.va:r.vb}{w&&<span style={{marginLeft:2,fontSize:9}}>✓</span>}</div>;})}
-            </div>)}
-          </div>;
-        })()}
-        {cmpEvs.length<2&&<div style={{textAlign:"center",padding:"40px 0",color:"#333"}}>Selecciona dos eventos</div>}
+      {view==="cmp"&&<CmpView evs={evs} cmpIds={cmpIds} setCmpIds={setCmpIds} cmpEvs={cmpEvs} setSel={setSel} setView={setView}/>}
+      {view==="cmp_DISABLED"&&<div>
       </div>}
 
       {view==="add"&&<div style={{maxWidth:470}}>
