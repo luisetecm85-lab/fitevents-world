@@ -930,40 +930,40 @@ export default function App(){
       {view==="cmp_DISABLED"&&<div>
       </div>}
 
-      {view==="add"&&<div style={{maxWidth:470}}>
-        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Anadir evento</div>
-        {!me?<div style={{textAlign:"center",padding:"40px 0"}}><p style={{color:"#888",marginBottom:11,fontSize:13}}>Inicia sesion para anadir eventos</p><button onClick={()=>setView("auth")} style={{...BT("p"),padding:"6px 13px"}}>Iniciar sesión</button></div>:
-        <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,padding:15}}>
-          <input value={nEv.name} onChange={e=>setNEv(x=>({...x,name:e.target.value}))} placeholder="Nombre *" style={IN}/>
+      {view==="add"&&<div style={{maxWidth:620,margin:"0 auto"}}>
+        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Añadir evento</div>
+        {!me?<div style={{textAlign:"center",padding:"40px 0"}}><p style={{color:"#888",marginBottom:11,fontSize:13}}>Inicia sesión para añadir eventos</p><button onClick={()=>setView("auth")} style={{...BT("p"),padding:"6px 13px"}}>Iniciar sesión</button></div>:
+        <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,padding:20}}>
+          <input value={nEv.name} onChange={e=>setNEv(x=>({...x,name:e.target.value}))} placeholder="Nombre del evento *" style={IN}/>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:7}}>
-            <select value={nEv.disc} onChange={e=>setNEv(x=>({...x,disc:e.target.value}))} style={IN}>{DISCIPLINES.slice(1).map(d=><option key={d}>{d}</option>)}</select>
-            <input value={nEv.country} onChange={e=>setNEv(x=>({...x,country:e.target.value}))} placeholder="Pais" style={IN}/>
+            <div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,color:"#888",fontWeight:700,letterSpacing:1,textTransform:"uppercase"}}>Disciplina</span><select value={nEv.disc} onChange={e=>setNEv(x=>({...x,disc:e.target.value}))} style={IN}>{DISCIPLINES.slice(1).map(d=><option key={d}>{d}</option>)}</select></div>
+            <div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,color:"#888",fontWeight:700,letterSpacing:1,textTransform:"uppercase"}}>País</span><select value={nEv.country} onChange={e=>{const isSpain=e.target.value==="España";setNEv(x=>({...x,country:e.target.value,prov:isSpain?"Madrid":e.target.value}));}} style={IN}><option>España</option>{["Portugal","Francia","Alemania","Italia","Reino Unido","Suecia","Noruega","Dinamarca","Finlandia","Irlanda","Paises Bajos","Belgica","Suiza","Austria","Polonia","Republica Checa","Hungria","Grecia","EEUU","Mexico","Brasil","Argentina","Colombia","Australia","Canada","Gibraltar"].map(c=><option key={c}>{c}</option>)}</select></div>
           </div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:7}}>
             <input value={nEv.city} onChange={e=>setNEv(x=>({...x,city:e.target.value}))} placeholder="Ciudad *" style={IN}/>
-            <select value={nEv.prov} onChange={e=>setNEv(x=>({...x,prov:e.target.value}))} style={IN}>{Object.keys(PC).map(p=><option key={p}>{p}</option>)}</select>
+            {nEv.country==="España"?<div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,color:"#888",fontWeight:700,letterSpacing:1,textTransform:"uppercase"}}>Provincia</span><select value={nEv.prov} onChange={e=>setNEv(x=>({...x,prov:e.target.value}))} style={IN}>{["Alava","Albacete","Alicante","Almeria","Asturias","Avila","Badajoz","Baleares","Barcelona","Bizkaia","Cadiz","Cantabria","Castellon","Ciudad Real","Cordoba","Cuenca","Girona","Granada","Guadalajara","Guipuzcoa","Huelva","Huesca","La Rioja","Las Palmas","Leon","Lleida","Lugo","Madrid","Malaga","Murcia","Navarra","Pontevedra","Salamanca","Sevilla","Tarragona","Tenerife","Toledo","Valencia","Valladolid","Zamora","Zaragoza"].map(p=><option key={p}>{p}</option>)}</select></div>:<input value={nEv.prov} readOnly style={{...IN,color:"#555"}} placeholder="Provincia (país seleccionado)"/>}
           </div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:7}}>
-            <input type="date" value={nEv.date} onChange={e=>setNEv(x=>({...x,date:e.target.value}))} style={IN}/>
-            <input type="number" value={nEv.price} onChange={e=>setNEv(x=>({...x,price:e.target.value}))} placeholder="Precio (0=Gratis)" style={IN}/>
+            <div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,color:"#888",fontWeight:700,letterSpacing:1,textTransform:"uppercase"}}>Fecha *</span><input type="date" value={nEv.date} onChange={e=>setNEv(x=>({...x,date:e.target.value}))} style={IN}/></div>
+            <div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,color:"#888",fontWeight:700,letterSpacing:1,textTransform:"uppercase"}}>Precio (0 = Gratis)</span><input type="number" value={nEv.price} onChange={e=>setNEv(x=>({...x,price:e.target.value}))} placeholder="€" style={IN}/></div>
           </div>
-          <div style={{fontSize:11,color:"#888",marginBottom:4}}>Formato:</div>
-          <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:8}}>{FORMATS.map(f=><button key={f} onClick={()=>setNEv(x=>({...x,fmts:x.fmts.includes(f)?x.fmts.filter(y=>y!==f):[...x.fmts,f]}))} style={PL((nEv.fmts||[]).includes(f))}>{f}</button>)}</div>
-          <textarea value={nEv.desc} onChange={e=>setNEv(x=>({...x,desc:e.target.value}))} placeholder="Descripcion..." style={{...IN,height:50,resize:"none"}}/>
-          <div style={{marginBottom:9}}>
-            <div style={{fontSize:11,color:"#888",marginBottom:5}}>Logo del evento (opcional):</div>
-            <label style={{display:"flex",alignItems:"center",gap:9,cursor:"pointer",background:"#1a1a1a",border:"1px dashed rgba(255,255,255,0.12)",borderRadius:7,padding:"8px 12px"}}>
-              {nEv.logo?<img src={nEv.logo} style={{width:38,height:38,borderRadius:5,objectFit:"cover"}}/>:<div style={{width:38,height:38,borderRadius:5,background:"#222",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,color:"#444"}}>🖼</div>}
-              <div><div style={{fontSize:12,color:"#888"}}>{nEv.logo?"Logo cargado — click para cambiar":"Sube el logo o icono del evento"}</div><div style={{fontSize:10,color:"#555"}}>JPG, PNG o SVG · Max 2MB</div></div>
+          <div style={{fontSize:10,color:"#888",fontWeight:700,letterSpacing:1,textTransform:"uppercase",marginBottom:6}}>Formato</div>
+          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>{FORMATS.map(f=>{const sel=(nEv.fmts||[]).includes(f);return<button key={f} onClick={()=>setNEv(x=>({...x,fmts:x.fmts.includes(f)?x.fmts.filter(y=>y!==f):[...x.fmts,f]}))} style={{background:sel?"#FF6500":"#222",color:sel?"#fff":"#aaa",border:`1px solid ${sel?"#FF6500":"#333"}`,padding:"6px 14px",borderRadius:20,fontSize:12,fontWeight:sel?700:400,cursor:"pointer"}}>{f}</button>;})}</div>
+          <textarea value={nEv.desc} onChange={e=>setNEv(x=>({...x,desc:e.target.value}))} placeholder="Descripción del evento..." style={{...IN,height:60,resize:"none"}}/>
+          <div style={{marginBottom:12}}>
+            <div style={{fontSize:10,color:"#888",fontWeight:700,letterSpacing:1,textTransform:"uppercase",marginBottom:6}}>Logo del evento (opcional)</div>
+            <label style={{display:"flex",alignItems:"center",gap:9,cursor:"pointer",background:"#1a1a1a",border:"1px dashed rgba(255,255,255,0.12)",borderRadius:7,padding:"10px 14px"}}>
+              {nEv.logo?<img src={nEv.logo} style={{width:42,height:42,borderRadius:5,objectFit:"cover"}}/>:<div style={{width:42,height:42,borderRadius:5,background:"#222",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,color:"#444"}}>🖼</div>}
+              <div><div style={{fontSize:12,color:"#aaa"}}>{nEv.logo?"Logo cargado — click para cambiar":"Sube el logo o icono del evento"}</div><div style={{fontSize:10,color:"#555"}}>JPG, PNG o SVG · Max 2MB</div></div>
               {nEv.logo&&<button onClick={e=>{e.preventDefault();setNEv(x=>({...x,logo:null}));}} style={{marginLeft:"auto",background:"none",border:"none",color:"#555",fontSize:13,cursor:"pointer"}}>✕</button>}
               <input type="file" accept="image/*" style={{display:"none"}} onChange={async e=>{const f=e.target.files[0];if(!f||f.size>2*1024*1024)return;const b64=await fileToB64(f);setNEv(x=>({...x,logo:b64}));}}/>
             </label>
           </div>
-          {evErr&&<p style={{color:"#EF5350",fontSize:11,marginBottom:4}}>{evErr}</p>}
-          {evOk&&<div style={{background:"rgba(76,175,80,0.09)",border:"1px solid rgba(76,175,80,0.18)",borderRadius:5,padding:7,marginBottom:6,textAlign:"center",color:"#4CAF50",fontSize:12}}>✓ {evOk}</div>}
-          <button onClick={addEv} style={{...BT("p"),width:"100%",padding:"8px 0",fontSize:13}}>Publicar evento</button>
-          <div style={{marginTop:9,background:"rgba(77,166,255,0.06)",border:"1px solid rgba(77,166,255,0.12)",borderRadius:5,padding:"7px 11px",fontSize:11,color:"#777"}}>
-            Quieres mayor visibilidad? <button onClick={()=>setShowContact(true)} style={{background:"none",border:"none",color:"#4DA6FF",cursor:"pointer",fontSize:11,fontWeight:700,padding:0}}>Solicita verificacion</button>
+          {evErr&&<p style={{color:"#EF5350",fontSize:12,marginBottom:6}}>{evErr}</p>}
+          {evOk&&<div style={{background:"rgba(76,175,80,0.09)",border:"1px solid rgba(76,175,80,0.18)",borderRadius:5,padding:8,marginBottom:8,textAlign:"center",color:"#4CAF50",fontSize:13}}>✓ {evOk}</div>}
+          <button onClick={addEv} style={{...BT("p"),width:"100%",padding:"10px 0",fontSize:14}}>Publicar evento</button>
+          <div style={{marginTop:10,background:"rgba(77,166,255,0.06)",border:"1px solid rgba(77,166,255,0.12)",borderRadius:6,padding:"8px 12px",fontSize:11,color:"#aaa"}}>
+            ¿Quieres mayor visibilidad? <button onClick={()=>setShowContact(true)} style={{background:"none",border:"none",color:"#4DA6FF",cursor:"pointer",fontSize:11,fontWeight:700,padding:0}}>Solicita verificación</button>
           </div>
         </div>}
       </div>}
