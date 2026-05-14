@@ -559,7 +559,7 @@ function CmpView({evs,cmpIds,setCmpIds,cmpEvs,setSel,setView}){
   </div>;
 }
 
-let _gc={ok:false,geo:null};
+let _gc={ok:false,geo:null,esp:null};
 function MapView({events,onCity}){
   const svgRef=useRef(null);const pinRef=useRef(null);
   const[st,setSt]=useState("loading");const tRef=useRef(null);
@@ -594,7 +594,7 @@ function MapView({events,onCity}){
   useEffect(()=>{
     if(_gc.ok&&_gc.geo){setSt("ready");return;}
     let dead=false;
-    (async()=>{try{if(!_gc.ok){_gc.ok=true;}if(!_gc.geo){const r=await fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json");_gc.geo=await r.json();}if(!dead)setSt("ready");}catch(e){if(!dead)setSt("error");}})();
+    (async()=>{try{if(!_gc.ok){_gc.ok=true;}if(!_gc.geo){const r=await fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json");_gc.geo=await r.json();}if(!_gc.esp){try{const r2=await fetch("https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/spain-provinces.geojson");_gc.esp=await r2.json();}catch(e2){_gc.esp=null;}}if(!dead)setSt("ready");}catch(e){if(!dead)setSt("error");}})();
     return()=>{dead=true;};
   },[]);
   useEffect(()=>{
@@ -612,6 +612,7 @@ function MapView({events,onCity}){
     svg.call(zoom);
     const gm=svg.append("g");
     gm.selectAll("path").data(ctries.features).enter().append("path").attr("d",path).attr("fill","#1e2530").attr("stroke","#2d3748").attr("stroke-width",0.5);
+    if(_gc.esp&&_gc.esp.features){gm.selectAll(".esp-prov").data(_gc.esp.features).enter().append("path").attr("class","esp-prov").attr("d",path).attr("fill","none").attr("stroke","#2d3f52").attr("stroke-width",0.1);}
     svg.call(zoom.transform,iT);drawPins(proj,iT);
   })();},[st,drawPins]);
   const go=(t)=>{if(!tRef.current)return;const{d3,proj,iT}=tRef.current;const svg=d3.select(svgRef.current);const zoom=d3.zoom().scaleExtent([0.8,20]).on("zoom",e=>{d3.select(svgRef.current).select("g").attr("transform",e.transform);drawPins(proj,e.transform);});svg.call(zoom);svg.transition().duration(600).call(zoom.transform,t==="es"?iT:d3.zoomIdentity);};
