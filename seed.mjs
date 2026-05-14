@@ -11,20 +11,20 @@ const firebaseConfig = {
 };
 
 const EVENTS=[
-  {id:1,name:"Hyrox Madrid",disc:"Hyrox",city:"Madrid",prov:"Madrid",country:"España",date:"2025-11-15",price:85,fmts:["Individual","Parejas"],desc:"IFEMA Madrid. Una de las citas Hyrox mas grandes de Espana.",feat:false,verified:true,ratings:[{user:"ana_garcia",date:"2025-11-20",scores:{precio:3,dificultad:4,organizacion:5,ambiente:5,categorias:4},comment:"Espectacular en IFEMA."},{user:"carlos_m",date:"2025-11-22",scores:{precio:2,dificultad:4,organizacion:4,ambiente:5,categorias:3},comment:"Caro pero vale la pena."}]},
+  {id:1,name:"Hyrox Madrid",disc:"Hyrox",city:"Madrid",prov:"Madrid",country:"España",date:"2025-11-15",price:85,fmts:["Individual","Parejas"],desc:"IFEMA Madrid. Una de las citas Hyrox mas grandes de España.",feat:false,verified:true,ratings:[{user:"ana_garcia",date:"2025-11-20",scores:{precio:3,dificultad:4,organizacion:5,ambiente:5,categorias:4},comment:"Espectacular en IFEMA."},{user:"carlos_m",date:"2025-11-22",scores:{precio:2,dificultad:4,organizacion:4,ambiente:5,categorias:3},comment:"Caro pero vale la pena."}]},
   {id:2,name:"Hyrox Bilbao",disc:"Hyrox",city:"Bilbao",prov:"Bizkaia",country:"España",date:"2026-02-14",price:85,fmts:["Individual","Parejas"],desc:"BEC Bilbao Exhibition Centre.",feat:false,verified:true,ratings:[]},
   {id:3,name:"Hyrox Malaga",disc:"Hyrox",city:"Malaga",prov:"Malaga",country:"España",date:"2026-04-18",price:85,fmts:["Individual","Parejas"],desc:"FYCMA Malaga.",feat:false,verified:true,ratings:[]},
   {id:4,name:"Hyrox Barcelona",disc:"Hyrox",city:"Barcelona",prov:"Barcelona",country:"España",date:"2026-05-23",price:85,fmts:["Individual","Parejas"],desc:"Fira Gran Via Barcelona.",feat:true,verified:true,ratings:[{user:"maria_fit",date:"2026-05-25",scores:{precio:3,dificultad:4,organizacion:5,ambiente:5,categorias:5},comment:"El mejor Hyrox que he hecho."}]},
   {id:5,name:"CrossFit Open 2026",disc:"CrossFit",city:"Online",prov:"Madrid",country:"España",date:"2026-02-26",price:0,fmts:["Individual"],desc:"Open anual online.",feat:false,verified:true,ratings:[]},
   {id:6,name:"MAD Fitness Festival",disc:"CrossFit",city:"Ciudad Real",prov:"Ciudad Real",country:"España",date:"2026-05-01",price:120,fmts:["Individual","Parejas","Trios"],desc:"Semifinal europea oficial de CrossFit.",feat:true,verified:true,ratings:[{user:"ana_garcia",date:"2026-05-05",scores:{precio:4,dificultad:5,organizacion:5,ambiente:5,categorias:5},comment:"Experiencia unica."}]},
-  {id:7,name:"Wodcelona",disc:"CrossFit",city:"Barcelona",prov:"Barcelona",country:"España",date:"2026-09-12",price:95,fmts:["Individual","Parejas"],desc:"El evento mas especial del ano en Espana.",feat:true,verified:true,ratings:[]},
+  {id:7,name:"Wodcelona",disc:"CrossFit",city:"Barcelona",prov:"Barcelona",country:"España",date:"2026-09-12",price:95,fmts:["Individual","Parejas"],desc:"El evento mas especial del ano en España.",feat:true,verified:true,ratings:[]},
   {id:8,name:"NorthFit Zarautz 2026",disc:"CrossFit",city:"Zarautz",prov:"Guipuzcoa",country:"España",date:"2026-01-17",price:300,fmts:["Trios"],desc:"Equipos de 3 en la costa vasca.",feat:true,verified:true,ratings:[{user:"carlos_m",date:"2026-01-19",scores:{precio:3,dificultad:5,organizacion:5,ambiente:5,categorias:3},comment:"La experiencia no tiene precio."}]},
   {id:9,name:"Spartan Race Madrid",disc:"OCR",city:"Madrid",prov:"Madrid",country:"España",date:"2026-05-16",price:75,fmts:["Individual"],desc:"Obstaculos en los alrededores de Madrid.",feat:false,verified:false,ratings:[]},
   {id:10,name:"Spartan Race Barcelona",disc:"OCR",city:"Barcelona",prov:"Barcelona",country:"España",date:"2026-10-03",price:75,fmts:["Individual"],desc:"Edicion otonal en la costa catalana.",feat:false,verified:false,ratings:[]},
   {id:11,name:"Campeonato Nacional OCR",disc:"OCR",city:"Madrid",prov:"Madrid",country:"España",date:"2026-05-09",price:55,fmts:["Individual","Parejas"],desc:"Campeonato nacional OCR Olympus.",feat:false,verified:false,ratings:[]},
-  {id:12,name:"Hyrox World Championships",disc:"Hyrox",city:"Estocolmo",prov:"Estocolmo",country:"Suecia",date:"2026-06-06",price:150,fmts:["Individual","Parejas"],desc:"Campeonato mundial en Estocolmo.",feat:true,verified:true,ratings:[{user:"maria_fit",date:"2026-06-08",scores:{precio:2,dificultad:5,organizacion:5,ambiente:5,categorias:5},comment:"Experiencia de vida."}]},
-  {id:13,name:"CrossFit Games 2026",disc:"CrossFit",city:"San Jose",prov:"San Jose CA",country:"EEUU",date:"2026-07-25",price:200,fmts:["Individual"],desc:"El evento mas importante del crossfit mundial.",feat:true,verified:true,ratings:[]},
-  {id:14,name:"Valencia Throwdown 2026",disc:"CrossFit",city:"La Eliana",prov:"Valencia",country:"España",date:"2026-06-05",price:85,fmts:["Individual","Parejas","Trios","Cuartetos"],desc:"Uno de los throwdowns mas importantes de Espana.",feat:true,verified:true,ratings:[]},
+  {id:12,name:"Hyrox World Championships",disc:"Hyrox",city:"Estocolmo",prov:"Suecia",country:"Suecia",date:"2026-06-06",price:150,fmts:["Individual","Parejas"],desc:"Campeonato mundial en Estocolmo.",feat:true,verified:true,ratings:[{user:"maria_fit",date:"2026-06-08",scores:{precio:2,dificultad:5,organizacion:5,ambiente:5,categorias:5},comment:"Experiencia de vida."}]},
+  {id:13,name:"CrossFit Games 2026",disc:"CrossFit",city:"San Jose",prov:"EEUU",country:"EEUU",date:"2026-07-25",price:200,fmts:["Individual"],desc:"El evento mas importante del crossfit mundial.",feat:true,verified:true,ratings:[]},
+  {id:14,name:"Valencia Throwdown 2026",disc:"CrossFit",city:"La Eliana",prov:"Valencia",country:"España",date:"2026-06-05",price:85,fmts:["Individual","Parejas","Trios","Cuartetos"],desc:"Uno de los throwdowns mas importantes de España.",feat:true,verified:true,ratings:[]},
   {id:15,name:"Basque CrossFit Txapelketa 2025",disc:"CrossFit",city:"Bilbao",prov:"Bizkaia",country:"España",date:"2025-11-01",price:120,fmts:["Individual","Cuartetos"],desc:"El campeonato vasco de CrossFit.",feat:true,verified:true,ratings:[]},
   {id:16,name:"Pamplona Arena Games",disc:"CrossFit",city:"Pamplona",prov:"Navarra",country:"España",date:"2026-02-08",price:200,fmts:["Individual","Parejas","Cuartetos","Equipos +4"],desc:"Evento espectacular en Navarra Arena.",feat:true,verified:true,ratings:[]},
   {id:17,name:"The Battle Games X",disc:"CrossFit",city:"Almassora",prov:"Castellon",country:"España",date:"2026-04-24",price:120,fmts:["Individual","Parejas","Trios","Cuartetos"],desc:"Decima edicion del Battle Games en Castellon.",feat:true,verified:false,ratings:[]},
@@ -52,7 +52,7 @@ const EVENTS=[
   {id:39,name:"Naiz Battle Running Final",disc:"CrossFit",city:"Labastida",prov:"Alava",country:"España",date:"2026-03-14",price:0,fmts:["Cuartetos"],desc:"Final del Naiz Battle Running en Alava.",feat:true,verified:false,ratings:[]},
   {id:40,name:"BEV Cup Ebro Box",disc:"CrossFit",city:"Tudela",prov:"Navarra",country:"España",date:"2026-03-14",price:90,fmts:["Trios"],desc:"Copa Ebro Box en Tudela, Navarra.",feat:true,verified:false,ratings:[]},
   {id:41,name:"Gladiators Arena Games 2025",disc:"CrossFit",city:"Pamplona",prov:"Navarra",country:"España",date:"2025-09-06",price:60,fmts:["Individual","Parejas"],desc:"Evento en el Pamplona Arena.",feat:true,verified:false,ratings:[]},
-  {id:42,name:"Gijon Throwdown 2025",disc:"CrossFit",city:"Gijon",prov:"Asturias",country:"España",date:"2025-11-22",price:300,fmts:["Cuartetos"],desc:"Uno de los grandes del norte de Espana.",feat:true,verified:false,ratings:[]},
+  {id:42,name:"Gijon Throwdown 2025",disc:"CrossFit",city:"Gijon",prov:"Asturias",country:"España",date:"2025-11-22",price:300,fmts:["Cuartetos"],desc:"Uno de los grandes del norte de España.",feat:true,verified:false,ratings:[]},
   {id:43,name:"Castellon Throwdown 2025",disc:"CrossFit",city:"Grau de Castellon",prov:"Castellon",country:"España",date:"2025-11-15",price:120,fmts:["Individual","Parejas"],desc:"Referente en la Comunitat Valenciana.",feat:true,verified:false,ratings:[]},
   {id:44,name:"Alicante Fitness Games 2025",disc:"CrossFit",city:"Salinas",prov:"Alicante",country:"España",date:"2025-11-08",price:135,fmts:["Individual","Parejas","Trios"],desc:"Gran evento con multiples categorias.",feat:true,verified:false,ratings:[]},
   {id:45,name:"Hispania Championships 2025",disc:"CrossFit",city:"Almodovar del Rio",prov:"Cordoba",country:"España",date:"2025-11-08",price:100,fmts:["Parejas"],desc:"Campeonato Hispania en Cordoba.",feat:true,verified:false,ratings:[]},
@@ -91,7 +91,6 @@ const EVENTS=[
   {id:78,name:"LAUCEB Games Winter 2025",disc:"CrossFit",city:"Argentona",prov:"Barcelona",country:"España",date:"2025-12-13",price:90,fmts:["Parejas"],desc:"Lauceb Games en Argentona.",feat:true,verified:false,ratings:[]},
   {id:79,name:"Por Ellas Throwdown 2025",disc:"CrossFit",city:"Pineda del Mar",prov:"Barcelona",country:"España",date:"2025-11-22",price:70,fmts:["Trios"],desc:"Throwdown solidario femenino en Barcelona.",feat:true,verified:false,ratings:[]},
   {id:80,name:"Barbatyr Games 2025",disc:"CrossFit",city:"Pedrera",prov:"Sevilla",country:"España",date:"2025-08-29",price:114,fmts:["Parejas"],desc:"Barbatyr Games en Pedrera, Sevilla.",feat:true,verified:false,ratings:[]},
-  // --- NUEVOS de Wodbuster (actuales) ---
   {id:101,name:"EXPERIENCE II CrossGames",disc:"CrossFit",city:"Almansa",prov:"Albacete",country:"España",date:"2026-03-28",price:70,fmts:["Parejas"],desc:"CrossGames Experience II en Almansa, Albacete.",feat:false,verified:false,ratings:[]},
   {id:102,name:"Hibrid-Bou",disc:"Functional",city:"Valls",prov:"Tarragona",country:"España",date:"2026-03-28",price:10,fmts:["Parejas"],desc:"Evento hibrido en Valls, Tarragona.",feat:false,verified:false,ratings:[]},
   {id:103,name:"Duo Challenge No Pain No Rest",disc:"Functional",city:"Altea",prov:"Alicante",country:"España",date:"2026-03-28",price:0,fmts:["Parejas"],desc:"Duo challenge presencial en Altea, Alicante.",feat:false,verified:false,ratings:[]},
@@ -139,14 +138,14 @@ const EVENTS=[
   {id:145,name:"Vera Summer Showdown Ind 2026",disc:"CrossFit",city:"Vera",prov:"Almeria",country:"España",date:"2026-05-23",price:75,fmts:["Individual"],desc:"Vera Summer Showdown Individual 2026 en Vera, Almeria.",feat:false,verified:false,ratings:[]},
   {id:146,name:"SPARK GAMES",disc:"CrossFit",city:"Sevilla",prov:"Sevilla",country:"España",date:"2026-05-16",price:60,fmts:["Parejas"],desc:"Spark Games en Sevilla.",feat:true,verified:false,ratings:[]},
   {id:147,name:"SEVILLA THROWDOWN INDIVIDUAL 2026",disc:"CrossFit",city:"Sevilla",prov:"Sevilla",country:"España",date:"2026-04-11",price:60,fmts:["Individual"],desc:"Sevilla Throwdown Individual 2026.",feat:true,verified:false,ratings:[]},
-  {id:148,name:"Flamingo Invitational 2026",disc:"CrossFit",city:"San Javier",prov:"Murcia",country:"España",date:"2026-04-11",price:150,fmts:["Parejas","Trios"],desc:"Flamingo Invitational 2026 en San Javier, Murcia.",feat:true,verified:false,ratings:[]},
+  {id:148,name:"Flamingo Invitational 2026",disc:"CrossFit",city:"San Javier",prov:"Murcia",country:"España",date:"2026-04-11",price:150,fmts:["Parejas","Trios"],desc:"Flamingo Invitacional 2026 en San Javier, Murcia.",feat:true,verified:false,ratings:[]},
   {id:149,name:"Healthy & Fit Games 2026",disc:"CrossFit",city:"Vilamarxant",prov:"Valencia",country:"España",date:"2026-04-11",price:120,fmts:["Individual","Parejas"],desc:"Healthy & Fit Games 2026 en Vilamarxant, Valencia.",feat:true,verified:false,ratings:[]},
   {id:150,name:"LANZAROTE SUMMER CHALLENGE 2026",disc:"CrossFit",city:"Arrecife",prov:"Las Palmas",country:"España",date:"2026-07-11",price:120,fmts:["Parejas"],desc:"Lanzarote Summer Challenge 2026 en Arrecife, Lanzarote.",feat:true,verified:false,ratings:[]},
   {id:151,name:"BRAVE CHALLENGE HYBRID II",disc:"Functional",city:"Blanes",prov:"Girona",country:"España",date:"2026-05-09",price:50,fmts:["Parejas"],desc:"Brave Challenge Hybrid II en Blanes, Girona.",feat:true,verified:false,ratings:[]},
   {id:152,name:"AREA UNITED HYBRID FESTIVAL",disc:"Functional",city:"Viladecans",prov:"Barcelona",country:"España",date:"2026-10-03",price:90,fmts:["Parejas","Cuartetos"],desc:"Area United Hybrid Festival Strongman Edition en Viladecans, Barcelona.",feat:true,verified:false,ratings:[]},
   {id:153,name:"APEX HYBRID CHALLENGE",disc:"Functional",city:"Sevilla",prov:"Sevilla",country:"España",date:"2026-05-09",price:90,fmts:["Parejas"],desc:"Apex Hybrid Challenge en Sevilla.",feat:true,verified:false,ratings:[]},
   {id:154,name:"PartnerXot 26",disc:"CrossFit",city:"Palma de Mallorca",prov:"Baleares",country:"España",date:"2026-05-23",price:140,fmts:["Cuartetos"],desc:"PartnerXot 2026 en Baleares.",feat:true,verified:false,ratings:[]},
-  {id:155,name:"Promofit Games XX",disc:"CrossFit",city:"Porto",prov:"Estocolmo",country:"Portugal",date:"2026-06-05",price:218,fmts:["Individual","Equipos +4"],desc:"Promofit Games XX en Porto, Portugal.",feat:true,verified:false,ratings:[]},
+  {id:155,name:"Promofit Games XX",disc:"CrossFit",city:"Porto",prov:"Portugal",country:"Portugal",date:"2026-06-05",price:218,fmts:["Individual","Equipos +4"],desc:"Promofit Games XX en Porto, Portugal.",feat:true,verified:false,ratings:[]},
   {id:156,name:"PHOENIX ON THE BEACH 2K26",disc:"CrossFit",city:"Malaga",prov:"Malaga",country:"España",date:"2026-06-13",price:115,fmts:["Individual","Parejas"],desc:"Phoenix On The Beach 2026.",feat:true,verified:false,ratings:[]},
   {id:157,name:"NEREO GAMES 2026",disc:"CrossFit",city:"Palau d'Anglesola",prov:"Lleida",country:"España",date:"2026-05-30",price:195,fmts:["Trios"],desc:"Nereo Games 2026 en Palau d'Anglesola, Lleida.",feat:true,verified:false,ratings:[]},
   {id:158,name:"THE FITTEST BOX 2026",disc:"CrossFit",city:"Granada",prov:"Granada",country:"España",date:"2026-05-30",price:185,fmts:["Trios"],desc:"The Fittest Box 2026 en Granada.",feat:true,verified:false,ratings:[]},
@@ -163,8 +162,8 @@ const EVENTS=[
   {id:169,name:"THE LAUCEB GAMES SUMMER EDITION",disc:"CrossFit",city:"Barcelona",prov:"Barcelona",country:"España",date:"2026-06-27",price:150,fmts:["Trios"],desc:"Lauceb Games Summer Edition en Barcelona.",feat:true,verified:false,ratings:[]},
   {id:170,name:"Consuegra Throwdown 2026",disc:"CrossFit",city:"Toledo",prov:"Toledo",country:"España",date:"2026-06-20",price:300,fmts:["Parejas"],desc:"Consuegra Throwdown 2026 en Toledo.",feat:true,verified:false,ratings:[]},
   {id:171,name:"Vitality Games 2026",disc:"CrossFit",city:"Mostoles",prov:"Madrid",country:"España",date:"2026-09-26",price:131,fmts:["Parejas"],desc:"Vitality Games 2026 en Mostoles, Madrid.",feat:false,verified:false,ratings:[]},
-  {id:172,name:"Elvas Cup 2026",disc:"CrossFit",city:"Elvas",prov:"Estocolmo",country:"Portugal",date:"2026-06-13",price:390,fmts:["Cuartetos"],desc:"Elvas Cup 2026 en Elvas, Portugal.",feat:true,verified:false,ratings:[]},
-  {id:173,name:"Gaia Throwdown 2026",disc:"CrossFit",city:"Vila Nova de Gaia",prov:"Estocolmo",country:"Portugal",date:"2026-07-11",price:40,fmts:["Individual","Trios"],desc:"Gaia Throwdown 2026 en Vila Nova de Gaia, Portugal.",feat:true,verified:false,ratings:[]},
+  {id:172,name:"Elvas Cup 2026",disc:"CrossFit",city:"Elvas",prov:"Portugal",country:"Portugal",date:"2026-06-13",price:390,fmts:["Cuartetos"],desc:"Elvas Cup 2026 en Elvas, Portugal.",feat:true,verified:false,ratings:[]},
+  {id:173,name:"Gaia Throwdown 2026",disc:"CrossFit",city:"Vila Nova de Gaia",prov:"Portugal",country:"Portugal",date:"2026-07-11",price:40,fmts:["Individual","Trios"],desc:"Gaia Throwdown 2026 en Vila Nova de Gaia, Portugal.",feat:true,verified:false,ratings:[]},
   {id:174,name:"HASKTRAINING GAMES 2026",disc:"CrossFit",city:"Molina de Segura",prov:"Murcia",country:"España",date:"2026-09-05",price:120,fmts:["Cuartetos"],desc:"HaskTraining Games 2026 en Molina de Segura, Murcia.",feat:true,verified:false,ratings:[]},
   {id:175,name:"Henko Hybrid Festival 2026",disc:"Functional",city:"Amposta",prov:"Tarragona",country:"España",date:"2026-10-03",price:115,fmts:["Parejas"],desc:"Henko Hybrid Festival 2026 en Amposta, Tarragona.",feat:true,verified:false,ratings:[]},
   {id:176,name:"GARES THROWDOWN",disc:"CrossFit",city:"Puente la Reina",prov:"Navarra",country:"España",date:"2026-10-10",price:392,fmts:["Cuartetos"],desc:"Gares Throwdown en Puente la Reina, Navarra.",feat:true,verified:false,ratings:[]},
@@ -182,10 +181,9 @@ const EVENTS=[
   {id:188,name:"BASQUE CROSSFIT TXAPELKETA V",disc:"CrossFit",city:"Bilbao",prov:"Bizkaia",country:"España",date:"2026-10-30",price:335,fmts:["Parejas","Cuartetos"],desc:"Basque CrossFit Txapelketa V edicion en Bizkaia.",feat:true,verified:false,ratings:[]},
   {id:189,name:"PAMPLONA ARENA GAMES 26",disc:"CrossFit",city:"Pamplona",prov:"Navarra",country:"España",date:"2026-11-14",price:440,fmts:["Cuartetos"],desc:"Pamplona Arena Games 2026 en Pamplona.",feat:true,verified:false,ratings:[]},
   {id:190,name:"Makumba Games 5",disc:"CrossFit",city:"Murcia",prov:"Murcia",country:"España",date:"2026-10-17",price:175,fmts:["Individual","Parejas","Trios"],desc:"Makumba Games 5a edicion en Murcia.",feat:true,verified:false,ratings:[]},
-  {id:191,name:"GIBRALTAR FITNESS GAMES",disc:"CrossFit",city:"Gibraltar",prov:"Malaga",country:"Gibraltar",date:"2026-10-24",price:140,fmts:["Parejas"],desc:"Gibraltar Fitness Games en Gibraltar.",feat:true,verified:false,ratings:[]},
+  {id:191,name:"GIBRALTAR FITNESS GAMES",disc:"CrossFit",city:"Gibraltar",prov:"Gibraltar",country:"Gibraltar",date:"2026-10-24",price:140,fmts:["Parejas"],desc:"Gibraltar Fitness Games en Gibraltar.",feat:true,verified:false,ratings:[]},
   {id:192,name:"North Ox Trials",disc:"Functional",city:"Oviedo",prov:"Asturias",country:"España",date:"2026-09-11",price:100,fmts:["Parejas"],desc:"North Ox Trials en Oviedo, Asturias.",feat:false,verified:false,ratings:[]},
   {id:193,name:"VTD27",disc:"CrossFit",city:"Valencia",prov:"Valencia",country:"España",date:"2027-03-12",price:275,fmts:["Parejas","Cuartetos"],desc:"Valencia Throwdown 2027 - ya abierto el registro.",feat:true,verified:false,ratings:[]},
-  // --- Pasados relevantes de Wodbuster ---
   {id:200,name:"Road to Athens Throwdown 2025",disc:"CrossFit",city:"Murcia",prov:"Murcia",country:"España",date:"2025-03-15",price:60,fmts:["Individual","Trios"],desc:"Road to Athens Throwdown en Murcia.",feat:true,verified:false,ratings:[]},
   {id:201,name:"February Challenge Leon 2025",disc:"CrossFit",city:"Leon",prov:"Leon",country:"España",date:"2025-01-31",price:299,fmts:["Trios","Equipos +4"],desc:"February Challenge Leon Edition 2025.",feat:true,verified:false,ratings:[]},
   {id:202,name:"Castilla Throwdown 2025",disc:"CrossFit",city:"Valladolid",prov:"Valladolid",country:"España",date:"2025-03-15",price:175,fmts:["Parejas"],desc:"Castilla Throwdown 2025 en Valladolid.",feat:true,verified:false,ratings:[]},
@@ -229,8 +227,8 @@ const EVENTS=[
   {id:240,name:"WOD GAMES LA CARLOTA 2025",disc:"CrossFit",city:"La Carlota",prov:"Cordoba",country:"España",date:"2025-11-15",price:100,fmts:["Parejas"],desc:"Wod Games La Carlota 2025 en Cordoba.",feat:true,verified:false,ratings:[]},
   {id:241,name:"12B Reborn Games",disc:"CrossFit",city:"Arona",prov:"Tenerife",country:"España",date:"2025-12-06",price:40,fmts:["Parejas"],desc:"12B Reborn Games en Arona, Tenerife.",feat:false,verified:false,ratings:[]},
   {id:242,name:"MADRIZ WAR OF PAIRS TEAM 2025",disc:"CrossFit",city:"Madrid",prov:"Madrid",country:"España",date:"2025-11-29",price:120,fmts:["Cuartetos"],desc:"Madriz War of Pairs Team Edition 2025 en Madrid.",feat:true,verified:false,ratings:[]},
-  {id:243,name:"Lx Games 25",disc:"CrossFit",city:"Lisboa",prov:"Estocolmo",country:"Portugal",date:"2025-10-17",price:155,fmts:["Individual","Cuartetos"],desc:"Lx Games 2025 en Lisboa, Portugal.",feat:true,verified:false,ratings:[]},
-  {id:244,name:"Badajoz Elvas Throwdown 2025",disc:"CrossFit",city:"Elvas",prov:"Estocolmo",country:"Portugal",date:"2025-11-07",price:238,fmts:["Individual","Cuartetos"],desc:"Badajoz Elvas Throwdown 2025 en Elvas, Portugal.",feat:true,verified:false,ratings:[]},
+  {id:243,name:"Lx Games 25",disc:"CrossFit",city:"Lisboa",prov:"Portugal",country:"Portugal",date:"2025-10-17",price:155,fmts:["Individual","Cuartetos"],desc:"Lx Games 2025 en Lisboa, Portugal.",feat:true,verified:false,ratings:[]},
+  {id:244,name:"Badajoz Elvas Throwdown 2025",disc:"CrossFit",city:"Elvas",prov:"Portugal",country:"Portugal",date:"2025-11-07",price:238,fmts:["Individual","Cuartetos"],desc:"Badajoz Elvas Throwdown 2025 en Elvas, Portugal.",feat:true,verified:false,ratings:[]},
   {id:245,name:"WEZONE THROWDOWN 2025",disc:"CrossFit",city:"Madrid",prov:"Madrid",country:"España",date:"2025-11-22",price:340,fmts:["Cuartetos"],desc:"Wezone Throwdown 2025.",feat:true,verified:false,ratings:[]},
   {id:246,name:"OHANA GAMES 25",disc:"CrossFit",city:"San Bartolome de Tirajana",prov:"Las Palmas",country:"España",date:"2025-05-31",price:150,fmts:["Individual","Trios"],desc:"Ohana Games 25 en Gran Canaria.",feat:true,verified:false,ratings:[]},
   {id:247,name:"Malpey Games 2025",disc:"CrossFit",city:"Malaga",prov:"Malaga",country:"España",date:"2025-09-26",price:135,fmts:["Parejas"],desc:"Malpey Games 2025.",feat:false,verified:false,ratings:[]},
@@ -242,15 +240,11 @@ const EVENTS=[
 async function seed() {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-  
   console.log(`Seeding ${EVENTS.length} events...`);
-  
-  // Firestore batch limit is 500, split if needed
   const chunks = [];
   for (let i = 0; i < EVENTS.length; i += 400) {
     chunks.push(EVENTS.slice(i, i + 400));
   }
-  
   for (const chunk of chunks) {
     const batch = writeBatch(db);
     chunk.forEach(ev => {
@@ -259,7 +253,6 @@ async function seed() {
     await batch.commit();
     console.log(`Batch of ${chunk.length} events written`);
   }
-  
   console.log('Seed complete!');
   process.exit(0);
 }
