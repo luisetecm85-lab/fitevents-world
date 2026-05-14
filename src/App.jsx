@@ -426,9 +426,9 @@ function AdminPanel({evs,setEvs,onClose}){
   if(!auth)return<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.92)",zIndex:999,display:"flex",alignItems:"center",justifyContent:"center"}}>
     <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.1)",borderRadius:12,padding:22,width:290}}>
       <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:20,fontWeight:800,marginBottom:12}}>Panel Admin</div>
-      <input type="password" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==="Enter"&&pass===ADMIN_PASS&&setAuth(true)} placeholder="Contrasena" style={{width:"100%",padding:"8px 11px",marginBottom:10}}/>
+      <input type="password" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==="Enter"&&pass===ADMIN_PASS&&setAuth(true)} placeholder="Contraseña *" style={{width:"100%",padding:"8px 11px",marginBottom:10}}/>
       <div style={{display:"flex",gap:8}}>
-        <button onClick={()=>{if(pass===ADMIN_PASS)setAuth(true);}} style={{flex:1,background:"#FF6500",color:"#fff",border:"none",padding:"8px 0",borderRadius:6,fontSize:13,fontWeight:600}}>Entrar</button>
+        <button onClick={()=>{if(pass===ADMIN_PASS)setAuth(true);}} style={{flex:1,background:"#FF6500",color:"#fff",border:"none",padding:"8px 0",borderRadius:6,fontSize:13,fontWeight:600}}>Iniciar sesión</button>
         <button onClick={onClose} style={{flex:1,background:"#2a2a2a",color:"#fff",border:"none",padding:"8px 0",borderRadius:6,fontSize:13,fontWeight:600}}>Cancelar</button>
       </div>
     </div>
@@ -612,7 +612,7 @@ function MapView({events,onCity}){
     svg.call(zoom);
     const gm=svg.append("g");
     gm.selectAll("path").data(ctries.features).enter().append("path").attr("d",path).attr("fill","#1e2530").attr("stroke","#2d3748").attr("stroke-width",0.5);
-    if(_gc.esp&&_gc.esp.features){gm.selectAll(".esp-prov").data(_gc.esp.features).enter().append("path").attr("class","esp-prov").attr("d",path).attr("fill","none").attr("stroke","#2d3f52").attr("stroke-width",0.1);}
+    if(_gc.esp&&_gc.esp.features){gm.selectAll(".esp-prov").data(_gc.esp.features).enter().append("path").attr("class","esp-prov").attr("d",path).attr("fill","none").attr("stroke","#3d5068").attr("stroke-width",0.4);}
     svg.call(zoom.transform,iT);drawPins(proj,iT);
   })();},[st,drawPins]);
   const go=(t)=>{if(!tRef.current)return;const{d3,proj,iT}=tRef.current;const svg=d3.select(svgRef.current);const zoom=d3.zoom().scaleExtent([0.8,20]).on("zoom",e=>{d3.select(svgRef.current).select("g").attr("transform",e.transform);drawPins(proj,e.transform);});svg.call(zoom);svg.transition().duration(600).call(zoom.transform,t==="es"?iT:d3.zoomIdentity);};
@@ -699,7 +699,7 @@ export default function App(){
   const cmpEvs=useMemo(()=>cmpIds.map(id=>evs.find(e=>e.id===id)).filter(Boolean),[cmpIds,evs]);
   const clr=()=>{setFDisc("Todos");setFCountry("Todos");setFCities([]);setSearch("");setSort("date");setMaxP(500);setOnlyFut(false);setOnlyNew(false);setFFmts([]);};
   const login=async()=>{setAErr("");try{await signInWithEmailAndPassword(auth,aF.u,aF.p);setView("list");setAF({u:"",name:"",p:"",p2:""});}catch(e){setAErr("Email o contraseña incorrectos");}};
-  const reg=async()=>{setAErr("");if(!aF.u||!aF.name||!aF.p)return setAErr("Rellena todos los campos");if(aF.p!==aF.p2)return setAErr("Contrasenas no coinciden");if(aF.p.length<6)return setAErr("Min 6 caracteres");try{const cred=await createUserWithEmailAndPassword(auth,aF.u,aF.p);await updateProfile(cred.user,{displayName:aF.name});setAOk(`Bienvenido/a, ${aF.name}`);setTimeout(()=>{setAOk("");setView("list");},2000);setAF({u:"",name:"",p:"",p2:""});}catch(e){if(e.code==="auth/email-already-in-use")setAErr("Email ya registrado");else setAErr("Error al crear cuenta");}};
+  const reg=async()=>{setAErr("");if(!aF.u||!aF.name||!aF.p)return setAErr("Rellena todos los campos obligatorios");if(aF.p!==aF.p2)return setAErr("Las contraseñas no coinciden");if(aF.p.length<6)return setAErr("Mínimo 6 caracteres");try{const cred=await createUserWithEmailAndPassword(auth,aF.u,aF.p);await updateProfile(cred.user,{displayName:aF.name});setAOk(`Bienvenido/a, ${aF.name}`);setTimeout(()=>{setAOk("");setView("list");},2000);setAF({u:"",name:"",p:"",p2:""});}catch(e){if(e.code==="auth/email-already-in-use")setAErr("Email ya registrado");else setAErr("Error al crear cuenta");}};
   const rate=async(ev)=>{setRErr("");if(!me)return setRErr("Inicia sesion");if(SCORE_KEYS.some(k=>!rSc[k]))return setRErr("Puntua todas las categorias");if(ev.ratings&&ev.ratings.find(r=>r.user===me.u))return setRErr("Ya has valorado");const nr={user:me.u,date:today,scores:{...rSc},comment:rCom};const updated={...ev,ratings:[...(ev.ratings||[]),nr]};await updateDoc(doc(db,"events",String(ev.id)),{ratings:updated.ratings});setSel(updated);setRSc({precio:0,dificultad:0,organizacion:0,ambiente:0,categorias:0});setRCom("");};
   const tog=async(id)=>{if(!me)return;const ev=evs.find(e=>e.id===id);if(!ev)return;const att2=ev.attendance||[];const updated=att2.includes(me.u)?att2.filter(u=>u!==me.u):[...att2,me.u];await updateDoc(doc(db,"events",String(id)),{attendance:updated});};
   const addEv=async()=>{setEvErr("");if(!nEv.name||!nEv.city||!nEv.date)return setEvErr("Nombre, ciudad y fecha obligatorios");const c=PC[nEv.prov]||{lat:40.42,lon:-3.70};const newEvent={...nEv,id:Date.now(),price:Number(nEv.price)||0,ratings:[],attendance:[],lat:c.lat,lon:c.lon,feat:false,verified:false};await setDoc(doc(db,"events",String(newEvent.id)),newEvent);setNEv({name:"",disc:"CrossFit",city:"",prov:"Madrid",country:"España",date:"",price:"",desc:"",fmts:[],logo:null});setEvOk("Evento anadido");setTimeout(()=>{setEvOk("");setView("list");},2000);};
@@ -854,7 +854,7 @@ export default function App(){
               <div style={{fontSize:10,fontWeight:700,letterSpacing:2,color:"#444",textTransform:"uppercase",marginBottom:8}}>Tu valoracion</div>
               {!me?<div style={{background:"rgba(255,107,43,0.07)",border:"1px solid rgba(255,107,43,0.15)",borderRadius:7,padding:11,textAlign:"center"}}>
                 <p style={{color:"#888",fontSize:12,marginBottom:7}}>Inicia sesion para valorar</p>
-                <button onClick={()=>setView("auth")} style={{...BT("p"),padding:"5px 13px"}}>Entrar</button>
+                <button onClick={()=>setView("auth")} style={{...BT("p"),padding:"5px 13px"}}>Iniciar sesión</button>
               </div>:hasR?<div style={{background:"rgba(76,175,80,0.07)",border:"1px solid rgba(76,175,80,0.15)",borderRadius:7,padding:11,textAlign:"center",fontSize:12,color:"#4CAF50"}}>Ya has valorado este evento ✓</div>:
               <div>
                 <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"3px 11px",marginBottom:7}}>
@@ -932,7 +932,7 @@ export default function App(){
 
       {view==="add"&&<div style={{maxWidth:470}}>
         <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Anadir evento</div>
-        {!me?<div style={{textAlign:"center",padding:"40px 0"}}><p style={{color:"#888",marginBottom:11,fontSize:13}}>Inicia sesion para anadir eventos</p><button onClick={()=>setView("auth")} style={{...BT("p"),padding:"6px 13px"}}>Entrar</button></div>:
+        {!me?<div style={{textAlign:"center",padding:"40px 0"}}><p style={{color:"#888",marginBottom:11,fontSize:13}}>Inicia sesion para anadir eventos</p><button onClick={()=>setView("auth")} style={{...BT("p"),padding:"6px 13px"}}>Iniciar sesión</button></div>:
         <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,padding:15}}>
           <input value={nEv.name} onChange={e=>setNEv(x=>({...x,name:e.target.value}))} placeholder="Nombre *" style={IN}/>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:7}}>
@@ -984,20 +984,20 @@ export default function App(){
         </div>}
       </div>}
 
-      {view==="auth"&&<div style={{maxWidth:310,margin:"0 auto"}}>
+      {view==="auth"&&<div style={{maxWidth:420,margin:"0 auto"}}>
         <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,padding:17}}>
           <div style={{display:"flex",gap:0,marginBottom:13,background:"#111",borderRadius:7,padding:3}}>
-            {["login","register"].map(m=><button key={m} onClick={()=>{setAMode(m);setAErr("");setAOk("");}} style={{flex:1,background:aMode===m?"#FF6500":"transparent",color:aMode===m?"#fff":"#555",border:"none",padding:"5px 0",borderRadius:5,fontSize:12,fontWeight:600}}>{m==="login"?"Entrar":"Registrarse"}</button>)}
+            {["login","register"].map(m=><button key={m} onClick={()=>{setAMode(m);setAErr("");setAOk("");}} style={{flex:1,background:aMode===m?"#FF6500":"transparent",color:aMode===m?"#fff":"#555",border:"none",padding:"5px 0",borderRadius:5,fontSize:12,fontWeight:600}}>{m==="login"?"Iniciar sesión":"Registrarse"}</button>)}
           </div>
           {aOk?<div style={{background:"rgba(76,175,80,0.09)",border:"1px solid rgba(76,175,80,0.18)",borderRadius:8,padding:13,textAlign:"center"}}><div style={{fontSize:20,marginBottom:4}}>✓</div><div style={{color:"#4CAF50",fontWeight:600}}>Registro completado</div><div style={{color:"#888",fontSize:12,marginTop:3}}>{aOk}</div></div>:
           <div>
-            <input value={aF.u} onChange={e=>setAF(x=>({...x,u:e.target.value}))} placeholder="Usuario" style={IN}/>
-            {aMode==="register"&&<input value={aF.name} onChange={e=>setAF(x=>({...x,name:e.target.value}))} placeholder="Nombre visible" style={IN}/>}
-            <input type="password" value={aF.p} onChange={e=>setAF(x=>({...x,p:e.target.value}))} placeholder="Contrasena" style={IN}/>
-            {aMode==="register"&&<input type="password" value={aF.p2} onChange={e=>setAF(x=>({...x,p2:e.target.value}))} placeholder="Repetir contrasena" style={IN}/>}
+            <input value={aF.u} onChange={e=>setAF(x=>({...x,u:e.target.value}))} placeholder="Email *" style={IN}/>
+            {aMode==="register"&&<input value={aF.name} onChange={e=>setAF(x=>({...x,name:e.target.value}))} placeholder="Nombre visible *" style={IN}/>}
+            <input type="password" value={aF.p} onChange={e=>setAF(x=>({...x,p:e.target.value}))} placeholder="Contraseña *" style={IN}/>
+            {aMode==="register"&&<input type="password" value={aF.p2} onChange={e=>setAF(x=>({...x,p2:e.target.value}))} placeholder="Repetir contraseña *" style={IN}/>}
             {aErr&&<p style={{color:"#EF5350",fontSize:11,marginBottom:5}}>{aErr}</p>}
-            <button onClick={aMode==="login"?login:reg} style={{...BT("p"),width:"100%",padding:"8px 0",fontSize:13}}>{aMode==="login"?"Entrar":"Crear cuenta"}</button>
-            {aMode==="login"&&<p style={{textAlign:"center",fontSize:11,color:"#444",marginTop:7}}>Demo: ana_garcia / 1234</p>}
+            <button onClick={aMode==="login"?login:reg} style={{...BT("p"),width:"100%",padding:"8px 0",fontSize:13}}>{aMode==="login"?"Iniciar sesión":"Crear cuenta"}</button>
+            
           </div>}
         </div>
       </div>}
