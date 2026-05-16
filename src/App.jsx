@@ -968,19 +968,44 @@ export default function App(){
         </div>}
       </div>}
 
-      {view==="prof"&&me&&<div>
-        <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,padding:14,marginBottom:11,display:"flex",gap:11,alignItems:"center"}}>
-          <div style={{width:42,height:42,borderRadius:"50%",background:"#E74C3C",display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,fontWeight:700,color:"#fff",fontFamily:"'Barlow Condensed',sans-serif"}}>{me.u.charAt(0).toUpperCase()}</div>
-          <div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:17,fontWeight:800}}>{me.name}</div><div style={{fontSize:11,color:"#555"}}>@{me.u}</div></div>
-          <button onClick={()=>{setMe(null);setView("list");}} style={{...BT("d"),marginLeft:"auto",padding:"4px 11px",fontSize:11}}>Salir</button>
+      {view==="prof"&&me&&<div style={{maxWidth:700,margin:"0 auto"}}>
+        {/* Header perfil */}
+        <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:12,padding:"20px 24px",marginBottom:16,display:"flex",gap:16,alignItems:"center"}}>
+          <div style={{width:60,height:60,borderRadius:"50%",background:"linear-gradient(135deg,#FF6500,#ff9a5c)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:26,fontWeight:900,color:"#fff",fontFamily:"'Barlow Condensed',sans-serif",flexShrink:0}}>{me.name.charAt(0).toUpperCase()}</div>
+          <div style={{flex:1}}>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:22,fontWeight:900,textTransform:"uppercase",marginBottom:2}}>{me.name}</div>
+            <div style={{fontSize:12,color:"#888"}}>{me.email}</div>
+          </div>
+          <div style={{display:"flex",gap:16,textAlign:"center"}}>
+            <div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:22,fontWeight:900,color:"#FF6500"}}>{evs.filter(e=>e.ratings.find(r=>r.user===me.u)).length}</div><div style={{fontSize:10,color:"#555",textTransform:"uppercase",letterSpacing:1}}>Valoraciones</div></div>
+            <div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:22,fontWeight:900,color:"#4CAF50"}}>{evs.filter(e=>((e.attendance||[])).includes(me.u)).length}</div><div style={{fontSize:10,color:"#555",textTransform:"uppercase",letterSpacing:1}}>Quiero ir</div></div>
+          </div>
+          <button onClick={()=>{signOut(auth);setMe(null);setView("list");}} style={{background:"rgba(239,83,80,0.12)",color:"#EF5350",border:"1px solid rgba(239,83,80,0.25)",padding:"6px 14px",borderRadius:6,fontSize:12,fontWeight:700,cursor:"pointer"}}>Cerrar sesión</button>
         </div>
-        {evs.filter(e=>e.ratings.find(r=>r.user===me.u)).length>0&&<div style={{marginBottom:11}}>
-          <div style={{fontSize:10,fontWeight:700,letterSpacing:2,color:"#444",textTransform:"uppercase",marginBottom:7}}>Mis valoraciones</div>
-          {evs.filter(e=>e.ratings.find(r=>r.user===me.u)).map(ev=><div key={ev.id} style={{...CRD,padding:"7px 11px",display:"flex",gap:7,alignItems:"center"}} onClick={()=>{setSel(ev);setView("det");}}><Badge disc={ev.disc} sm/><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700}}>{ev.name}</div></div>)}
+        {/* Mis valoraciones */}
+        {evs.filter(e=>e.ratings.find(r=>r.user===me.u)).length>0?<div style={{marginBottom:16}}>
+          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:16,fontWeight:800,letterSpacing:1,textTransform:"uppercase",marginBottom:10,color:"#FF6500"}}>Mis valoraciones</div>
+          <div style={{display:"flex",flexDirection:"column",gap:6}}>
+          {evs.filter(e=>e.ratings.find(r=>r.user===me.u)).map(ev=>{const r=ev.ratings.find(x=>x.user===me.u);const oa=overall([r]);return<div key={ev.id} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",borderRadius:10,padding:"10px 14px",display:"flex",gap:10,alignItems:"center",cursor:"pointer"}} onClick={()=>{setSel(ev);setView("det");}}>
+            <EventLogo ev={ev} size={36}/>
+            <div style={{flex:1}}><div style={{display:"flex",gap:4,marginBottom:2}}><Badge disc={ev.disc} sm/>{ev.verified&&<VBadge sm/>}</div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,textTransform:"uppercase"}}>{ev.name}</div><div style={{fontSize:11,color:"#888"}}>{ev.city} · {fd(ev.date)}</div></div>
+            <div style={{textAlign:"center"}}><div style={{fontSize:20,fontWeight:900,color:"#FF6500",fontFamily:"'Barlow Condensed',sans-serif"}}>{f1(oa)}</div><Stars n={oa} sz={9}/></div>
+          </div>;})}
+          </div>
+        </div>:<div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,padding:"20px",marginBottom:16,textAlign:"center"}}>
+          <div style={{fontSize:13,color:"#555",marginBottom:8}}>Todavía no has valorado ningún evento</div>
+          <button onClick={()=>setView("list")} style={{...BT("p"),padding:"5px 14px",fontSize:12}}>Explorar eventos</button>
         </div>}
+        {/* Quiero asistir */}
         {evs.filter(e=>((e.attendance||[])).includes(me.u)).length>0&&<div>
-          <div style={{fontSize:10,fontWeight:700,letterSpacing:2,color:"#444",textTransform:"uppercase",marginBottom:7}}>Quiero asistir</div>
-          {evs.filter(e=>((e.attendance||[])).includes(me.u)).map(ev=><div key={ev.id} style={{...CRD,padding:"7px 11px",display:"flex",gap:7,alignItems:"center"}} onClick={()=>{setSel(ev);setView("det");}}><Badge disc={ev.disc} sm/><div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700}}>{ev.name}</div><div style={{fontSize:10,color:"#555"}}>{fd(ev.date)} · {ev.city}</div></div></div>)}
+          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:16,fontWeight:800,letterSpacing:1,textTransform:"uppercase",marginBottom:10,color:"#4CAF50"}}>Quiero asistir</div>
+          <div style={{display:"flex",flexDirection:"column",gap:6}}>
+          {evs.filter(e=>((e.attendance||[])).includes(me.u)).map(ev=><div key={ev.id} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",borderRadius:10,padding:"10px 14px",display:"flex",gap:10,alignItems:"center",cursor:"pointer"}} onClick={()=>{setSel(ev);setView("det");}}>
+            <EventLogo ev={ev} size={36}/>
+            <div style={{flex:1}}><div style={{display:"flex",gap:4,marginBottom:2}}><Badge disc={ev.disc} sm/>{ev.verified&&<VBadge sm/>}</div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,textTransform:"uppercase"}}>{ev.name}</div><div style={{fontSize:11,color:"#888"}}>{ev.city} · {fd(ev.date)} · {ev.price===0?"Gratis":`${ev.price}€`}</div></div>
+            <div style={{fontSize:11,color:"#4CAF50",fontWeight:700}}>✓ Apuntado</div>
+          </div>)}
+          </div>
         </div>}
       </div>}
 
