@@ -11,8 +11,6 @@ const DISCIPLINES=["Todos","CrossFit","Hyrox","OCR","Fuerza","Functional"];
 const FORMATS=["Individual","Parejas","Trios","Cuartetos","Equipos +4"];
 const SCORE_KEYS=["precio","dificultad","organizacion","ambiente","categorias"];
 const SLABELS={precio:"Precio/calidad",dificultad:"Dificultad",organizacion:"Organizacion",ambiente:"Ambiente",categorias:"Categorias"};
-const ADMIN_PASS="fitevents2026";
-
 const ADS=[
   {id:1,brand:"PICSIL",claim:"Equipamiento tecnico para atletas de elite",cta:"Ver productos",url:"https://picsil.com",color:"#FF6500",logo:"💪"},
   {id:2,brand:"ON RUNNING",claim:"Zapatillas disenadas para rendimiento hibrido",cta:"Descubrir",url:"https://on-running.com",color:"#4DA6FF",logo:"👟"},
@@ -417,22 +415,10 @@ function AdminEventEditor({ev,onSave,onClose}){
 }
 
 function AdminPanel({evs,setEvs,onClose}){
-  const[pass,setPass]=useState("");const[auth,setAuth]=useState(false);
   const[search,setSearch]=useState("");const[editing,setEditing]=useState(null);
   const toggle=async(id,field)=>{const ev=evs.find(e=>e.id===id);if(!ev)return;await updateDoc(doc(db,"events",String(id)),{[field]:!ev[field]});};
   const saveEdit=async(updated)=>{await updateDoc(doc(db,"events",String(updated.id)),updated);setEditing(null);};
   const filtered=evs.filter(e=>e.name.toLowerCase().includes(search.toLowerCase()));
-
-  if(!auth)return<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.92)",zIndex:999,display:"flex",alignItems:"center",justifyContent:"center"}}>
-    <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.1)",borderRadius:12,padding:22,width:290}}>
-      <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:20,fontWeight:800,marginBottom:12}}>Panel Admin</div>
-      <input type="password" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==="Enter"&&pass===ADMIN_PASS&&setAuth(true)} placeholder="Contraseña *" style={{width:"100%",padding:"8px 11px",marginBottom:10}}/>
-      <div style={{display:"flex",gap:8}}>
-        <button onClick={()=>{if(pass===ADMIN_PASS)setAuth(true);}} style={{flex:1,background:"#FF6500",color:"#fff",border:"none",padding:"8px 0",borderRadius:6,fontSize:13,fontWeight:600}}>Iniciar sesión</button>
-        <button onClick={onClose} style={{flex:1,background:"#2a2a2a",color:"#fff",border:"none",padding:"8px 0",borderRadius:6,fontSize:13,fontWeight:600}}>Cancelar</button>
-      </div>
-    </div>
-  </div>;
 
   return<>
     {editing&&<AdminEventEditor ev={editing} onSave={saveEdit} onClose={()=>setEditing(null)}/>}
@@ -639,9 +625,12 @@ export default function App(){
   const[loading,setLoading]=useState(true);
 
   useEffect(()=>{
-    const unsub=onAuthStateChanged(auth,(user)=>{
-      if(user){setMe({u:user.uid,name:user.displayName||user.email.split("@")[0],email:user.email});}
-      else{setMe(null);}
+    const unsub=onAuthStateChanged(auth,async(user)=>{
+      if(user){
+        setMe({u:user.uid,name:user.displayName||user.email.split("@")[0],email:user.email});
+        const adminSnap=await getDocs(collection(db,"admins"));
+        setIsAdmin(adminSnap.docs.some(d=>d.id===user.uid));
+      } else{setMe(null);setIsAdmin(false);}
     });
     return unsub;
   },[]);
@@ -675,7 +664,7 @@ export default function App(){
   const[nEv,setNEv]=useState({name:"",disc:"CrossFit",city:"",prov:"Madrid",country:"España",date:"",price:"",desc:"",fmts:[],logo:null});
   const[evErr,setEvErr]=useState("");const[evOk,setEvOk]=useState("");
   const[rSc,setRSc]=useState({precio:0,dificultad:0,organizacion:0,ambiente:0,categorias:0});const[rCom,setRCom]=useState("");const[rErr,setRErr]=useState("");
-  const[showContact,setShowContact]=useState(false);const[showAdmin,setShowAdmin]=useState(false);
+  const[showContact,setShowContact]=useState(false);const[showAdmin,setShowAdmin]=useState(false);const[isAdmin,setIsAdmin]=useState(false);
   const today=new Date().toISOString().split("T")[0];
   const countries=useMemo(()=>["Todos",...new Set(evs.map(e=>e.country))].sort(),[evs]);
   const boost=(e)=>(e.verified?3:0)+(e.feat?2:0);
@@ -726,7 +715,7 @@ export default function App(){
       <div style={{display:"flex",gap:7,alignItems:"center",marginLeft:"auto"}}>
         <button onClick={()=>setShowContact(true)} style={{background:"rgba(0,210,100,0.15)",color:"#00D264",border:"1px solid rgba(0,210,100,0.35)",padding:"4px 11px",borderRadius:6,fontSize:11,fontWeight:700}}>✓ Verificar evento</button>
         {me&&<span style={{fontSize:11,color:"#777"}}>Hola, <strong style={{color:"#FF6500"}}>{me.name}</strong></span>}
-        <button onClick={()=>setShowAdmin(true)} style={{background:"none",border:"none",color:"#888",fontSize:20,padding:"2px 5px"}} title="Admin">⚙</button>
+        {isAdmin&&<button onClick={()=>setShowAdmin(true)} style={{background:"none",border:"none",color:"#888",fontSize:20,padding:"2px 5px"}} title="Admin">⚙</button>}
       </div>
     </header>
     <nav style={{background:"#0d0d0d",borderBottom:"1px solid #1e1e1e",padding:"0 10px",display:"flex",overflowX:"auto",flexShrink:0,justifyContent:"center"}}>
