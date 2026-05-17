@@ -63,18 +63,18 @@ const PC={
 };
 
 const EVENTS=[
-  {id:1,name:"Hyrox Madrid",disc:"Hyrox",city:"Madrid",prov:"Madrid",country:"España",date:"2025-11-15",price:85,fmts:["Individual","Parejas"],desc:"IFEMA Madrid. Una de las citas Hyrox mas grandes de España.",feat:false,verified:true,ratings:[{user:"ana_garcia",date:"2025-11-20",scores:{precio:3,dificultad:4,organizacion:5,ambiente:5,categorias:4},comment:"Espectacular en IFEMA."},{user:"carlos_m",date:"2025-11-22",scores:{precio:2,dificultad:4,organizacion:4,ambiente:5,categorias:3},comment:"Caro pero vale la pena."}]},
+  {id:1,name:"Hyrox Madrid",disc:"Hyrox",city:"Madrid",prov:"Madrid",country:"España",date:"2025-11-15",price:85,fmts:["Individual","Parejas"],desc:"IFEMA Madrid. Una de las citas Hyrox mas grandes de España.",feat:false,verified:true,ratings:[]},
   {id:2,name:"Hyrox Bilbao",disc:"Hyrox",city:"Bilbao",prov:"Bizkaia",country:"España",date:"2026-02-14",price:85,fmts:["Individual","Parejas"],desc:"BEC Bilbao Exhibition Centre.",feat:false,verified:true,ratings:[]},
   {id:3,name:"Hyrox Malaga",disc:"Hyrox",city:"Malaga",prov:"Malaga",country:"España",date:"2026-04-18",price:85,fmts:["Individual","Parejas"],desc:"FYCMA Malaga.",feat:false,verified:true,ratings:[]},
-  {id:4,name:"Hyrox Barcelona",disc:"Hyrox",city:"Barcelona",prov:"Barcelona",country:"España",date:"2026-05-23",price:85,fmts:["Individual","Parejas"],desc:"Fira Gran Via Barcelona.",feat:true,verified:true,ratings:[{user:"maria_fit",date:"2026-05-25",scores:{precio:3,dificultad:4,organizacion:5,ambiente:5,categorias:5},comment:"El mejor Hyrox que he hecho."}]},
+  {id:4,name:"Hyrox Barcelona",disc:"Hyrox",city:"Barcelona",prov:"Barcelona",country:"España",date:"2026-05-23",price:85,fmts:["Individual","Parejas"],desc:"Fira Gran Via Barcelona.",feat:true,verified:true,ratings:[]},
   {id:5,name:"CrossFit Open 2026",disc:"CrossFit",city:"Online",prov:"Madrid",country:"España",date:"2026-02-26",price:0,fmts:["Individual"],desc:"Open anual online.",feat:false,verified:true,ratings:[]},
-  {id:6,name:"MAD Fitness Festival",disc:"CrossFit",city:"Ciudad Real",prov:"Ciudad Real",country:"España",date:"2026-05-01",price:120,fmts:["Individual","Parejas","Trios"],desc:"Semifinal europea oficial de CrossFit.",feat:true,verified:true,ratings:[{user:"ana_garcia",date:"2026-05-05",scores:{precio:4,dificultad:5,organizacion:5,ambiente:5,categorias:5},comment:"Experiencia unica."}]},
+  {id:6,name:"MAD Fitness Festival",disc:"CrossFit",city:"Ciudad Real",prov:"Ciudad Real",country:"España",date:"2026-05-01",price:120,fmts:["Individual","Parejas","Trios"],desc:"Semifinal europea oficial de CrossFit.",feat:true,verified:true,ratings:[]},
   {id:7,name:"Wodcelona",disc:"CrossFit",city:"Barcelona",prov:"Barcelona",country:"España",date:"2026-09-12",price:95,fmts:["Individual","Parejas"],desc:"El evento mas especial del ano en España.",feat:true,verified:true,ratings:[]},
-  {id:8,name:"NorthFit Zarautz 2026",disc:"CrossFit",city:"Zarautz",prov:"Guipuzcoa",country:"España",date:"2026-01-17",price:300,fmts:["Trios"],desc:"Equipos de 3 en la costa vasca.",feat:true,verified:true,ratings:[{user:"carlos_m",date:"2026-01-19",scores:{precio:3,dificultad:5,organizacion:5,ambiente:5,categorias:3},comment:"La experiencia no tiene precio."}]},
+  {id:8,name:"NorthFit Zarautz 2026",disc:"CrossFit",city:"Zarautz",prov:"Guipuzcoa",country:"España",date:"2026-01-17",price:300,fmts:["Trios"],desc:"Equipos de 3 en la costa vasca.",feat:true,verified:true,ratings:[]},
   {id:9,name:"Spartan Race Madrid",disc:"OCR",city:"Madrid",prov:"Madrid",country:"España",date:"2026-05-16",price:75,fmts:["Individual"],desc:"Obstaculos en los alrededores de Madrid.",feat:false,verified:false,ratings:[]},
   {id:10,name:"Spartan Race Barcelona",disc:"OCR",city:"Barcelona",prov:"Barcelona",country:"España",date:"2026-10-03",price:75,fmts:["Individual"],desc:"Edicion otonal en la costa catalana.",feat:false,verified:false,ratings:[]},
   {id:11,name:"Campeonato Nacional OCR",disc:"OCR",city:"Madrid",prov:"Madrid",country:"España",date:"2026-05-09",price:55,fmts:["Individual","Parejas"],desc:"Campeonato nacional OCR Olympus.",feat:false,verified:false,ratings:[]},
-  {id:12,name:"Hyrox World Championships",disc:"Hyrox",city:"Estocolmo",prov:"Suecia",country:"Suecia",date:"2026-06-06",price:150,fmts:["Individual","Parejas"],desc:"Campeonato mundial en Estocolmo.",feat:true,verified:true,ratings:[{user:"maria_fit",date:"2026-06-08",scores:{precio:2,dificultad:5,organizacion:5,ambiente:5,categorias:5},comment:"Experiencia de vida."}]},
+  {id:12,name:"Hyrox World Championships",disc:"Hyrox",city:"Estocolmo",prov:"Suecia",country:"Suecia",date:"2026-06-06",price:150,fmts:["Individual","Parejas"],desc:"Campeonato mundial en Estocolmo.",feat:true,verified:true,ratings:[]},
   {id:13,name:"CrossFit Games 2026",disc:"CrossFit",city:"San Jose",prov:"EEUU",country:"EEUU",date:"2026-07-25",price:200,fmts:["Individual"],desc:"El evento mas importante del crossfit mundial.",feat:true,verified:true,ratings:[]},
   {id:14,name:"Valencia Throwdown 2026",disc:"CrossFit",city:"La Eliana",prov:"Valencia",country:"España",date:"2026-06-05",price:85,fmts:["Individual","Parejas","Trios","Cuartetos"],desc:"Uno de los throwdowns mas importantes de España.",feat:true,verified:true,ratings:[]},
   {id:15,name:"Basque CrossFit Txapelketa 2025",disc:"CrossFit",city:"Bilbao",prov:"Bizkaia",country:"España",date:"2025-11-01",price:120,fmts:["Individual","Cuartetos"],desc:"El campeonato vasco de CrossFit.",feat:true,verified:true,ratings:[]},
@@ -674,7 +674,7 @@ export default function App(){
   const[view,setView]=useState("list");const[sel,setSel]=useState(null);
   const[fDisc,setFDisc]=useState("Todos");const[fCountry,setFCountry]=useState("Todos");
   const[fCities,setFCities]=useState([]);const[search,setSearch]=useState("");const[sort,setSort]=useState("date");
-  const[maxP,setMaxP]=useState(500);const[onlyFut,setOnlyFut]=useState(false);const[onlyNew,setOnlyNew]=useState(false);
+  const[maxP,setMaxP]=useState(500);const[onlyFut,setOnlyFut]=useState(true);const[onlyNew,setOnlyNew]=useState(false);
   const[fFmts,setFFmts]=useState([]);const[showAdv,setShowAdv]=useState(false);
   const[cmpIds,setCmpIds]=useState([]);const[rkDisc,setRkDisc]=useState("Todos");const[rkFmts,setRkFmts]=useState([]);
   const[nEv,setNEv]=useState({name:"",disc:"CrossFit",city:"",prov:"Madrid",country:"España",date:"",price:"",desc:"",fmts:[],logo:null});
@@ -715,11 +715,7 @@ export default function App(){
   const CRD={};
   const TABS=[{id:"list",l:"Eventos"},{id:"map",l:"Mapa"},{id:"rnk",l:"Ranking"},{id:"cmp",l:"Comparar"},{id:"add",l:"+ Anadir"},...(me?[{id:"prof",l:me.name}]:[{id:"auth",l:"Entrar"}])];
 
-  const listWithAds=useMemo(()=>{
-    const r=[];
-    filtered.forEach((ev,i)=>{r.push({type:"ev",ev});if((i+1)%10===0&&i<filtered.length-1)r.push({type:"ad",ad:ADS[Math.floor(i/10)%ADS.length]});});
-    return r;
-  },[filtered]);
+  const listWithAds=useMemo(()=>filtered.map(ev=>({type:"ev",ev})),[filtered]);
 
   if(loading)return<div style={{minHeight:"100vh",background:"#0a0a0a",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:12}}><div style={{width:36,height:36,border:"3px solid #222",borderTopColor:"#FF6500",borderRadius:"50%",animation:"spin 1s linear infinite"}}/><span style={{color:"#444",fontSize:13,fontFamily:"'Barlow Condensed',sans-serif",letterSpacing:1}}>CARGANDO...</span></div>;
   return<div style={{minHeight:"100vh",background:"#0a0a0a",display:"flex",flexDirection:"column"}}>
@@ -755,13 +751,13 @@ export default function App(){
         <div style={{display:"flex",gap:5,marginBottom:6,alignItems:"center"}}>
           <button onClick={()=>setShowAdv(x=>!x)} style={{...BT(""),padding:"3px 9px",fontSize:11}}>{showAdv?"▲":"▼"} Filtros</button>
           <button onClick={clr} style={{...BT(""),padding:"3px 9px",fontSize:11}}>Limpiar</button>
+          <button onClick={()=>setOnlyFut(x=>!x)} style={{background:onlyFut?"#FF6500":"#242424",color:"#fff",border:onlyFut?"1px solid #FF6500":"1px solid #333",padding:"3px 9px",borderRadius:6,fontSize:11,fontWeight:onlyFut?700:400,cursor:"pointer"}}>{onlyFut?"📅 Solo futuros":"📅 Todos"}</button>
           <span style={{fontSize:11,color:"#444",marginLeft:"auto"}}><strong style={{color:"#FF6500"}}>{filtered.length}</strong> eventos</span>
         </div>
         {showAdv&&<div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:8,padding:11,marginBottom:8}}>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9,marginBottom:7}}>
             <label style={{fontSize:11,color:"#888"}}>Max: <strong style={{color:"#FF6500"}}>{maxP}EUR</strong><input type="range" min={0} max={500} value={maxP} onChange={e=>setMaxP(Number(e.target.value))} style={{width:"100%",marginTop:3,accentColor:"#FF6500"}}/></label>
             <div style={{display:"flex",flexDirection:"column",gap:4}}>
-              <label style={{fontSize:11,color:"#888",display:"flex",gap:5,cursor:"pointer"}}><input type="checkbox" checked={onlyFut} onChange={e=>setOnlyFut(e.target.checked)} style={{accentColor:"#FF6500"}}/>Solo futuros</label>
               <label style={{fontSize:11,color:"#888",display:"flex",gap:5,cursor:"pointer"}}><input type="checkbox" checked={onlyNew} onChange={e=>setOnlyNew(e.target.checked)} style={{accentColor:"#FF6500"}}/>Sin valorar</label>
             </div>
           </div>
@@ -769,7 +765,7 @@ export default function App(){
         </div>}
         {listWithAds.length===0?<div style={{textAlign:"center",padding:"50px 0",color:"#444"}}>Sin resultados</div>:
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(340px,1fr))",gap:14}}>{listWithAds.map((item,idx)=>{
-          if(item.type==="ad")return<div key={`ad${idx}`} style={{gridColumn:"1/-1",margin:"4px 0"}}><AdBanner ad={item.ad}/></div>;
+
           const ev=item.ev,oa=overall(ev.ratings),al=(ev.attendance||[]),ia=me&&al.includes(me.u),dc=DISC_COLORS[ev.disc]||"#555";
           const borderColor=ev.verified?"#4DA6FF":ev.feat?"#FFB300":dc;
           return<div key={ev.id} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",borderTop:`3px solid ${borderColor}`,borderRadius:12,overflow:"hidden",cursor:"pointer",transition:"transform 0.15s,box-shadow 0.15s",display:"flex",flexDirection:"column"}} onClick={()=>{setSel(ev);setView("det");}}>
