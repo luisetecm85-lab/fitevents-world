@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react'
+import emailjs from '@emailjs/browser'
 import * as d3 from 'd3'
 import * as topojson from 'topojson-client'
 import { db, auth } from './firebase'
@@ -354,7 +355,22 @@ function ContactForm({onClose}){
         <input value={f.email} onChange={e=>setF(x=>({...x,email:e.target.value}))} placeholder="Email de contacto *" style={{width:"100%",padding:"8px 11px",marginBottom:8}}/>
         <input value={f.event} onChange={e=>setF(x=>({...x,event:e.target.value}))} placeholder="Nombre del evento *" style={{width:"100%",padding:"8px 11px",marginBottom:8}}/>
         <textarea value={f.msg} onChange={e=>setF(x=>({...x,msg:e.target.value}))} placeholder="Informacion adicional o preguntas..." style={{width:"100%",padding:"8px 11px",height:66,resize:"none",marginBottom:12}}/>
-        <button onClick={()=>{if(!f.name||!f.email||!f.event)return;setSent(true);}} style={{background:"#FF6500",color:"#fff",border:"none",padding:"9px 0",borderRadius:6,fontSize:14,fontWeight:700,cursor:"pointer",width:"100%"}}>Enviar solicitud</button>
+        <button onClick={async()=>{
+  if(!f.name||!f.email||!f.event)return;
+  try{
+    await emailjs.send("service_3e3tn5k","template_wlemyhc",{
+      organizer_name:f.name,
+      organizer_email:f.email,
+      event_name:f.event,
+      plan:f.plan==="verified"?"Verificado (49€)":"Destacado (99€)",
+      message:f.msg||"Sin mensaje adicional",
+      name:f.name,
+      email:f.email,
+      message:f.msg||"-"
+    },"bz1Do_nJPcpdEza1O");
+    setSent(true);
+  }catch(e){console.error(e);alert("Error al enviar. Inténtalo de nuevo.");}
+}} style={{background:"#FF6500",color:"#fff",border:"none",padding:"9px 0",borderRadius:6,fontSize:14,fontWeight:700,cursor:"pointer",width:"100%"}}>Enviar solicitud</button>
         <p style={{fontSize:11,color:"#555",textAlign:"center",marginTop:7}}>Te contactamos en menos de 24h · Pago tras confirmacion</p>
       </>}
     </div>
