@@ -680,7 +680,7 @@ export default function App(){
   const[nEv,setNEv]=useState({name:"",disc:"CrossFit",city:"",prov:"Madrid",country:"España",date:"",price:"",desc:"",fmts:[],logo:null});
   const[evErr,setEvErr]=useState("");const[evOk,setEvOk]=useState("");
   const[rSc,setRSc]=useState({precio:0,dificultad:0,organizacion:0,ambiente:0,categorias:0});const[rCom,setRCom]=useState("");const[rErr,setRErr]=useState("");
-  const[showContact,setShowContact]=useState(false);const[showAdmin,setShowAdmin]=useState(false);const[isAdmin,setIsAdmin]=useState(false);
+  const[showContact,setShowContact]=useState(false);const[showAdmin,setShowAdmin]=useState(false);const[isAdmin,setIsAdmin]=useState(false);const[loginHint,setLoginHint]=useState(false);
   const today=new Date().toISOString().split("T")[0];
   const countries=useMemo(()=>["Todos",...new Set(evs.map(e=>e.country))].sort(),[evs]);
   const boost=(e)=>(e.verified?3:0)+(e.feat?2:0);
@@ -705,7 +705,7 @@ export default function App(){
   const clr=()=>{setFDisc("Todos");setFCountry("Todos");setFCities([]);setSearch("");setSort("date");setMaxP(500);setOnlyFut(false);setOnlyNew(false);setFFmts([]);};
   const login=async()=>{setAErr("");try{await signInWithEmailAndPassword(auth,aF.u,aF.p);setView("list");setAF({u:"",name:"",p:"",p2:""});}catch(e){setAErr("Email o contraseña incorrectos");}};
   const reg=async()=>{setAErr("");if(!aF.u||!aF.name||!aF.p)return setAErr("Rellena todos los campos obligatorios");if(aF.p!==aF.p2)return setAErr("Las contraseñas no coinciden");if(aF.p.length<6)return setAErr("Mínimo 6 caracteres");try{const cred=await createUserWithEmailAndPassword(auth,aF.u,aF.p);await updateProfile(cred.user,{displayName:aF.name});setAOk(`Bienvenido/a, ${aF.name}`);setTimeout(()=>{setAOk("");setView("list");},2000);setAF({u:"",name:"",p:"",p2:""});}catch(e){if(e.code==="auth/email-already-in-use")setAErr("Email ya registrado");else setAErr("Error al crear cuenta");}};
-  const rate=async(ev)=>{setRErr("");if(!me)return setRErr("Inicia sesion");if(SCORE_KEYS.some(k=>!rSc[k]))return setRErr("Puntua todas las categorias");if(ev.ratings&&ev.ratings.find(r=>r.user===me.u))return setRErr("Ya has valorado");const nr={user:me.u,date:today,scores:{...rSc},comment:rCom};const updated={...ev,ratings:[...(ev.ratings||[]),nr]};await updateDoc(doc(db,"events",String(ev.id)),{ratings:updated.ratings});setSel(updated);setRSc({precio:0,dificultad:0,organizacion:0,ambiente:0,categorias:0});setRCom("");};
+  const rate=async(ev)=>{setRErr("");if(!me)return setRErr("Inicia sesion");if(SCORE_KEYS.some(k=>!rSc[k]))return setRErr("Puntua todas las categorias");if(ev.ratings&&ev.ratings.find(r=>r.user===me.u))return setRErr("Ya has valorado");const nr={user:me.u,userName:me.name,date:today,scores:{...rSc},comment:rCom};const updated={...ev,ratings:[...(ev.ratings||[]),nr]};await updateDoc(doc(db,"events",String(ev.id)),{ratings:updated.ratings});setSel(updated);setRSc({precio:0,dificultad:0,organizacion:0,ambiente:0,categorias:0});setRCom("");};
   const tog=async(id)=>{if(!me)return;const ev=evs.find(e=>e.id===id);if(!ev)return;const att2=ev.attendance||[];const updated=att2.includes(me.u)?att2.filter(u=>u!==me.u):[...att2,me.u];await updateDoc(doc(db,"events",String(id)),{attendance:updated});};
   const addEv=async()=>{setEvErr("");if(!nEv.name||!nEv.city||!nEv.date)return setEvErr("Nombre, ciudad y fecha obligatorios");const c=PC[nEv.prov]||{lat:40.42,lon:-3.70};const newEvent={...nEv,id:Date.now(),price:Number(nEv.price)||0,ratings:[],attendance:[],lat:c.lat,lon:c.lon,feat:false,verified:false};await setDoc(doc(db,"events",String(newEvent.id)),newEvent);setNEv({name:"",disc:"CrossFit",city:"",prov:"Madrid",country:"España",date:"",price:"",desc:"",fmts:[],logo:null});setEvOk("Evento anadido");setTimeout(()=>{setEvOk("");setView("list");},2000);};
 
@@ -720,6 +720,7 @@ export default function App(){
   if(loading)return<div style={{minHeight:"100vh",background:"#0a0a0a",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:12}}><div style={{width:36,height:36,border:"3px solid #222",borderTopColor:"#FF6500",borderRadius:"50%",animation:"spin 1s linear infinite"}}/><span style={{color:"#444",fontSize:13,fontFamily:"'Barlow Condensed',sans-serif",letterSpacing:1}}>CARGANDO...</span></div>;
   return<div style={{minHeight:"100vh",background:"#0a0a0a",display:"flex",flexDirection:"column"}}>
     {showContact&&<ContactForm onClose={()=>setShowContact(false)}/>}
+    {loginHint&&<div style={{position:"fixed",bottom:24,left:"50%",transform:"translateX(-50%)",background:"#1a1a1a",border:"1px solid #FF6500",borderRadius:10,padding:"12px 20px",zIndex:9999,display:"flex",alignItems:"center",gap:12,boxShadow:"0 4px 20px rgba(0,0,0,0.6)"}}>  <span style={{fontSize:20}}>🔒</span><div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:"#fff"}}>Inicia sesión para continuar</div><div style={{fontSize:11,color:"#888"}}>Necesitas una cuenta para guardar eventos</div></div><button onClick={()=>{setLoginHint(false);setView("auth");}} style={{background:"#FF6500",color:"#fff",border:"none",padding:"6px 14px",borderRadius:6,fontSize:12,fontWeight:700,cursor:"pointer",marginLeft:8}}>Entrar</button><button onClick={()=>setLoginHint(false)} style={{background:"none",border:"none",color:"#555",fontSize:16,cursor:"pointer"}}>✕</button></div>}
     {showAdmin&&<AdminPanel evs={evs} setEvs={setEvs} onClose={()=>setShowAdmin(false)}/>}
 
     <header style={{background:"#0d0d0d",borderBottom:"1px solid #1e1e1e",padding:"0 20px",height:62,display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,flexShrink:0,position:"relative"}}>
@@ -795,7 +796,7 @@ export default function App(){
               </div>
               <div style={{display:"flex",gap:5,alignItems:"center"}}>
                 {al.length>0&&<span style={{fontSize:11,color:"#4CAF50"}}>✓{al.length}</span>}
-                <button onClick={e=>{e.stopPropagation();if(!me){setView("auth");return;}tog(ev.id);}} style={{fontSize:15,background:"none",border:"none",opacity:ia?1:0.4,padding:0}}>{ia?"💚":"🤍"}</button>
+                <button onClick={e=>{e.stopPropagation();if(!me){setLoginHint(true);setTimeout(()=>setLoginHint(false),3000);return;}tog(ev.id);}} style={{fontSize:15,background:"none",border:"none",opacity:ia?1:0.4,padding:0}}>{ia?"💚":"🤍"}</button>
                 <button onClick={e=>{e.stopPropagation();setCmpIds(x=>x.includes(ev.id)?x.filter(i=>i!==ev.id):[...x.slice(-1),ev.id]);setView("cmp");}} style={{fontSize:10,background:cmpIds.includes(ev.id)?"rgba(255,100,0,0.15)":"rgba(255,255,255,0.05)",border:cmpIds.includes(ev.id)?"1px solid #FF6500":"1px solid #2a2a2a",borderRadius:5,padding:"3px 6px",color:cmpIds.includes(ev.id)?"#FF6500":"#555"}}>⚖</button>
               </div>
             </div>
@@ -804,7 +805,7 @@ export default function App(){
       </div>}
 
       {view==="det"&&sel&&(()=>{
-        const ev=sel,oa=overall(ev.ratings),al=(ev.attendance||[]),ia=me&&al.includes(me.u),hasR=me&&ev.ratings.find(r=>r.user===me.u),dc=DISC_COLORS[ev.disc]||"#555";
+        const ev=evs.find(e=>e.id===sel.id)||sel,oa=overall(ev.ratings),al=(ev.attendance||[]),ia=me&&al.includes(me.u),hasR=me&&ev.ratings.find(r=>r.user===me.u),dc=DISC_COLORS[ev.disc]||"#555";
         return<div>
           <button onClick={()=>setView("list")} style={{...BT(""),marginBottom:11,padding:"4px 10px",fontSize:12}}>Volver</button>
           <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,overflow:"hidden"}}>
@@ -825,7 +826,7 @@ export default function App(){
                 <div style={{textAlign:"center"}}>
                   <div style={{fontSize:28,fontWeight:800,color:oa>0?"#FF6500":"#2a2a2a",fontFamily:"'Barlow Condensed',sans-serif"}}>{oa>0?f1(oa):"—"}</div>
                   <Stars n={oa} sz={13}/><div style={{fontSize:10,color:"#444",marginBottom:7}}>{ev.ratings.length} val.</div>
-                  <button onClick={()=>tog(ev.id)} style={{...BT(ia?"s":""),padding:"5px 12px",fontSize:12}}>{ia?"Asistire":"Quiero ir"}</button>
+                  <button onClick={()=>{if(!me){setLoginHint(true);setTimeout(()=>setLoginHint(false),3000);return;}tog(ev.id);}} style={{background:ia?"rgba(76,175,80,0.15)":"rgba(255,255,255,0.06)",color:ia?"#4CAF50":"#fff",border:`1px solid ${ia?"#4CAF50":"rgba(255,255,255,0.15)"}`,padding:"8px 18px",borderRadius:8,fontSize:13,fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",gap:7,transition:"all 0.2s"}}>{ia?"💚 Asistiré ✓":"🤍 Quiero ir"}</button>
                   {al.length>0&&<div style={{fontSize:10,color:"#4CAF50",marginTop:3}}>{al.length} personas</div>}
                 </div>
               </div>
@@ -844,8 +845,8 @@ export default function App(){
               <div style={{fontSize:10,fontWeight:700,letterSpacing:2,color:"#444",textTransform:"uppercase",marginBottom:8}}>{ev.ratings.length} valoraciones</div>
               {ev.ratings.map((r,i)=><div key={i} style={{background:"#1a1a1a",borderRadius:8,padding:10,marginBottom:7}}>
                 <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:4}}>
-                  <div style={{width:25,height:25,borderRadius:"50%",background:"#E74C3C",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"#fff"}}>{r.user.charAt(0).toUpperCase()}</div>
-                  <div><div style={{fontSize:12,fontWeight:600}}>{r.user}</div><div style={{fontSize:10,color:"#444"}}>{fd(r.date)}</div></div>
+                  <div style={{width:25,height:25,borderRadius:"50%",background:"#E74C3C",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"#fff"}}>{(r.userName||r.user).charAt(0).toUpperCase()}</div>
+                  <div><div style={{fontSize:12,fontWeight:600}}>{r.userName||r.user}</div><div style={{fontSize:10,color:"#444"}}>{fd(r.date)}</div></div>
                   <div style={{marginLeft:"auto"}}><Stars n={overall([r])} sz={10}/></div>
                 </div>
                 {r.comment&&<p style={{fontSize:12,color:"#bbb",fontStyle:"italic",borderTop:"1px solid rgba(255,255,255,0.04)",paddingTop:5,marginTop:3}}>"{r.comment}"</p>}
@@ -871,7 +872,7 @@ export default function App(){
             </div>
           </div>
           {!ev.verified&&<div style={{marginTop:10,background:"rgba(77,166,255,0.06)",border:"1px solid rgba(77,166,255,0.15)",borderRadius:8,padding:"9px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,flexWrap:"wrap"}}>
-            <div><div style={{fontSize:12,fontWeight:600,color:"#4DA6FF",marginBottom:1}}>Eres organizador de este evento?</div><div style={{fontSize:11,color:"#777"}}>Verificalo y aumenta su visibilidad en la plataforma.</div></div>
+            <div><div style={{fontSize:12,fontWeight:600,color:"#4DA6FF",marginBottom:1}}>¿Eres organizador de este evento?</div><div style={{fontSize:11,color:"#777"}}>Verificalo y aumenta su visibilidad en la plataforma.</div></div>
             <button onClick={()=>setShowContact(true)} style={{...BT("p"),padding:"5px 13px",flexShrink:0,fontSize:12}}>Verificar</button>
           </div>}
         </div>;
@@ -894,7 +895,7 @@ export default function App(){
               <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:16,fontWeight:800,textTransform:"uppercase",marginBottom:4,lineHeight:1.1}}>{ev.name}</div>
               <div style={{fontSize:12,color:"#888",marginBottom:2}}>{fd(ev.date)} · {ev.city}</div>
               <div style={{fontSize:12,color:ev.price===0?"#4CAF50":"#888",fontWeight:ev.price===0?700:400,marginBottom:10}}>{ev.price===0?"GRATIS":`${ev.price} €`}</div>
-              <button onClick={e=>{e.stopPropagation();if(!me){setView("auth");return;}tog(ev.id);}} style={{...BT(((ev.attendance||[])).includes(me?.u)?"s":""),padding:"5px 9px",fontSize:11,width:"100%"}}>{((ev.attendance||[])).includes(me?.u)?"Asistire":"Quiero ir"}</button>
+              <button onClick={e=>{e.stopPropagation();if(!me){setLoginHint(true);setTimeout(()=>setLoginHint(false),3000);return;}tog(ev.id);}} style={{...BT(((ev.attendance||[])).includes(me?.u)?"s":""),padding:"5px 9px",fontSize:11,width:"100%"}}>{((ev.attendance||[])).includes(me?.u)?"Asistire":"Quiero ir"}</button>
             </div>;
           })}
         </div>
