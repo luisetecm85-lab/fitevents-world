@@ -405,6 +405,7 @@ function AdminEventEditor({ev,onSave,onClose}){
         {FORMATS.map(f=><button key={f} onClick={()=>setD(x=>({...x,fmts:x.fmts.includes(f)?x.fmts.filter(y=>y!==f):[...x.fmts,f]}))} style={PL2((d.fmts||[]).includes(f))}>{f}</button>)}
       </div>
       <textarea value={d.desc} onChange={e=>setD(x=>({...x,desc:e.target.value}))} placeholder="Descripcion..." style={{...IN2,height:60,resize:"none"}}/>
+      <input value={d.url||""} onChange={e=>setD(x=>({...x,url:e.target.value}))} placeholder="Web del evento (https://...)" style={IN2}/>
       <div style={{display:"flex",gap:8,marginBottom:10}}>
         <button onClick={()=>setD(x=>({...x,verified:!x.verified}))} style={{flex:1,background:d.verified?"rgba(77,166,255,0.15)":"#1a1a1a",border:`1px solid ${d.verified?"#4DA6FF":"rgba(255,255,255,0.1)"}`,color:d.verified?"#4DA6FF":"#555",padding:"7px 0",borderRadius:6,fontSize:12,fontWeight:700,cursor:"pointer"}}>
           {d.verified?"✓ VERIFICADO ON":"VERIFICADO OFF"}
@@ -614,7 +615,7 @@ function MapView({events,onCity}){
     svg.call(zoom);
     const gm=svg.append("g");
     gm.selectAll("path").data(ctries.features).enter().append("path").attr("d",path).attr("fill","#1e2530").attr("stroke","#2d3748").attr("stroke-width",0.5);
-    if(_gc.esp&&_gc.esp.features){gm.selectAll(".esp-prov").data(_gc.esp.features).enter().append("path").attr("class","esp-prov").attr("d",path).attr("fill","none").attr("stroke","#2d3f52").attr("stroke-width",0.05);}
+    if(_gc.esp&&_gc.esp.features){gm.selectAll(".esp-prov").data(_gc.esp.features).enter().append("path").attr("class","esp-prov").attr("d",path).attr("fill","none").attr("stroke","#3d5068").attr("stroke-width",0.4);}
     svg.call(zoom.transform,iT);drawPins(proj,iT);
   })();},[st,drawPins]);
   const go=(t)=>{if(!tRef.current)return;const{d3,proj,iT}=tRef.current;const svg=d3.select(svgRef.current);const zoom=d3.zoom().scaleExtent([0.8,20]).on("zoom",e=>{d3.select(svgRef.current).select("g").attr("transform",e.transform);drawPins(proj,e.transform);});svg.call(zoom);svg.transition().duration(600).call(zoom.transform,t==="es"?iT:d3.zoomIdentity);};
@@ -677,7 +678,7 @@ export default function App(){
   const[maxP,setMaxP]=useState(500);const[onlyFut,setOnlyFut]=useState(true);const[onlyNew,setOnlyNew]=useState(false);
   const[fFmts,setFFmts]=useState([]);const[showAdv,setShowAdv]=useState(false);
   const[cmpIds,setCmpIds]=useState([]);const[rkDisc,setRkDisc]=useState("Todos");const[rkFmts,setRkFmts]=useState([]);
-  const[nEv,setNEv]=useState({name:"",disc:"CrossFit",city:"",prov:"Madrid",country:"España",date:"",price:"",desc:"",fmts:[],logo:null});
+  const[nEv,setNEv]=useState({name:"",disc:"CrossFit",city:"",prov:"Madrid",country:"España",date:"",price:"",desc:"",url:"",fmts:[],logo:null});
   const[evErr,setEvErr]=useState("");const[evOk,setEvOk]=useState("");
   const[rSc,setRSc]=useState({precio:0,dificultad:0,organizacion:0,ambiente:0,categorias:0});const[rCom,setRCom]=useState("");const[rErr,setRErr]=useState("");
   const[showContact,setShowContact]=useState(false);const[showAdmin,setShowAdmin]=useState(false);const[isAdmin,setIsAdmin]=useState(false);const[loginHint,setLoginHint]=useState(false);const[mapPopup,setMapPopup]=useState(null);
@@ -706,8 +707,13 @@ export default function App(){
   const login=async()=>{setAErr("");try{await signInWithEmailAndPassword(auth,aF.u,aF.p);setView("list");setAF({u:"",name:"",p:"",p2:""});}catch(e){setAErr("Email o contraseña incorrectos");}};
   const reg=async()=>{setAErr("");if(!aF.u||!aF.name||!aF.p)return setAErr("Rellena todos los campos obligatorios");if(aF.p!==aF.p2)return setAErr("Las contraseñas no coinciden");if(aF.p.length<6)return setAErr("Mínimo 6 caracteres");try{const cred=await createUserWithEmailAndPassword(auth,aF.u,aF.p);await updateProfile(cred.user,{displayName:aF.name});setAOk(`Bienvenido/a, ${aF.name}`);setTimeout(()=>{setAOk("");setView("list");},2000);setAF({u:"",name:"",p:"",p2:""});}catch(e){if(e.code==="auth/email-already-in-use")setAErr("Email ya registrado");else setAErr("Error al crear cuenta");}};
   const rate=async(ev)=>{setRErr("");if(!me)return setRErr("Inicia sesion");if(SCORE_KEYS.some(k=>!rSc[k]))return setRErr("Puntua todas las categorias");if(ev.ratings&&ev.ratings.find(r=>r.user===me.u))return setRErr("Ya has valorado");const nr={user:me.u,userName:me.name,date:today,scores:{...rSc},comment:rCom};const updated={...ev,ratings:[...(ev.ratings||[]),nr]};await updateDoc(doc(db,"events",String(ev.id)),{ratings:updated.ratings});setSel(updated);setRSc({precio:0,dificultad:0,organizacion:0,ambiente:0,categorias:0});setRCom("");};
+  const deleteRate=async(ev)=>{
+    if(!me)return;
+    const updated={...ev,ratings:(ev.ratings||[]).filter(r=>r.user!==me.u)};
+    await updateDoc(doc(db,"events",String(ev.id)),{ratings:updated.ratings});
+  };
   const tog=async(id)=>{if(!me)return;const ev=evs.find(e=>e.id===id);if(!ev)return;const att2=ev.attendance||[];const updated=att2.includes(me.u)?att2.filter(u=>u!==me.u):[...att2,me.u];await updateDoc(doc(db,"events",String(id)),{attendance:updated});};
-  const addEv=async()=>{setEvErr("");if(!nEv.name||!nEv.city||!nEv.date)return setEvErr("Nombre, ciudad y fecha obligatorios");const c=PC[nEv.prov]||{lat:40.42,lon:-3.70};const newEvent={...nEv,id:Date.now(),price:Number(nEv.price)||0,ratings:[],attendance:[],lat:c.lat,lon:c.lon,feat:false,verified:false};await setDoc(doc(db,"events",String(newEvent.id)),newEvent);setNEv({name:"",disc:"CrossFit",city:"",prov:"Madrid",country:"España",date:"",price:"",desc:"",fmts:[],logo:null});setEvOk("Evento anadido");setTimeout(()=>{setEvOk("");setView("list");},2000);};
+  const addEv=async()=>{setEvErr("");if(!nEv.name||!nEv.city||!nEv.date)return setEvErr("Nombre, ciudad y fecha obligatorios");const c=PC[nEv.prov]||{lat:40.42,lon:-3.70};const newEvent={...nEv,id:Date.now(),price:Number(nEv.price)||0,ratings:[],attendance:[],lat:c.lat,lon:c.lon,feat:false,verified:false};await setDoc(doc(db,"events",String(newEvent.id)),newEvent);setNEv({name:"",disc:"CrossFit",city:"",prov:"Madrid",country:"España",date:"",price:"",desc:"",url:"",fmts:[],logo:null});setEvOk("Evento anadido");setTimeout(()=>{setEvOk("");setView("list");},2000);};
 
   const BT=(v)=>({background:v==="p"?"#FF6500":v==="d"?"#EF5350":v==="s"?"#4CAF50":"#242424",color:"#fff",border:"none",padding:"8px 14px",borderRadius:6,cursor:"pointer",fontSize:13,fontWeight:600});
   const PL=(a)=>({background:a?"#FF6500":"#1a1a1a",color:a?"#fff":"#777",border:`1px solid ${a?"#FF6500":"rgba(255,255,255,0.08)"}`,padding:"4px 9px",borderRadius:20,fontSize:12,cursor:"pointer"});
@@ -849,6 +855,7 @@ export default function App(){
                 </div>
               </div>
               {ev.desc&&<p style={{marginTop:7,fontSize:13,color:"#bbb",lineHeight:1.5}}>{ev.desc}</p>}
+              {ev.url&&<a href={ev.url} target="_blank" rel="noopener noreferrer" style={{display:"inline-flex",alignItems:"center",gap:6,marginTop:8,background:"rgba(255,107,43,0.12)",color:"#FF6500",border:"1px solid rgba(255,107,43,0.25)",padding:"5px 12px",borderRadius:6,fontSize:12,fontWeight:700,textDecoration:"none"}}>🌐 Web oficial →</a>}
             </div>
             {ev.ratings.length>0&&<div style={{padding:"13px 17px",borderBottom:"1px solid rgba(255,255,255,0.05)"}}>
               <div style={{fontSize:10,fontWeight:700,letterSpacing:2,color:"#444",textTransform:"uppercase",marginBottom:8}}>Puntuacion media</div>
@@ -875,7 +882,10 @@ export default function App(){
               {!me?<div style={{background:"rgba(255,107,43,0.07)",border:"1px solid rgba(255,107,43,0.15)",borderRadius:7,padding:11,textAlign:"center"}}>
                 <p style={{color:"#888",fontSize:12,marginBottom:7}}>Inicia sesion para valorar</p>
                 <button onClick={()=>setView("auth")} style={{...BT("p"),padding:"5px 13px"}}>Iniciar sesión</button>
-              </div>:hasR?<div style={{background:"rgba(76,175,80,0.07)",border:"1px solid rgba(76,175,80,0.15)",borderRadius:7,padding:11,textAlign:"center",fontSize:12,color:"#4CAF50"}}>Ya has valorado este evento ✓</div>:
+              </div>:hasR?<div style={{background:"rgba(76,175,80,0.07)",border:"1px solid rgba(76,175,80,0.15)",borderRadius:8,padding:"10px 14px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                <div style={{fontSize:12,color:"#4CAF50",fontWeight:700}}>✓ Ya has valorado este evento</div>
+                <button onClick={()=>deleteRate(ev)} style={{background:"rgba(239,83,80,0.12)",color:"#EF5350",border:"1px solid rgba(239,83,80,0.25)",padding:"4px 10px",borderRadius:5,fontSize:11,fontWeight:700,cursor:"pointer"}}>Eliminar y repetir</button>
+              </div>:
               <div>
                 <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"3px 11px",marginBottom:7}}>
                   {SCORE_KEYS.map(k=><div key={k} style={{marginBottom:4}}>
@@ -970,6 +980,7 @@ export default function App(){
           <div style={{fontSize:10,color:"#888",fontWeight:700,letterSpacing:1,textTransform:"uppercase",marginBottom:6}}>Formato</div>
           <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>{FORMATS.map(f=>{const sel=(nEv.fmts||[]).includes(f);return<button key={f} onClick={()=>setNEv(x=>({...x,fmts:x.fmts.includes(f)?x.fmts.filter(y=>y!==f):[...x.fmts,f]}))} style={{background:sel?"#FF6500":"#222",color:sel?"#fff":"#aaa",border:`1px solid ${sel?"#FF6500":"#333"}`,padding:"6px 14px",borderRadius:20,fontSize:12,fontWeight:sel?700:400,cursor:"pointer"}}>{f}</button>;})}</div>
           <textarea value={nEv.desc} onChange={e=>setNEv(x=>({...x,desc:e.target.value}))} placeholder="Descripción del evento..." style={{...IN,height:60,resize:"none"}}/>
+          <input value={nEv.url||""} onChange={e=>setNEv(x=>({...x,url:e.target.value}))} placeholder="Web del evento (https://...)" style={IN}/>
           <div style={{marginBottom:12}}>
             <div style={{fontSize:10,color:"#888",fontWeight:700,letterSpacing:1,textTransform:"uppercase",marginBottom:6}}>Logo del evento (opcional)</div>
             <label style={{display:"flex",alignItems:"center",gap:9,cursor:"pointer",background:"#1a1a1a",border:"1px dashed rgba(255,255,255,0.12)",borderRadius:7,padding:"10px 14px"}}>
