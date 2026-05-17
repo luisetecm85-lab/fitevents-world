@@ -5,7 +5,7 @@ import * as topojson from 'topojson-client'
 import { db, auth } from './firebase'
 import { collection, doc, getDocs, setDoc, updateDoc, onSnapshot, writeBatch } from 'firebase/firestore'
 import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, updateProfile } from 'firebase/auth'
-
+function useIsMobile(){const[m,setM]=useState(window.innerWidth<768);useEffect(()=>{const h=()=>setM(window.innerWidth<768);window.addEventListener('resize',h);return()=>window.removeEventListener('resize',h);},[]);return m;}
 
 const DISC_COLORS={CrossFit:"#FF6500",Hyrox:"#4DA6FF",OCR:"#4CAF50",Fuerza:"#B56AFF",Functional:"#FFB300"};
 const DISCIPLINES=["Todos","CrossFit","Hyrox","OCR","Fuerza","Functional"];
@@ -637,7 +637,7 @@ function MapView({events,onCity}){
   </div>;
 }
 
-export default function App(){
+export default function App(){const isMobile=useIsMobile();
   const[evs,setEvs]=useState(EVENTS);
   const[loading,setLoading]=useState(true);
 
@@ -748,9 +748,9 @@ export default function App(){
     {showAdmin&&<AdminPanel evs={evs} setEvs={setEvs} onClose={()=>setShowAdmin(false)}/>}
 
     <header style={{background:"#0d0d0d",borderBottom:"1px solid #1e1e1e",padding:"0 20px",height:62,display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,flexShrink:0,position:"relative"}}>
-      <div style={{display:"flex",flexDirection:"column",lineHeight:1,position:"absolute",left:"50%",transform:"translateX(-50%)",alignItems:"center"}}><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:24,fontWeight:900,letterSpacing:2,textTransform:"uppercase"}}>FIT<span style={{color:"#FF6500"}}>EVENTS</span> WORLD</span><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,letterSpacing:3,color:"#444",textTransform:"uppercase",marginTop:2}}>DESCUBRE · COMPARA · COMPITE</span></div>
+      <div style={{display:"flex",flexDirection:"column",lineHeight:1,position:"absolute",left:"50%",transform:"translateX(-50%)",alignItems:"center"}}><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:isMobile?16:24,fontWeight:900,letterSpacing:isMobile?1:2,textTransform:"uppercase"}}>FIT<span style={{color:"#FF6500"}}>EVENTS</span> WORLD</span><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:10,letterSpacing:3,color:"#444",textTransform:"uppercase",marginTop:2}}>DESCUBRE · COMPARA · COMPITE</span></div>
       <div style={{display:"flex",gap:7,alignItems:"center",marginLeft:"auto"}}>
-        <button onClick={()=>setShowContact(true)} style={{background:"rgba(0,210,100,0.15)",color:"#00D264",border:"1px solid rgba(0,210,100,0.35)",padding:"4px 11px",borderRadius:6,fontSize:11,fontWeight:700}}>✓ Verificar evento</button>
+        <button onClick={()=>setShowContact(true)} style={{background:"rgba(0,210,100,0.15)",color:"#00D264",border:"1px solid rgba(0,210,100,0.35)",padding:"4px 11px",borderRadius:6,fontSize:11,fontWeight:700}}>{isMobile?"✓":"✓ Verificar evento"}</button>
         {me&&<span style={{fontSize:11,color:"#777"}}>Hola, <strong style={{color:"#FF6500"}}>{me.name}</strong></span>}
         {isAdmin&&<button onClick={()=>setShowAdmin(true)} style={{background:"none",border:"none",color:"#888",fontSize:20,padding:"2px 5px"}} title="Admin">⚙</button>}
       </div>
@@ -759,7 +759,7 @@ export default function App(){
       {TABS.map(t=><button key={t.id} onClick={()=>setView(t.id)} style={{background:"transparent",color:(view===t.id||(view==="det"&&t.id==="list"))?"#fff":"#999",border:"none",padding:"11px 16px",borderBottom:(view===t.id||(view==="det"&&t.id==="list"))?"2px solid #FF6500":"2px solid transparent",borderRadius:0,cursor:"pointer",whiteSpace:"nowrap",fontSize:15,fontWeight:700,letterSpacing:0.5,fontFamily:"Barlow Condensed,sans-serif"}}>{t.l}</button>)}
     </nav>
     <div style={{display:"flex",flex:1}}>
-      <div style={{width:140,flexShrink:0,padding:"16px 10px",background:"#080808"}}><div style={{background:"#111",border:"1px dashed #1e1e1e",borderRadius:10,height:600,display:"flex",alignItems:"center",justifyContent:"center",position:"sticky",top:80}}><span style={{fontSize:9,color:"#2a2a2a",letterSpacing:2,textTransform:"uppercase",writingMode:"vertical-rl"}}>Publicidad</span></div></div>
+      <div style={{width:isMobile?0:140,flexShrink:0,padding:isMobile?"0":"16px 10px",background:"#080808",overflow:"hidden"}}><div style={{background:"#111",border:"1px dashed #1e1e1e",borderRadius:10,height:600,display:"flex",alignItems:"center",justifyContent:"center",position:"sticky",top:80}}><span style={{fontSize:9,color:"#2a2a2a",letterSpacing:2,textTransform:"uppercase",writingMode:"vertical-rl"}}>Publicidad</span></div></div>
       <main style={{flex:1,padding:"16px 20px",minWidth:0}}>
 
       {view==="list"&&<div>
@@ -789,7 +789,7 @@ export default function App(){
           <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{FORMATS.map(f=><button key={f} onClick={()=>setFFmts(x=>x.includes(f)?x.filter(y=>y!==f):[...x,f])} style={PL(fFmts.includes(f))}>{f}</button>)}</div>
         </div>}
         {listWithAds.length===0?<div style={{textAlign:"center",padding:"50px 0",color:"#444"}}>Sin resultados</div>:
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(340px,1fr))",gap:14}}>{listWithAds.map((item,idx)=>{
+        <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"repeat(auto-fill,minmax(340px,1fr))",gap:14}}>{listWithAds.map((item,idx)=>{
 
           const ev=item.ev,oa=overall(ev.ratings),al=(ev.attendance||[]),ia=me&&al.includes(me.u),dc=DISC_COLORS[ev.disc]||"#555";
           const borderColor=ev.verified?"#4DA6FF":ev.feat?"#FFB300":dc;
@@ -1059,7 +1059,7 @@ export default function App(){
       </div>}
 
       </main>
-      <div style={{width:140,flexShrink:0,padding:"16px 10px",background:"#080808"}}><div style={{background:"#111",border:"1px dashed #1e1e1e",borderRadius:10,height:600,display:"flex",alignItems:"center",justifyContent:"center",position:"sticky",top:80}}><span style={{fontSize:9,color:"#2a2a2a",letterSpacing:2,textTransform:"uppercase",writingMode:"vertical-rl"}}>Publicidad</span></div></div>
+      <div style={{width:isMobile?0:140,flexShrink:0,padding:isMobile?"0":"16px 10px",background:"#080808",overflow:"hidden"}}><div style={{background:"#111",border:"1px dashed #1e1e1e",borderRadius:10,height:600,display:"flex",alignItems:"center",justifyContent:"center",position:"sticky",top:80}}><span style={{fontSize:9,color:"#2a2a2a",letterSpacing:2,textTransform:"uppercase",writingMode:"vertical-rl"}}>Publicidad</span></div></div>
     </div>
     <footer style={{background:"#141414",borderTop:"1px solid rgba(255,255,255,0.04)",padding:"9px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:7}}>
       <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:12,color:"#444"}}>FitEvents World 2026</span>
