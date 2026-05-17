@@ -614,7 +614,7 @@ function MapView({events,onCity}){
     svg.call(zoom);
     const gm=svg.append("g");
     gm.selectAll("path").data(ctries.features).enter().append("path").attr("d",path).attr("fill","#1e2530").attr("stroke","#2d3748").attr("stroke-width",0.5);
-    if(_gc.esp&&_gc.esp.features){gm.selectAll(".esp-prov").data(_gc.esp.features).enter().append("path").attr("class","esp-prov").attr("d",path).attr("fill","none").attr("stroke","#3d5068").attr("stroke-width",0.4);}
+    if(_gc.esp&&_gc.esp.features){gm.selectAll(".esp-prov").data(_gc.esp.features).enter().append("path").attr("class","esp-prov").attr("d",path).attr("fill","none").attr("stroke","#2d3f52").attr("stroke-width",0.05);}
     svg.call(zoom.transform,iT);drawPins(proj,iT);
   })();},[st,drawPins]);
   const go=(t)=>{if(!tRef.current)return;const{d3,proj,iT}=tRef.current;const svg=d3.select(svgRef.current);const zoom=d3.zoom().scaleExtent([0.8,20]).on("zoom",e=>{d3.select(svgRef.current).select("g").attr("transform",e.transform);drawPins(proj,e.transform);});svg.call(zoom);svg.transition().duration(600).call(zoom.transform,t==="es"?iT:d3.zoomIdentity);};
@@ -680,7 +680,7 @@ export default function App(){
   const[nEv,setNEv]=useState({name:"",disc:"CrossFit",city:"",prov:"Madrid",country:"España",date:"",price:"",desc:"",fmts:[],logo:null});
   const[evErr,setEvErr]=useState("");const[evOk,setEvOk]=useState("");
   const[rSc,setRSc]=useState({precio:0,dificultad:0,organizacion:0,ambiente:0,categorias:0});const[rCom,setRCom]=useState("");const[rErr,setRErr]=useState("");
-  const[showContact,setShowContact]=useState(false);const[showAdmin,setShowAdmin]=useState(false);const[isAdmin,setIsAdmin]=useState(false);const[loginHint,setLoginHint]=useState(false);
+  const[showContact,setShowContact]=useState(false);const[showAdmin,setShowAdmin]=useState(false);const[isAdmin,setIsAdmin]=useState(false);const[loginHint,setLoginHint]=useState(false);const[mapPopup,setMapPopup]=useState(null);
   const today=new Date().toISOString().split("T")[0];
   const countries=useMemo(()=>["Todos",...new Set(evs.map(e=>e.country))].sort(),[evs]);
   const boost=(e)=>(e.verified?3:0)+(e.feat?2:0);
@@ -720,6 +720,24 @@ export default function App(){
   if(loading)return<div style={{minHeight:"100vh",background:"#0a0a0a",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:12}}><div style={{width:36,height:36,border:"3px solid #222",borderTopColor:"#FF6500",borderRadius:"50%",animation:"spin 1s linear infinite"}}/><span style={{color:"#444",fontSize:13,fontFamily:"'Barlow Condensed',sans-serif",letterSpacing:1}}>CARGANDO...</span></div>;
   return<div style={{minHeight:"100vh",background:"#0a0a0a",display:"flex",flexDirection:"column"}}>
     {showContact&&<ContactForm onClose={()=>setShowContact(false)}/>}
+    {mapPopup&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.75)",zIndex:999,display:"flex",alignItems:"center",justifyContent:"center",padding:16}} onClick={()=>setMapPopup(null)}>
+      <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.1)",borderRadius:12,padding:20,maxWidth:480,width:"100%",maxHeight:"80vh",overflowY:"auto"}} onClick={e=>e.stopPropagation()}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:18,fontWeight:800,textTransform:"uppercase"}}>Eventos en esta zona</div>
+          <button onClick={()=>setMapPopup(null)} style={{background:"none",border:"none",color:"#555",fontSize:20,cursor:"pointer"}}>✕</button>
+        </div>
+        {mapPopup.events.length===0?<div style={{color:"#555",fontSize:13,textAlign:"center",padding:"20px 0"}}>No hay eventos en esta zona</div>:
+        mapPopup.events.map(ev=>{const oa=overall(ev.ratings);return<div key={ev.id} onClick={()=>{setSel(ev);setView("det");setMapPopup(null);}} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",borderRadius:10,padding:"10px 14px",marginBottom:8,cursor:"pointer",display:"flex",gap:10,alignItems:"center"}}>
+          <EventLogo ev={ev} size={36}/>
+          <div style={{flex:1}}>
+            <div style={{display:"flex",gap:4,marginBottom:2,flexWrap:"wrap"}}><Badge disc={ev.disc} sm/>{ev.verified&&<VBadge sm/>}</div>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:800,textTransform:"uppercase"}}>{ev.name}</div>
+            <div style={{fontSize:11,color:"#888"}}>{ev.city} · {fd(ev.date)} · {ev.price===0?"Gratis":`${ev.price}€`}</div>
+          </div>
+          {oa>0&&<div style={{textAlign:"center",minWidth:36}}><div style={{fontSize:16,fontWeight:900,color:"#FF6500",fontFamily:"'Barlow Condensed',sans-serif"}}>{f1(oa)}</div><Stars n={oa} sz={8}/></div>}
+        </div>;})}
+      </div>
+    </div>}
     {loginHint&&<div style={{position:"fixed",bottom:24,left:"50%",transform:"translateX(-50%)",background:"#1a1a1a",border:"1px solid #FF6500",borderRadius:10,padding:"12px 20px",zIndex:9999,display:"flex",alignItems:"center",gap:12,boxShadow:"0 4px 20px rgba(0,0,0,0.6)"}}>  <span style={{fontSize:20}}>🔒</span><div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:"#fff"}}>Inicia sesión para continuar</div><div style={{fontSize:11,color:"#888"}}>Necesitas una cuenta para guardar eventos</div></div><button onClick={()=>{setLoginHint(false);setView("auth");}} style={{background:"#FF6500",color:"#fff",border:"none",padding:"6px 14px",borderRadius:6,fontSize:12,fontWeight:700,cursor:"pointer",marginLeft:8}}>Entrar</button><button onClick={()=>setLoginHint(false)} style={{background:"none",border:"none",color:"#555",fontSize:16,cursor:"pointer"}}>✕</button></div>}
     {showAdmin&&<AdminPanel evs={evs} setEvs={setEvs} onClose={()=>setShowAdmin(false)}/>}
 
@@ -872,7 +890,7 @@ export default function App(){
             </div>
           </div>
           {!ev.verified&&<div style={{marginTop:10,background:"rgba(77,166,255,0.06)",border:"1px solid rgba(77,166,255,0.15)",borderRadius:8,padding:"9px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,flexWrap:"wrap"}}>
-            <div><div style={{fontSize:12,fontWeight:600,color:"#4DA6FF",marginBottom:1}}>¿Eres organizador de este evento?</div><div style={{fontSize:11,color:"#777"}}>Verificalo y aumenta su visibilidad en la plataforma.</div></div>
+            <div><div style={{fontSize:12,fontWeight:600,color:"#4DA6FF",marginBottom:1}}>Eres organizador de este evento?</div><div style={{fontSize:11,color:"#777"}}>Verificalo y aumenta su visibilidad en la plataforma.</div></div>
             <button onClick={()=>setShowContact(true)} style={{...BT("p"),padding:"5px 13px",flexShrink:0,fontSize:12}}>Verificar</button>
           </div>}
         </div>;
@@ -880,7 +898,7 @@ export default function App(){
 
       {view==="map"&&<div>
         <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Mapa de eventos</div>
-        <MapView events={evs} onCity={c=>{setFCities(c);setView("list");}}/>
+        <MapView events={evs} onCity={c=>{const eventsInArea=evs.filter(e=>c.includes(e.city)&&e.city!=="Online");if(eventsInArea.length===1){setSel(eventsInArea[0]);setView("det");}else{setMapPopup({cities:c,events:eventsInArea});}}}/>
       </div>}
 
       {view==="upc"&&<div>
