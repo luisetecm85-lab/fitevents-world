@@ -788,7 +788,7 @@ export default function App(){const isMobile=useIsMobile();
           </div>
           <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{FORMATS.map(f=><button key={f} onClick={()=>setFFmts(x=>x.includes(f)?x.filter(y=>y!==f):[...x,f])} style={PL(fFmts.includes(f))}>{f}</button>)}</div>
         </div>}
-        {listWithAds.length===0?<div style={{textAlign:"center",padding:"50px 0",color:"#444"}}>Sin resultados</div>:
+        {isMobile&&<div style={{background:"#111",border:"1px dashed #2a2a2a",borderRadius:8,padding:"10px 14px",marginBottom:12,display:"flex",alignItems:"center",justifyContent:"center",minHeight:60}}><span style={{fontSize:9,color:"#333",letterSpacing:2,textTransform:"uppercase"}}>Publicidad</span></div>}{listWithAds.length===0?<div style={{textAlign:"center",padding:"50px 0",color:"#444"}}>Sin resultados</div>:
         <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"repeat(auto-fill,minmax(340px,1fr))",gap:14}}>{listWithAds.map((item,idx)=>{
 
           const ev=item.ev,oa=overall(ev.ratings),al=(ev.attendance||[]),ia=me&&al.includes(me.u),dc=DISC_COLORS[ev.disc]||"#555";
