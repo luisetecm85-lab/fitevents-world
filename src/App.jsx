@@ -767,7 +767,7 @@ export default function App(){const isMobile=useIsMobile();
           <span>Filtrando: <strong>{fCities.join(", ")}</strong></span>
           <button onClick={()=>setFCities([])} style={{...BT(""),padding:"1px 7px",fontSize:11}}>✕</button>
         </div>}
-        <<div style={{display:isMobile?"none":"flex",gap:8,marginBottom:8,flexWrap:"wrap",alignItems:"flex-end"}}>
+        <div style={{display:isMobile?"none":"flex",gap:8,marginBottom:8,flexWrap:"wrap",alignItems:"flex-end"}}>
           <div style={{display:"flex",flexDirection:"column",gap:3,flex:"1 1 180px",width:isMobile?"100%":"auto"}}><span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"#888",textTransform:"uppercase"}}>Buscar evento</span><div style={{position:"relative"}}><span style={{position:"absolute",left:9,top:"50%",transform:"translateY(-50%)",color:"#555",fontSize:12}}>🔍</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Nombre, ciudad..." style={{...IN,paddingLeft:28,marginBottom:0}}/></div></div>
           <div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"#888",textTransform:"uppercase"}}>Disciplina</span><select value={fDisc} onChange={e=>setFDisc(e.target.value)} style={{padding:"8px 10px",minWidth:120}}>{DISCIPLINES.map(d=><option key={d}>{d}</option>)}</select></div>
           <div style={{display:"flex",flexDirection:"column",gap:3}}><span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"#888",textTransform:"uppercase"}}>País</span><select value={fCountry} onChange={e=>{setFCountry(e.target.value);setFCities([]);}} style={{padding:"8px 10px",minWidth:100}}>{countries.map(c=><option key={c}>{c}</option>)}</select></div>
