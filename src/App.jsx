@@ -900,7 +900,7 @@ export default function App(){const isMobile=useIsMobile();
             </div>
           </div>
           {!ev.verified&&<div style={{marginTop:10,background:"rgba(77,166,255,0.06)",border:"1px solid rgba(77,166,255,0.15)",borderRadius:8,padding:"9px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,flexWrap:"wrap"}}>
-            <div><div style={{fontSize:12,fontWeight:600,color:"#4DA6FF",marginBottom:1}}>Eres organizador de este evento?</div><div style={{fontSize:11,color:"#777"}}>Verificalo y aumenta su visibilidad en la plataforma.</div></div>
+            <div><div style={{fontSize:12,fontWeight:600,color:"#4DA6FF",marginBottom:1}}>¿Eres organizador de este evento?</div><div style={{fontSize:11,color:"#777"}}>Verificalo y aumenta su visibilidad en la plataforma.</div></div>
             <button onClick={()=>setShowContact(true)} style={{...BT("p"),padding:"5px 13px",flexShrink:0,fontSize:12}}>Verificar</button>
           </div>}
         </div>;
