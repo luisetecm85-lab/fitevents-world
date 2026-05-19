@@ -615,7 +615,7 @@ function MapView({events,onCity}){
     svg.call(zoom);
     const gm=svg.append("g");
     gm.selectAll("path").data(ctries.features).enter().append("path").attr("d",path).attr("fill","#1e2530").attr("stroke","#2d3748").attr("stroke-width",0.5);
-    if(_gc.esp&&_gc.esp.features){gm.selectAll(".esp-prov").data(_gc.esp.features).enter().append("path").attr("class","esp-prov").attr("d",path).attr("fill","none").attr("stroke","#3d5068").attr("stroke-width",0.4);}
+    if(_gc.esp&&_gc.esp.features){gm.selectAll(".esp-prov").data(_gc.esp.features).enter().append("path").attr("class","esp-prov").attr("d",path).attr("fill","none").attr("stroke","#3d5068").attr("stroke-width",0.05);}
     svg.call(zoom.transform,iT);drawPins(proj,iT);
   })();},[st,drawPins]);
   const go=(t)=>{if(!tRef.current)return;const{d3,proj,iT}=tRef.current;const svg=d3.select(svgRef.current);const zoom=d3.zoom().scaleExtent([0.8,20]).on("zoom",e=>{d3.select(svgRef.current).select("g").attr("transform",e.transform);drawPins(proj,e.transform);});svg.call(zoom);svg.transition().duration(600).call(zoom.transform,t==="es"?iT:d3.zoomIdentity);};
@@ -721,7 +721,7 @@ export default function App(){const isMobile=useIsMobile();
   const CRD={};
   const TABS=[{id:"list",l:"Eventos"},{id:"map",l:"Mapa"},{id:"rnk",l:"Ranking"},{id:"cmp",l:"Comparar"},{id:"add",l:"+ Anadir"},...(me?[{id:"prof",l:me.name}]:[{id:"auth",l:"Entrar"}])];
 
-  const listWithAds=useMemo(()=>filtered.map(ev=>({type:"ev",ev})),[filtered]);
+  const listWithAds=useMemo(()=>{if(!isMobile)return filtered.map(ev=>({type:"ev",ev}));const r=[];filtered.forEach((ev,i)=>{r.push({type:"ev",ev});if((i+1)%4===0&&i<filtered.length-1)r.push({type:"ad"});});return r;},[filtered,isMobile]);
 
   if(loading)return<div style={{minHeight:"100vh",background:"#0a0a0a",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:12}}><div style={{width:36,height:36,border:"3px solid #222",borderTopColor:"#FF6500",borderRadius:"50%",animation:"spin 1s linear infinite"}}/><span style={{color:"#444",fontSize:13,fontFamily:"'Barlow Condensed',sans-serif",letterSpacing:1}}>CARGANDO...</span></div>;
   return<div style={{minHeight:"100vh",background:"#0a0a0a",display:"flex",flexDirection:"column"}}>
