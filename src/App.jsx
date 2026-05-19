@@ -755,12 +755,12 @@ export default function App(){const isMobile=useIsMobile();
         {isAdmin&&<button onClick={()=>setShowAdmin(true)} style={{background:"none",border:"none",color:"#888",fontSize:20,padding:"2px 5px"}} title="Admin">⚙</button>}
       </div>
     </header>
-    <nav style={{background:"#0d0d0d",borderBottom:"1px solid #1e1e1e",padding:"0 10px",display:"flex",overflowX:"auto",flexShrink:0,justifyContent:"center"}}>
-      {TABS.map(t=><button key={t.id} onClick={()=>setView(t.id)} style={{background:"transparent",color:(view===t.id||(view==="det"&&t.id==="list"))?"#fff":"#999",border:"none",padding:"11px 16px",borderBottom:(view===t.id||(view==="det"&&t.id==="list"))?"2px solid #FF6500":"2px solid transparent",borderRadius:0,cursor:"pointer",whiteSpace:"nowrap",fontSize:15,fontWeight:700,letterSpacing:0.5,fontFamily:"Barlow Condensed,sans-serif"}}>{t.l}</button>)}
+    <nav style={{background:"#0d0d0d",borderBottom:"1px solid #1e1e1e",padding:"0 10px",display:"flex",overflowX:"auto",flexShrink:0,justifyContent:"center",scrollbarWidth:"none"}}>
+      {TABS.map(t=><button key={t.id} onClick={()=>setView(t.id)} style={{background:"transparent",color:(view===t.id||(view==="det"&&t.id==="list"))?"#fff":"#999",border:"none",padding:isMobile?"8px 10px":"11px 16px",borderBottom:(view===t.id||(view==="det"&&t.id==="list"))?"2px solid #FF6500":"2px solid transparent",borderRadius:0,cursor:"pointer",whiteSpace:"nowrap",fontSize:isMobile?12:15,fontWeight:700,letterSpacing:0.5,fontFamily:"Barlow Condensed,sans-serif"}}>{t.l}</button>)}
     </nav>
     <div style={{display:"flex",flex:1}}>
       <div style={{width:isMobile?0:140,flexShrink:0,padding:isMobile?"0":"16px 10px",background:"#080808",overflow:"hidden"}}><div style={{background:"#111",border:"1px dashed #1e1e1e",borderRadius:10,height:600,display:"flex",alignItems:"center",justifyContent:"center",position:"sticky",top:80}}><span style={{fontSize:9,color:"#2a2a2a",letterSpacing:2,textTransform:"uppercase",writingMode:"vertical-rl"}}>Publicidad</span></div></div>
-      <main style={{flex:1,padding:"16px 20px",minWidth:0}}>
+      <main style={{flex:1,padding:isMobile?"10px 10px":"16px 20px",minWidth:0}}>
 
       {view==="list"&&<div>
           {fCities.length>0&&<div style={{background:"rgba(255,107,43,0.08)",border:"1px solid rgba(255,107,43,0.2)",borderRadius:7,padding:"5px 11px",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"space-between",fontSize:12}}>
