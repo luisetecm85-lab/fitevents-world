@@ -289,7 +289,7 @@ const EVENTS=[
   {id:250,name:"Persevera Team Games 2025",disc:"CrossFit",city:"Estepona",prov:"Malaga",country:"España",date:"2025-11-08",price:120,fmts:["Trios"],desc:"Persevera Team Games 2025 en Estepona, Malaga.",feat:true,verified:false,ratings:[]},
 ];
 
-const avgS=(arr,k)=>arr.length?arr.reduce((s,r)=>s+r.scores[k],0)/arr.length:0;
+const avgS=(arr,k)=>arr.length?arr.reduce((s,r)=>s+(r.scores[k]||0),0)/arr.length:0;
 const overall=(r)=>!r.length?0:SCORE_KEYS.reduce((s,k)=>s+avgS(r,k),0)/SCORE_KEYS.length;
 const f1=(n)=>n.toFixed(1);
 const fd=(d)=>{if(!d)return"";const[y,m,dy]=d.split("-");const mn=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];return`${parseInt(dy)} ${mn[parseInt(m)-1]} ${y}`;};
@@ -756,7 +756,7 @@ export default function App(){const isMobile=useIsMobile();
       </div>
     </header>
     <nav style={{background:"#0d0d0d",borderBottom:"1px solid #1e1e1e",padding:"0 10px",display:"flex",overflowX:"auto",flexShrink:0,justifyContent:"center",scrollbarWidth:"none"}}>
-      {TABS.map(t=><button key={t.id} onClick={()=>setView(t.id)} style={{background:"transparent",color:(view===t.id||(view==="det"&&t.id==="list"))?"#fff":t.id==="prof"?"#4DA6FF":"#999",border:"none",padding:isMobile?"8px 10px":"11px 16px",borderBottom:(view===t.id||(view==="det"&&t.id==="list"))?"2px solid #FF6500":"2px solid transparent",borderRadius:0,cursor:"pointer",whiteSpace:"nowrap",fontSize:isMobile?12:15,fontWeight:700,letterSpacing:0.5,fontFamily:"Barlow Condensed,sans-serif"}}>{t.id==="prof"?<span><span style={{color:"#4DA6FF"}}>👤</span> {t.l}</span>:t.l}</button>)}
+      {TABS.map(t=><button key={t.id} onClick={()=>setView(t.id)} style={{background:"transparent",color:(view===t.id||(view==="det"&&t.id==="list"))?"#fff":"#999",border:"none",padding:isMobile?"8px 10px":"11px 16px",borderBottom:(view===t.id||(view==="det"&&t.id==="list"))?"2px solid #FF6500":"2px solid transparent",borderRadius:0,cursor:"pointer",whiteSpace:"nowrap",fontSize:isMobile?12:15,fontWeight:700,letterSpacing:0.5,fontFamily:"Barlow Condensed,sans-serif"}}>{t.id==="prof"?<span><span style={{color:"#4DA6FF"}}>👤</span><span style={{color:(view==="prof")?"#fff":"#999"}}> {t.l}</span></span>:t.l}</button>)}
     </nav>
     <div style={{display:"flex",flex:1}}>
       <div style={{width:isMobile?0:140,flexShrink:0,padding:isMobile?"0":"16px 10px",background:"#080808",overflow:"hidden"}}><div style={{background:"#111",border:"1px dashed #1e1e1e",borderRadius:10,height:600,display:"flex",alignItems:"center",justifyContent:"center",position:"sticky",top:80}}><span style={{fontSize:9,color:"#2a2a2a",letterSpacing:2,textTransform:"uppercase",writingMode:"vertical-rl"}}>Publicidad</span></div></div>
