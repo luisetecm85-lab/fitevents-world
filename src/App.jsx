@@ -10,8 +10,8 @@ function useIsMobile(){const[m,setM]=useState(window.innerWidth<768);useEffect((
 const DISC_COLORS={CrossFit:"#FF6500",Hyrox:"#4DA6FF",OCR:"#4CAF50",Fuerza:"#B56AFF",Functional:"#FFB300"};
 const DISCIPLINES=["Todos","CrossFit","Hyrox","OCR","Fuerza","Functional"];
 const FORMATS=["Individual","Parejas","Trios","Cuartetos","Equipos +4"];
-const SCORE_KEYS=["precio","dificultad","organizacion","ambiente","categorias"];
-const SLABELS={precio:"Precio/calidad",dificultad:"Dificultad",organizacion:"Organizacion",ambiente:"Ambiente",categorias:"Categorias"};
+const SCORE_KEYS=["precio","dificultad","organizacion","ambiente","categorias","accesibilidad","espacio"];
+const SLABELS={precio:"Precio/calidad",dificultad:"Dificultad",organizacion:"Organización",ambiente:"Ambiente",categorias:"Categorías",accesibilidad:"Accesibilidad",espacio:"Espacio del evento (recinto, estadio...)"};
 const ADS=[
   {id:1,brand:"PICSIL",claim:"Equipamiento tecnico para atletas de elite",cta:"Ver productos",url:"https://picsil.com",color:"#FF6500",logo:"💪"},
   {id:2,brand:"ON RUNNING",claim:"Zapatillas disenadas para rendimiento hibrido",cta:"Descubrir",url:"https://on-running.com",color:"#4DA6FF",logo:"👟"},
@@ -719,7 +719,7 @@ export default function App(){const isMobile=useIsMobile();
   const PL=(a)=>({background:a?"#FF6500":"#1a1a1a",color:a?"#fff":"#777",border:`1px solid ${a?"#FF6500":"rgba(255,255,255,0.08)"}`,padding:"4px 9px",borderRadius:20,fontSize:12,cursor:"pointer"});
   const IN={width:"100%",padding:"8px 11px",marginBottom:9};
   const CRD={};
-  const TABS=[{id:"list",l:"Eventos"},{id:"map",l:"Mapa"},{id:"rnk",l:"Ranking"},{id:"cmp",l:"Comparar"},{id:"add",l:"+ Anadir"},...(me?[{id:"prof",l:me.name}]:[{id:"auth",l:"Entrar"}])];
+  const TABS=[{id:"list",l:"Eventos"},{id:"map",l:"Mapa"},{id:"rnk",l:"Ranking"},{id:"cmp",l:"Comparar"},{id:"add",l:"+ Anadir"},...(me?[{id:"prof",l:`👤 ${me.name}`}]:[{id:"auth",l:"Entrar"}])];
 
   const listWithAds=useMemo(()=>{if(!isMobile)return filtered.map(ev=>({type:"ev",ev}));const r=[];filtered.forEach((ev,i)=>{r.push({type:"ev",ev});if((i+1)%4===0&&i<filtered.length-1)r.push({type:"ad"});});return r;},[filtered,isMobile]);
 
