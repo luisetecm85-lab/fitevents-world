@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, writeBatch } from 'firebase/firestore';
+import { getFirestore, doc, writeBatch, collection, getDocs } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCVJe1QFCRQDDUBh4Xs4GH27VeyKq3uA0s",
@@ -241,6 +241,7 @@ async function seed() {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   console.log(`Seeding ${EVENTS.length} events...`);
+  const snap = await getDocs(collection(db, 'events'));
   const chunks = [];
   for (let i = 0; i < EVENTS.length; i += 400) {
     chunks.push(EVENTS.slice(i, i + 400));
@@ -248,7 +249,7 @@ async function seed() {
   for (const chunk of chunks) {
     const batch = writeBatch(db);
     chunk.forEach(ev => {
-      batch.set(doc(db, 'events', String(ev.id)), ev);
+      const existing=snap.docs.find(d=>d.id===String(ev.id));const merged={...ev,...(existing?{ratings:existing.data().ratings||[],attendance:existing.data().attendance||[]}:{})};batch.set(doc(db, 'events', String(ev.id)), merged);
     });
     await batch.commit();
     console.log(`Batch of ${chunk.length} events written`);
