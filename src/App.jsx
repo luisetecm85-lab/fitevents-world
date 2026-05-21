@@ -1001,17 +1001,17 @@ export default function App(){const isMobile=useIsMobile();
 
       {view==="prof"&&me&&<div style={{maxWidth:700,margin:"0 auto"}}>
         {/* Header perfil */}
-        <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:12,padding:"20px 24px",marginBottom:16,display:"flex",gap:16,alignItems:"center"}}>
+        <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:12,padding:"20px 24px",marginBottom:16,display:"flex",gap:16,alignItems:"center",flexWrap:"wrap"}}>
           <div style={{width:60,height:60,borderRadius:"50%",background:"linear-gradient(135deg,#FF6500,#ff9a5c)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:26,fontWeight:900,color:"#fff",fontFamily:"'Barlow Condensed',sans-serif",flexShrink:0}}>{me.name.charAt(0).toUpperCase()}</div>
           <div style={{flex:1}}>
             <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:22,fontWeight:900,textTransform:"uppercase",marginBottom:2}}>{me.name}</div>
             <div style={{fontSize:12,color:"#888"}}>{me.email}</div>
           </div>
-          <div style={{display:"flex",gap:16,textAlign:"center"}}>
+          <div style={{display:"flex",gap:isMobile?8:16,textAlign:"center"}}>
             <div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:22,fontWeight:900,color:"#FF6500"}}>{evs.filter(e=>e.ratings.find(r=>r.user===me.u)).length}</div><div style={{fontSize:10,color:"#555",textTransform:"uppercase",letterSpacing:1}}>Valoraciones</div></div>
             <div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:22,fontWeight:900,color:"#4CAF50"}}>{evs.filter(e=>((e.attendance||[])).includes(me.u)).length}</div><div style={{fontSize:10,color:"#555",textTransform:"uppercase",letterSpacing:1}}>Quiero ir</div></div>
           </div>
-          <button onClick={()=>{signOut(auth);setMe(null);setView("list");}} style={{background:"rgba(239,83,80,0.12)",color:"#EF5350",border:"1px solid rgba(239,83,80,0.25)",padding:"6px 14px",borderRadius:6,fontSize:12,fontWeight:700,cursor:"pointer"}}>Cerrar sesión</button>
+          <button onClick={()=>{signOut(auth);setMe(null);setView("list");}} style={{background:"rgba(239,83,80,0.12)",color:"#EF5350",border:"1px solid rgba(239,83,80,0.25)",padding:"6px 14px",borderRadius:6,fontSize:12,fontWeight:700,cursor:"pointer",flexShrink:0}}>Cerrar sesión</button>
         </div>
         {/* Mis valoraciones */}
         {evs.filter(e=>e.ratings.find(r=>r.user===me.u)).length>0?<div style={{marginBottom:16}}>
