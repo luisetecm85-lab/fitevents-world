@@ -681,8 +681,9 @@ export default function App(){const isMobile=useIsMobile();
   const[nEv,setNEv]=useState({name:"",disc:"CrossFit",city:"",prov:"Madrid",country:"España",date:"",price:"",desc:"",url:"",fmts:[],logo:null});
   const[evErr,setEvErr]=useState("");const[evOk,setEvOk]=useState("");
   const[rSc,setRSc]=useState({precio:0,dificultad:0,organizacion:0,ambiente:0,categorias:0});const[rCom,setRCom]=useState("");const[rErr,setRErr]=useState("");
-  const[showContact,setShowContact]=useState(false);const[showAdmin,setShowAdmin]=useState(false);const[isAdmin,setIsAdmin]=useState(false);const[loginHint,setLoginHint]=useState(false);const[mapPopup,setMapPopup]=useState(null);
+  const[showContact,setShowContact]=useState(false);const[installPrompt,setInstallPrompt]=useState(null);const[showAdmin,setShowAdmin]=useState(false);const[isAdmin,setIsAdmin]=useState(false);const[loginHint,setLoginHint]=useState(false);const[mapPopup,setMapPopup]=useState(null);
   const today=new Date().toISOString().split("T")[0];
+useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window.addEventListener('beforeinstallprompt',handler);return()=>window.removeEventListener('beforeinstallprompt',handler);},[]);
   const countries=useMemo(()=>["Todos",...new Set(evs.map(e=>e.country))].sort(),[evs]);
   const boost=(e)=>(e.verified?3:0)+(e.feat?2:0);
   const filtered=useMemo(()=>{
@@ -750,7 +751,7 @@ export default function App(){const isMobile=useIsMobile();
     <header style={{background:"#0d0d0d",borderBottom:"1px solid #1e1e1e",padding:isMobile?"0 8px":"0 20px",height:isMobile?50:62,display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,flexShrink:0}}>
       <div style={{display:"flex",flexDirection:"column",lineHeight:1,position:isMobile?"static":"absolute",left:isMobile?"auto":"50%",transform:isMobile?"none":"translateX(-50%)",alignItems:"center",flex:isMobile?1:0}}><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:isMobile?16:24,fontWeight:900,letterSpacing:isMobile?1:2,textTransform:"uppercase"}}>FIT<span style={{color:"#FF6500"}}>EVENTS</span> WORLD</span><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:isMobile?8:10,letterSpacing:isMobile?1:3,color:"#666",textTransform:"uppercase",marginTop:2,whiteSpace:"nowrap"}}>DESCUBRE · COMPARA · COMPITE</span></div>
       <div style={{display:isMobile?"none":"flex",gap:7,alignItems:"center",marginLeft:"auto"}}>
-        <button onClick={()=>setShowContact(true)} style={{background:"rgba(0,210,100,0.15)",color:"#00D264",border:"1px solid rgba(0,210,100,0.35)",padding:"4px 11px",borderRadius:6,fontSize:11,fontWeight:700}}>{isMobile?"✓":"✓ Verificar evento"}</button>
+        <button onClick={()=>setShowContact(true)} style={{background:"rgba(0,210,100,0.15)",color:"#00D264",border:"1px solid rgba(0,210,100,0.35)",padding:"4px 11px",borderRadius:6,fontSize:11,fontWeight:700}}>{isMobile?"✓":"✓ Verificar evento"}</button>{installPrompt&&<button onClick={()=>{installPrompt.prompt();installPrompt.userChoice.then(()=>setInstallPrompt(null));}} style={{background:"rgba(77,166,255,0.15)",color:"#4DA6FF",border:"1px solid rgba(77,166,255,0.35)",padding:"4px 11px",borderRadius:6,fontSize:11,fontWeight:700}}>📲 Instalar app</button>}
         {me&&<span style={{fontSize:11,color:"#777"}}>Hola, <strong style={{color:"#FF6500"}}>{me.name}</strong></span>}
         {isAdmin&&<button onClick={()=>setShowAdmin(true)} style={{background:"none",border:"none",color:"#888",fontSize:20,padding:"2px 5px"}} title="Admin">⚙</button>}
       </div>
