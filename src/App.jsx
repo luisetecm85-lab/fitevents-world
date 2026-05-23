@@ -445,7 +445,7 @@ function AdminPanel({evs,setEvs,onClose,sponsors,setSponsors}){
       <div style={{background:"#141414",borderBottom:"1px solid rgba(255,107,43,0.2)",padding:"10px 18px",display:"flex",alignItems:"center",gap:10,flexShrink:0}}>
         <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:17,fontWeight:800,color:"#FF6500"}}>⚙ ADMIN — FitEvents World</span>
         <button onClick={()=>setAdminTab(x=>x==="events"?"sponsors":"events")} style={{background:"rgba(255,107,43,0.12)",color:"#FF6500",border:"1px solid rgba(255,107,43,0.25)",padding:"4px 12px",borderRadius:6,fontSize:12,fontWeight:700,cursor:"pointer",marginLeft:8}}>{adminTab==="events"?"🎟️ Sponsors":"📋 Eventos"}</button>
-        <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Buscar evento..." style={{padding:"5px 10px",flex:1,maxWidth:280}}/>
+        <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Buscar evento..." style={{padding:"5px 10px",flex:1,maxWidth:200}}/>
         <span style={{fontSize:12,color:"#555"}}>{filtered.length} eventos</span>
         <button onClick={onClose} style={{background:"#2a2a2a",color:"#fff",border:"none",padding:"5px 12px",borderRadius:6,fontSize:12,fontWeight:600,marginLeft:"auto"}}>Cerrar</button>
       </div>
