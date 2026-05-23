@@ -432,8 +432,7 @@ function AdminEventEditor({ev,onSave,onClose}){
 }
 
 function AdminPanel({evs,setEvs,onClose,sponsors,setSponsors}){
-  const[adminTab,setAdminTab]=useState("events");
-  const[newSp,setNewSp]=useState({brand:"",desc:"",code:"",discount:"",url:"",color:"#FF6500",logo:null});
+  const[adminTab,setAdminTab]=useState("events");const[newSp,setNewSp]=useState({brand:"",desc:"",code:"",discount:"",url:"",color:"#FF6500",logo:null});
   const saveSponsor=async()=>{if(!newSp.brand||!newSp.code)return;const id=Date.now().toString();await setDoc(doc(db,"sponsors",id),{...newSp,id});setNewSp({brand:"",desc:"",code:"",discount:"",url:"",color:"#FF6500",logo:null});};
   const deleteSponsor=async(id)=>{await updateDoc(doc(db,"sponsors",id),{deleted:true});};
   const[search,setSearch]=useState("");const[editing,setEditing]=useState(null);
