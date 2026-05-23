@@ -439,83 +439,59 @@ function AdminPanel({evs,setEvs,onClose,sponsors,setSponsors}){
   const toggle=async(id,field)=>{const ev=evs.find(e=>e.id===id);if(!ev)return;await updateDoc(doc(db,"events",String(id)),{[field]:!ev[field]});};
   const saveEdit=async(updated)=>{await updateDoc(doc(db,"events",String(updated.id)),updated);setEditing(null);};
   const filtered=evs.filter(e=>e.name.toLowerCase().includes(search.toLowerCase()));
-
   return<>
     {editing&&<AdminEventEditor ev={editing} onSave={saveEdit} onClose={()=>setEditing(null)}/>}
-    {adminTab==="sponsors"&&<div style={{flex:1,overflowY:"auto",padding:"12px 18px"}}>
-      <div style={{background:"#1a1a1a",border:"1px solid #2a2a2a",borderRadius:10,padding:16,marginBottom:16}}>
-        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:15,fontWeight:800,color:"#FF6500",marginBottom:10}}>Añadir sponsor</div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-          <input value={newSp.brand} onChange={e=>setNewSp(x=>({...x,brand:e.target.value}))} placeholder="Marca *" style={{padding:"7px 10px"}}/>
-          <input value={newSp.code} onChange={e=>setNewSp(x=>({...x,code:e.target.value}))} placeholder="Código *" style={{padding:"7px 10px"}}/>
-          <input value={newSp.discount} onChange={e=>setNewSp(x=>({...x,discount:e.target.value}))} placeholder="Descuento (ej: 10% de descuento)" style={{padding:"7px 10px"}}/>
-          <input value={newSp.url} onChange={e=>setNewSp(x=>({...x,url:e.target.value}))} placeholder="URL tienda" style={{padding:"7px 10px"}}/>
-          <input value={newSp.color} onChange={e=>setNewSp(x=>({...x,color:e.target.value}))} placeholder="Color (ej: #FF6500)" style={{padding:"7px 10px"}}/>
-          <input value={newSp.desc} onChange={e=>setNewSp(x=>({...x,desc:e.target.value}))} placeholder="Descripción" style={{padding:"7px 10px"}}/>
-        </div>
-        <div style={{marginTop:8,marginBottom:8}}>
-          <label style={{display:"flex",alignItems:"center",gap:9,cursor:"pointer",background:"#111",border:"1px dashed #333",borderRadius:7,padding:"7px 11px"}}>
-            {newSp.logo?<img src={newSp.logo} style={{width:36,height:36,borderRadius:5,objectFit:"cover"}}/>:<div style={{width:36,height:36,borderRadius:5,background:"#222",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,color:"#444"}}>🖼</div>}
-            <div style={{fontSize:12,color:"#888"}}>{newSp.logo?"Logo cargado — click para cambiar":"Subir logo del sponsor"}</div>
-            <input type="file" accept="image/*" style={{display:"none"}} onChange={async e=>{const f=e.target.files[0];if(!f||f.size>2*1024*1024)return;const b64=await fileToB64(f);setNewSp(x=>({...x,logo:b64}));}}/>
-          </label>
-        </div>
-        <button onClick={saveSponsor} style={{background:"#FF6500",color:"#fff",border:"none",padding:"8px 20px",borderRadius:6,fontSize:13,fontWeight:700,cursor:"pointer",marginTop:4}}>Añadir sponsor</button>
-      </div>
-      {sponsors.filter(s=>!s.deleted).length===0?<div style={{color:"#555",fontSize:13,textAlign:"center",padding:"20px 0"}}>No hay sponsors activos</div>:
-      sponsors.filter(s=>!s.deleted).map(s=><div key={s.id} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",borderRadius:8,padding:"10px 14px",marginBottom:8,display:"flex",alignItems:"center",gap:10}}>
-        {s.logo?<img src={s.logo} style={{width:36,height:36,borderRadius:5,objectFit:"cover"}}/>:<div style={{width:36,height:36,borderRadius:5,background:"#222",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,color:"#444"}}>🏷️</div>}
-        <div style={{flex:1}}><div style={{fontWeight:700,color:s.color||"#FF6500"}}>{s.brand}</div><div style={{fontSize:11,color:"#888"}}>{s.code} · {s.discount}</div></div>
-        <button onClick={()=>deleteSponsor(s.id)} style={{backgrou
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.95)",zIndex:999,display:"flex",flexDirection:"column"}}>
       <div style={{background:"#141414",borderBottom:"1px solid rgba(255,107,43,0.2)",padding:"10px 18px",display:"flex",alignItems:"center",gap:10,flexShrink:0}}>
-        <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:17,fontWeight:800,color:"#FF6500"}}>⚙ ADMIN — FitEvents World</span><button onClick={()=>setAdminTab(x=>x==="events"?"sponsors":"events")} style={{background:"rgba(255,107,43,0.12)",color:"#FF6500",border:"1px solid rgba(255,107,43,0.25)",padding:"4px 12px",borderRadius:6,fontSize:12,fontWeight:700,cursor:"pointer",marginLeft:8}}>{adminTab==="events"?"🎟️ Sponsors":"📋 Eventos"}</button>
+        <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:17,fontWeight:800,color:"#FF6500"}}>⚙ ADMIN — FitEvents World</span>
+        <button onClick={()=>setAdminTab(x=>x==="events"?"sponsors":"events")} style={{background:"rgba(255,107,43,0.12)",color:"#FF6500",border:"1px solid rgba(255,107,43,0.25)",padding:"4px 12px",borderRadius:6,fontSize:12,fontWeight:700,cursor:"pointer",marginLeft:8}}>{adminTab==="events"?"🎟️ Sponsors":"📋 Eventos"}</button>
         <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Buscar evento..." style={{padding:"5px 10px",flex:1,maxWidth:280}}/>
         <span style={{fontSize:12,color:"#555"}}>{filtered.length} eventos</span>
         <button onClick={onClose} style={{background:"#2a2a2a",color:"#fff",border:"none",padding:"5px 12px",borderRadius:6,fontSize:12,fontWeight:600,marginLeft:"auto"}}>Cerrar</button>
       </div>
-      <div style={{background:"#111",padding:"5px 18px",display:"grid",gridTemplateColumns:"1fr 80px 80px 80px 80px",gap:6,flexShrink:0}}>
-        <span style={{fontSize:10,color:"#555",fontWeight:700}}>EVENTO</span>
-        <span style={{fontSize:10,color:"#4DA6FF",fontWeight:700,textAlign:"center"}}>VERIF.</span>
-        <span style={{fontSize:10,color:"#FFB300",fontWeight:700,textAlign:"center"}}>DEST.</span>
-        <span style={{fontSize:10,color:"#4CAF50",fontWeight:700,textAlign:"center"}}>LOGO</span>
-        <span style={{fontSize:10,color:"#FF6500",fontWeight:700,textAlign:"center"}}>EDITAR</span>
-      </div>
-      {adminTab==="events"&&<div style={{flex:1,overflowY:"auto",padding:"4px 18px 16px"}}>
-        {filtered.map(ev=><div key={ev.id} style={{display:"grid",gridTemplateColumns:"1fr 80px 80px 80px 80px",gap:6,padding:"6px 0",borderBottom:"1px solid rgba(255,255,255,0.04)",alignItems:"center"}}>
-          <div style={{display:"flex",alignItems:"center",gap:7}}>
-            <EventLogo ev={ev} size={26}/>
-            <div>
-              <div style={{fontSize:12,fontWeight:600}}>{ev.name}</div>
-              <div style={{fontSize:10,color:"#555"}}>{ev.city} · {fd(ev.date)} · {(ev.fmts||[]).join(", ")}</div>
-            </div>
+      {adminTab==="sponsors"?<div style={{flex:1,overflowY:"auto",padding:"12px 18px"}}>
+        <div style={{background:"#1a1a1a",border:"1px solid #2a2a2a",borderRadius:10,padding:16,marginBottom:16}}>
+          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:15,fontWeight:800,color:"#FF6500",marginBottom:10}}>Añadir sponsor</div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+            <input value={newSp.brand} onChange={e=>setNewSp(x=>({...x,brand:e.target.value}))} placeholder="Marca *" style={{padding:"7px 10px"}}/>
+            <input value={newSp.code} onChange={e=>setNewSp(x=>({...x,code:e.target.value}))} placeholder="Código *" style={{padding:"7px 10px"}}/>
+            <input value={newSp.discount} onChange={e=>setNewSp(x=>({...x,discount:e.target.value}))} placeholder="Descuento (ej: 10% de descuento)" style={{padding:"7px 10px"}}/>
+            <input value={newSp.url} onChange={e=>setNewSp(x=>({...x,url:e.target.value}))} placeholder="URL tienda" style={{padding:"7px 10px"}}/>
+            <input value={newSp.color} onChange={e=>setNewSp(x=>({...x,color:e.target.value}))} placeholder="Color (ej: #FF6500)" style={{padding:"7px 10px"}}/>
+            <input value={newSp.desc} onChange={e=>setNewSp(x=>({...x,desc:e.target.value}))} placeholder="Descripción" style={{padding:"7px 10px"}}/>
           </div>
-          <div style={{textAlign:"center"}}>
-            <button onClick={()=>toggle(ev.id,"verified")} style={{background:ev.verified?"rgba(77,166,255,0.15)":"#1a1a1a",border:`1px solid ${ev.verified?"#4DA6FF":"rgba(255,255,255,0.08)"}`,color:ev.verified?"#4DA6FF":"#555",padding:"3px 8px",borderRadius:5,fontSize:10,fontWeight:700,cursor:"pointer"}}>
-              {ev.verified?"✓":"–"}
-            </button>
-          </div>
-          <div style={{textAlign:"center"}}>
-            <button onClick={()=>toggle(ev.id,"feat")} style={{background:ev.feat?"rgba(255,193,7,0.12)":"#1a1a1a",border:`1px solid ${ev.feat?"#FFB300":"rgba(255,255,255,0.08)"}`,color:ev.feat?"#FFB300":"#555",padding:"3px 8px",borderRadius:5,fontSize:10,fontWeight:700,cursor:"pointer"}}>
-              {ev.feat?"⭐":"–"}
-            </button>
-          </div>
-          <div style={{textAlign:"center"}}>
-            <label style={{cursor:"pointer",display:"inline-block"}}>
-              {ev.logo
-                ?<img src={ev.logo} style={{width:26,height:26,borderRadius:4,objectFit:"cover",border:"1px solid #333"}}/>
-                :<div style={{width:26,height:26,borderRadius:4,background:"#1a1a1a",border:"1px dashed #333",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,color:"#555"}}>+</div>}
-              <input type="file" accept="image/*" style={{display:"none"}} onChange={async e=>{const f=e.target.files[0];if(!f)return;const b64=await fileToB64(f);setEvs(x=>x.map(ev2=>ev2.id===ev.id?{...ev2,logo:b64}:ev2));}}/>
+          <div style={{marginTop:8,marginBottom:8}}>
+            <label style={{display:"flex",alignItems:"center",gap:9,cursor:"pointer",background:"#111",border:"1px dashed #333",borderRadius:7,padding:"7px 11px"}}>
+              {newSp.logo?<img src={newSp.logo} style={{width:36,height:36,borderRadius:5,objectFit:"cover"}}/>:<div style={{width:36,height:36,borderRadius:5,background:"#222",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,color:"#444"}}>🖼</div>}
+              <div style={{fontSize:12,color:"#888"}}>{newSp.logo?"Logo cargado — click para cambiar":"Subir logo del sponsor"}</div>
+              <input type="file" accept="image/*" style={{display:"none"}} onChange={async e=>{const f=e.target.files[0];if(!f||f.size>2*1024*1024)return;const b64=await fileToB64(f);setNewSp(x=>({...x,logo:b64}));}}/>
             </label>
-            {ev.logo&&<button onClick={()=>setEvs(x=>x.map(ev2=>ev2.id===ev.id?{...ev2,logo:null}:ev2))} style={{display:"block",margin:"1px auto 0",background:"none",border:"none",color:"#555",fontSize:9,cursor:"pointer"}}>✕</button>}
           </div>
-          <div style={{textAlign:"center"}}>
-            <button onClick={()=>setEditing(ev)} style={{background:"rgba(255,107,43,0.12)",border:"1px solid rgba(255,107,43,0.25)",color:"#FF6500",padding:"3px 8px",borderRadius:5,fontSize:10,fontWeight:700,cursor:"pointer"}}>
-              ✏ Edit
-            </button>
-          </div>
+          <button onClick={saveSponsor} style={{background:"#FF6500",color:"#fff",border:"none",padding:"8px 20px",borderRadius:6,fontSize:13,fontWeight:700,cursor:"pointer",marginTop:4}}>Añadir sponsor</button>
+        </div>
+        {sponsors.filter(s=>!s.deleted).length===0?<div style={{color:"#555",fontSize:13,textAlign:"center",padding:"20px 0"}}>No hay sponsors activos</div>:sponsors.filter(s=>!s.deleted).map(s=><div key={s.id} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",borderRadius:8,padding:"10px 14px",marginBottom:8,display:"flex",alignItems:"center",gap:10}}>
+          {s.logo?<img src={s.logo} style={{width:36,height:36,borderRadius:5,objectFit:"cover"}}/>:<div style={{width:36,height:36,borderRadius:5,background:"#222",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,color:"#444"}}>🏷️</div>}
+          <div style={{flex:1}}><div style={{fontWeight:700,color:s.color||"#FF6500"}}>{s.brand}</div><div style={{fontSize:11,color:"#888"}}>{s.code} · {s.discount}</div></div>
+          <button onClick={()=>deleteSponsor(s.id)} style={{background:"rgba(239,83,80,0.12)",color:"#EF5350",border:"1px solid rgba(239,83,80,0.25)",padding:"4px 10px",borderRadius:5,fontSize:11,fontWeight:700,cursor:"pointer"}}>Eliminar</button>
         </div>)}
-      </div>}
+      </div>:<>
+        <div style={{background:"#111",padding:"5px 18px",display:"grid",gridTemplateColumns:"1fr 80px 80px 80px 80px",gap:6,flexShrink:0}}>
+          <span style={{fontSize:10,color:"#555",fontWeight:700}}>EVENTO</span>
+          <span style={{fontSize:10,color:"#4DA6FF",fontWeight:700,textAlign:"center"}}>VERIF.</span>
+          <span style={{fontSize:10,color:"#FFB300",fontWeight:700,textAlign:"center"}}>DEST.</span>
+          <span style={{fontSize:10,color:"#4CAF50",fontWeight:700,textAlign:"center"}}>LOGO</span>
+          <span style={{fontSize:10,color:"#FF6500",fontWeight:700,textAlign:"center"}}>EDITAR</span>
+        </div>
+        <div style={{flex:1,overflowY:"auto",padding:"4px 18px 16px"}}>
+          {filtered.map(ev=><div key={ev.id} style={{display:"grid",gridTemplateColumns:"1fr 80px 80px 80px 80px",gap:6,padding:"6px 0",borderBottom:"1px solid rgba(255,255,255,0.04)",alignItems:"center"}}>
+            <div style={{display:"flex",alignItems:"center",gap:7}}><EventLogo ev={ev} size={26}/><div><div style={{fontSize:12,fontWeight:600}}>{ev.name}</div><div style={{fontSize:10,color:"#555"}}>{ev.city} · {fd(ev.date)} · {(ev.fmts||[]).join(", ")}</div></div></div>
+            <div style={{textAlign:"center"}}><button onClick={()=>toggle(ev.id,"verified")} style={{background:ev.verified?"rgba(77,166,255,0.15)":"#1a1a1a",border:`1px solid ${ev.verified?"#4DA6FF":"rgba(255,255,255,0.08)"}`,color:ev.verified?"#4DA6FF":"#555",padding:"3px 8px",borderRadius:5,fontSize:10,fontWeight:700,cursor:"pointer"}}>{ev.verified?"✓":"–"}</button></div>
+            <div style={{textAlign:"center"}}><button onClick={()=>toggle(ev.id,"feat")} style={{background:ev.feat?"rgba(255,193,7,0.12)":"#1a1a1a",border:`1px solid ${ev.feat?"#FFB300":"rgba(255,255,255,0.08)"}`,color:ev.feat?"#FFB300":"#555",padding:"3px 8px",borderRadius:5,fontSize:10,fontWeight:700,cursor:"pointer"}}>{ev.feat?"⭐":"–"}</button></div>
+            <div style={{textAlign:"center"}}><label style={{cursor:"pointer",display:"inline-block"}}>{ev.logo?<img src={ev.logo} style={{width:26,height:26,borderRadius:4,objectFit:"cover",border:"1px solid #333"}}/>:<div style={{width:26,height:26,borderRadius:4,background:"#1a1a1a",border:"1px dashed #333",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,color:"#555"}}>+</div>}<input type="file" accept="image/*" style={{display:"none"}} onChange={async e=>{const f=e.target.files[0];if(!f)return;const b64=await fileToB64(f);setEvs(x=>x.map(ev2=>ev2.id===ev.id?{...ev2,logo:b64}:ev2));}}/></label>{ev.logo&&<button onClick={()=>setEvs(x=>x.map(ev2=>ev2.id===ev.id?{...ev2,logo:null}:ev2))} style={{display:"block",margin:"1px auto 0",background:"none",border:"none",color:"#555",fontSize:9,cursor:"pointer"}}>✕</button>}</div>
+            <div style={{textAlign:"center"}}><button onClick={()=>setEditing(ev)} style={{background:"rgba(255,107,43,0.12)",border:"1px solid rgba(255,107,43,0.25)",color:"#FF6500",padding:"3px 8px",borderRadius:5,fontSize:10,fontWeight:700,cursor:"pointer"}}>✏ Edit</button></div>
+          </div>)}
+        </div>
+      </>}
     </div>
   </>;
 }
