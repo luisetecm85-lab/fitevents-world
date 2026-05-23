@@ -1012,7 +1012,7 @@ useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window
             <div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:22,fontWeight:900,color:"#FF6500"}}>{evs.filter(e=>e.ratings.find(r=>r.user===me.u)).length}</div><div style={{fontSize:10,color:"#555",textTransform:"uppercase",letterSpacing:1}}>Valoraciones</div></div>
             <div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:22,fontWeight:900,color:"#4CAF50"}}>{evs.filter(e=>((e.attendance||[])).includes(me.u)).length}</div><div style={{fontSize:10,color:"#555",textTransform:"uppercase",letterSpacing:1}}>Quiero ir</div></div>
           </div>
-          <button onClick={()=>{signOut(auth);setMe(null);setView("list");}} style={{background:"rgba(239,83,80,0.12)",color:"#EF5350",border:"1px solid rgba(239,83,80,0.25)",padding:"6px 14px",borderRadius:6,fontSize:12,fontWeight:700,cursor:"pointer",flexShrink:0}}>Cerrar sesión</button>
+          <button onClick={()=>setView("sponsors")} style={{background:"rgba(76,175,80,0.12)",color:"#4CAF50",border:"1px solid rgba(76,175,80,0.25)",padding:"6px 14px",borderRadius:6,fontSize:12,fontWeight:700,cursor:"pointer",flexShrink:0}}>🎟️ Descuentos</button><button onClick={()=>{signOut(auth);setMe(null);setView("list");}} style={{background:"rgba(239,83,80,0.12)",color:"#EF5350",border:"1px solid rgba(239,83,80,0.25)",padding:"6px 14px",borderRadius:6,fontSize:12,fontWeight:700,cursor:"pointer",flexShrink:0}}>Cerrar sesión</button>
         </div>
         {/* Mis valoraciones */}
         {evs.filter(e=>e.ratings.find(r=>r.user===me.u)).length>0?<div style={{marginBottom:16}}>
