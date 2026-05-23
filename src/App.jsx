@@ -481,7 +481,7 @@ function AdminPanel({evs,setEvs,onClose,sponsors,setSponsors}){
         <span style={{fontSize:10,color:"#4CAF50",fontWeight:700,textAlign:"center"}}>LOGO</span>
         <span style={{fontSize:10,color:"#FF6500",fontWeight:700,textAlign:"center"}}>EDITAR</span>
       </div>
-      <div style={{flex:1,overflowY:"auto",padding:"4px 18px 16px"}}>
+      {adminTab==="events"&&<div style={{flex:1,overflowY:"auto",padding:"4px 18px 16px"}}>
         {filtered.map(ev=><div key={ev.id} style={{display:"grid",gridTemplateColumns:"1fr 80px 80px 80px 80px",gap:6,padding:"6px 0",borderBottom:"1px solid rgba(255,255,255,0.04)",alignItems:"center"}}>
           <div style={{display:"flex",alignItems:"center",gap:7}}>
             <EventLogo ev={ev} size={26}/>
@@ -515,7 +515,7 @@ function AdminPanel({evs,setEvs,onClose,sponsors,setSponsors}){
             </button>
           </div>
         </div>)}
-      </div>
+      </div>}
     </div>
   </>;
 }
