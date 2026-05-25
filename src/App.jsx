@@ -895,7 +895,7 @@ useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window
               <div>
                 <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"3px 11px",marginBottom:7}}>
                   {SCORE_KEYS.map(k=><div key={k} style={{marginBottom:4}}>
-                    <div style={{fontSize:11,color:"#888",marginBottom:2,display:"flex",alignItems:"center",gap:4}}>{SLABELS[k]}{STOOLTIPS[k]&&<span title={STOOLTIPS[k]} style={{width:13,height:13,borderRadius:"50%",background:"#333",color:"#888",fontSize:9,display:"inline-flex",alignItems:"center",justifyContent:"center",cursor:"help",flexShrink:0}}>?</span>}</div>
+                    <div style={{marginBottom:4}}><div style={{fontSize:11,color:"#888"}}>{SLABELS[k]}</div>{STOOLTIPS[k]&&<div style={{fontSize:10,color:"#555",fontStyle:"italic",marginTop:1}}>{STOOLTIPS[k]}</div>}</div>
                     <div style={{display:"flex",gap:3}}>{[1,2,3,4,5].map(n=><button key={n} onClick={()=>setRSc(x=>({...x,[k]:n}))} style={{width:23,height:23,borderRadius:3,border:"none",background:rSc[k]>=n?"#FF6500":"#222",color:"#fff",fontSize:11,cursor:"pointer"}}>★</button>)}</div>
                   </div>)}
                 </div>
