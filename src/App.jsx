@@ -11,7 +11,8 @@ const DISC_COLORS={CrossFit:"#FF6500",Hyrox:"#4DA6FF",OCR:"#4CAF50",Fuerza:"#B56
 const DISCIPLINES=["Todos","CrossFit","Hyrox","OCR","Fuerza","Fitness Funcional"];
 const FORMATS=["Individual","Parejas","Trios","Cuartetos","Equipos +4"];
 const SCORE_KEYS=["precio","dificultad","organizacion","ambiente","categorias","accesibilidad","espacio"];
-const SLABELS={precio:"Precio/calidad",dificultad:"Dificultad",organizacion:"Organización",ambiente:"Ambiente",categorias:"Categorías",accesibilidad:"Accesibilidad",espacio:"Espacio del evento (recinto, estadio...)"};
+const SLABELS={precio:"Precio/calidad",dificultad:"Dificultad adecuada",organizacion:"Organización",ambiente:"Ambiente",categorias:"Categorías",accesibilidad:"Accesibilidad",espacio:"Espacio"};
+const STOOLTIPS={precio:"¿El precio de inscripción está justificado con lo que ofrece el evento?",dificultad:"¿El nivel de dificultad fue el prometido por el organizador?",organizacion:"Logística, comunicación, puntualidad y atención al participante.",ambiente:"Animación, música, público y energía general del evento.",categorias:"Variedad y adecuación de las categorías por nivel y formato.",accesibilidad:"Facilidad para llegar, aparcamiento y acceso al recinto.",espacio:"Calidad del recinto: estadio, pabellón, espacio exterior..."};
 const ADS=[
   {id:1,brand:"PICSIL",claim:"Equipamiento tecnico para atletas de elite",cta:"Ver productos",url:"https://picsil.com",color:"#FF6500",logo:"💪"},
   {id:2,brand:"ON RUNNING",claim:"Zapatillas disenadas para rendimiento hibrido",cta:"Descubrir",url:"https://on-running.com",color:"#4DA6FF",logo:"👟"},
@@ -894,7 +895,7 @@ useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window
               <div>
                 <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"3px 11px",marginBottom:7}}>
                   {SCORE_KEYS.map(k=><div key={k} style={{marginBottom:4}}>
-                    <div style={{fontSize:11,color:"#888",marginBottom:2}}>{SLABELS[k]}</div>
+                    <div style={{fontSize:11,color:"#888",marginBottom:2,display:"flex",alignItems:"center",gap:4}}>{SLABELS[k]}{STOOLTIPS[k]&&<span title={STOOLTIPS[k]} style={{width:13,height:13,borderRadius:"50%",background:"#333",color:"#888",fontSize:9,display:"inline-flex",alignItems:"center",justifyContent:"center",cursor:"help",flexShrink:0}}>?</span>}</div>
                     <div style={{display:"flex",gap:3}}>{[1,2,3,4,5].map(n=><button key={n} onClick={()=>setRSc(x=>({...x,[k]:n}))} style={{width:23,height:23,borderRadius:3,border:"none",background:rSc[k]>=n?"#FF6500":"#222",color:"#fff",fontSize:11,cursor:"pointer"}}>★</button>)}</div>
                   </div>)}
                 </div>
