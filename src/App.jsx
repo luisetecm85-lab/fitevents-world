@@ -517,7 +517,7 @@ function CalendarView({evs,setSel,setView}){
     <div style={{display:"flex",gap:6,marginBottom:12,flexWrap:"wrap",alignItems:"center"}}>
       {["Todos","CrossFit","Hyrox","OCR","Fuerza","Fitness Funcional"].map(d=><button key={d} onClick={()=>{setFDisc(d);setSelDay(null);}} style={BT2(fDisc===d)}>{d}</button>)}
     </div>
-    <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:12,overflow:"hidden",marginBottom:16}}>
+    <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:12,overflow:"hidden",marginBottom:16,maxWidth:680,margin:"0 auto 16px"}}>
       <div style={{padding:"12px 16px",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
         <button onClick={prevMonth} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",color:"#fff",width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:14}}>‹</button>
         <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:18,fontWeight:800,textTransform:"uppercase"}}>{monthNames[month]} {year}</span>
@@ -546,7 +546,7 @@ function CalendarView({evs,setSel,setView}){
       </div>
     </div>
     <div>
-      <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:800,letterSpacing:1,textTransform:"uppercase",marginBottom:10,color:"#FF6500"}}>
+      <div style={{maxWidth:680,margin:"0 auto"}}><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:800,letterSpacing:1,textTransform:"uppercase",marginBottom:10,color:"#FF6500"}}>
         {selDay?`${selDay} de ${monthNames[month]} · ${selEvents.length} eventos`:`Todos los eventos de ${monthNames[month]} · ${selEvents.length} eventos`}
       </div>
       {selEvents.length===0?<div style={{color:"#444",fontSize:13,textAlign:"center",padding:"20px 0"}}>Sin eventos {selDay?`el día ${selDay}`:""} este mes</div>:
@@ -562,7 +562,7 @@ function CalendarView({evs,setSel,setView}){
         </div>;})}
       </div>}
     </div>
-  </div>;
+  </div></div>;
 }
 function CmpSearchBox({evs,selectedId,otherId,onSelect,label}){
   const[q,setQ]=useState("");const[open,setOpen]=useState(false);
