@@ -497,6 +497,73 @@ function AdminPanel({evs,setEvs,onClose,sponsors,setSponsors}){
   </>;
 }
 
+function CalendarView({evs,setSel,setView}){
+  const[curDate,setCurDate]=useState(new Date());
+  const[selDay,setSelDay]=useState(null);
+  const[fDisc,setFDisc]=useState("Todos");
+  const DISC_COLORS_CAL={CrossFit:"#FF6500",Hyrox:"#4DA6FF",OCR:"#4CAF50",Fuerza:"#B56AFF","Fitness Funcional":"#FFB300"};
+  const year=curDate.getFullYear(),month=curDate.getMonth();
+  const monthNames=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+  const firstDay=(new Date(year,month,1).getDay()+6)%7;
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  const eventsInMonth=evs.filter(e=>{if(!e.date)return false;const[y,m]=e.date.split("-");return parseInt(y)===year&&parseInt(m)-1===month&&(fDisc==="Todos"||e.disc===fDisc);});
+  const evsByDay={};eventsInMonth.forEach(e=>{const d=parseInt(e.date.split("-")[2]);if(!evsByDay[d])evsByDay[d]=[];evsByDay[d].push(e);});
+  const selEvents=selDay?evsByDay[selDay]||[]:eventsInMonth;
+  const prevMonth=()=>{setCurDate(new Date(year,month-1,1));setSelDay(null);};
+  const nextMonth=()=>{setCurDate(new Date(year,month+1,1));setSelDay(null);};
+  const BT2=(a)=>({background:a?"#FF6500":"#1a1a1a",color:a?"#fff":"#777",border:`1px solid ${a?"#FF6500":"rgba(255,255,255,0.08)"}`,padding:"3px 10px",borderRadius:20,fontSize:11,cursor:"pointer"});
+  return<div>
+    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Calendario</div>
+    <div style={{display:"flex",gap:6,marginBottom:12,flexWrap:"wrap",alignItems:"center"}}>
+      {["Todos","CrossFit","Hyrox","OCR","Fuerza","Fitness Funcional"].map(d=><button key={d} onClick={()=>{setFDisc(d);setSelDay(null);}} style={BT2(fDisc===d)}>{d}</button>)}
+    </div>
+    <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:12,overflow:"hidden",marginBottom:16}}>
+      <div style={{padding:"12px 16px",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
+        <button onClick={prevMonth} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",color:"#fff",width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:14}}>‹</button>
+        <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:18,fontWeight:800,textTransform:"uppercase"}}>{monthNames[month]} {year}</span>
+        <button onClick={nextMonth} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",color:"#fff",width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:14}}>›</button>
+      </div>
+      <div style={{padding:"10px 12px"}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:3,marginBottom:3}}>
+          {["L","M","X","J","V","S","D"].map(d=><div key={d} style={{textAlign:"center",fontSize:10,color:"#555",fontWeight:700,padding:"3px 0"}}>{d}</div>)}
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:3}}>
+          {Array.from({length:firstDay}).map((_,i)=><div key={"e"+i}/>)}
+          {Array.from({length:daysInMonth}).map((_,i)=>{
+            const day=i+1,dayEvs=evsByDay[day]||[],hasSel=selDay===day;
+            return<div key={day} onClick={()=>setSelDay(hasSel?null:day)} style={{aspectRatio:"1",borderRadius:6,background:hasSel?"rgba(255,101,0,0.2)":dayEvs.length?"#1e1e1e":"#141414",border:hasSel?"1px solid #FF6500":dayEvs.length?"1px solid #2a2a2a":"1px solid transparent",cursor:dayEvs.length?"pointer":"default",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"flex-start",padding:"3px 2px",transition:"all 0.15s"}}>
+              <span style={{fontSize:10,color:hasSel?"#FF6500":dayEvs.length?"#fff":"#444",fontWeight:dayEvs.length?700:400}}>{day}</span>
+              {dayEvs.length>0&&<div style={{display:"flex",gap:2,marginTop:2,flexWrap:"wrap",justifyContent:"center"}}>
+                {dayEvs.slice(0,4).map((e,i)=><div key={i} style={{width:5,height:5,borderRadius:"50%",background:DISC_COLORS_CAL[e.disc]||"#555"}}/>)}
+                {dayEvs.length>4&&<div style={{width:5,height:5,borderRadius:"50%",background:"#555"}}/>}
+              </div>}
+            </div>;
+          })}
+        </div>
+      </div>
+      <div style={{padding:"6px 12px 8px",display:"flex",gap:10,flexWrap:"wrap",borderTop:"1px solid rgba(255,255,255,0.04)"}}>
+        {Object.entries(DISC_COLORS_CAL).map(([d,c])=><span key={d} style={{display:"flex",alignItems:"center",gap:4,fontSize:10,color:"#555"}}><span style={{width:7,height:7,borderRadius:"50%",background:c,display:"inline-block"}}/>{d}</span>)}
+      </div>
+    </div>
+    <div>
+      <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:800,letterSpacing:1,textTransform:"uppercase",marginBottom:10,color:"#FF6500"}}>
+        {selDay?`${selDay} de ${monthNames[month]} · ${selEvents.length} eventos`:`Todos los eventos de ${monthNames[month]} · ${selEvents.length} eventos`}
+      </div>
+      {selEvents.length===0?<div style={{color:"#444",fontSize:13,textAlign:"center",padding:"20px 0"}}>Sin eventos {selDay?`el día ${selDay}`:""} este mes</div>:
+      <div style={{display:"flex",flexDirection:"column",gap:6}}>
+        {selEvents.sort((a,b)=>a.date.localeCompare(b.date)).map(ev=>{const oa=overall(ev.ratings);return<div key={ev.id} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",borderLeft:`3px solid ${DISC_COLORS_CAL[ev.disc]||"#555"}`,borderRadius:8,padding:"10px 14px",display:"flex",gap:10,alignItems:"center",cursor:"pointer"}} onClick={()=>{setSel(ev);setView("det");}}>
+          <EventLogo ev={ev} size={32}/>
+          <div style={{flex:1}}>
+            <div style={{display:"flex",gap:4,marginBottom:2,flexWrap:"wrap",alignItems:"center"}}><Badge disc={ev.disc} sm/>{ev.verified&&<VBadge sm/>}</div>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:800,textTransform:"uppercase"}}>{ev.name}</div>
+            <div style={{fontSize:11,color:"#888"}}>{ev.city} · {fd(ev.date)} · {ev.price===0?"Gratis":`${ev.price}€`}</div>
+          </div>
+          {oa>0&&<div style={{textAlign:"center",minWidth:32}}><div style={{fontSize:16,fontWeight:900,color:"#FF6500",fontFamily:"'Barlow Condensed',sans-serif"}}>{f1(oa)}</div><Stars n={oa} sz={8}/></div>}
+        </div>;})}
+      </div>}
+    </div>
+  </div>;
+}
 function CmpSearchBox({evs,selectedId,otherId,onSelect,label}){
   const[q,setQ]=useState("");const[open,setOpen]=useState(false);
   const selected=evs.find(e=>e.id===selectedId);
@@ -725,7 +792,7 @@ useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window
   const PL=(a)=>({background:a?"#FF6500":"#1a1a1a",color:a?"#fff":"#777",border:`1px solid ${a?"#FF6500":"rgba(255,255,255,0.08)"}`,padding:"4px 9px",borderRadius:20,fontSize:12,cursor:"pointer"});
   const IN={width:"100%",padding:"8px 11px",marginBottom:9};
   const CRD={};
-  const TABS=[{id:"list",l:"Eventos"},{id:"map",l:"Mapa"},{id:"rnk",l:"Ranking"},{id:"cmp",l:"Comparar"},{id:"add",l:"+ Anadir"},...(me?[{id:"prof",l:me.name}]:[{id:"auth",l:"Entrar"}])];
+  const TABS=[{id:"list",l:"Eventos"},{id:"map",l:"Mapa"},{id:"cal",l:"Calendario"},{id:"rnk",l:"Ranking"},{id:"cmp",l:"Comparar"},{id:"add",l:"+ Anadir"},...(me?[{id:"prof",l:me.name}]:[{id:"auth",l:"Entrar"}])];
 
   const listWithAds=useMemo(()=>{if(!isMobile)return filtered.map(ev=>({type:"ev",ev}));const r=[];filtered.forEach((ev,i)=>{r.push({type:"ev",ev});if((i+1)%4===0&&i<filtered.length-1)r.push({type:"ad"});});return r;},[filtered,isMobile]);
 
@@ -935,7 +1002,7 @@ useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window
         </div>
       </div>}
 
-      {view==="rnk"&&<div>
+      {view==="cal"&&<CalendarView evs={evs} setSel={setSel} setView={setView}/>}{view==="rnk"&&<div>
         <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Ranking</div>
         <div style={{display:"flex",gap:5,marginBottom:12,flexWrap:"wrap",alignItems:"center"}}>
           <select value={rkDisc} onChange={e=>setRkDisc(e.target.value)} style={{padding:"6px 7px"}}>{DISCIPLINES.map(d=><option key={d}>{d}</option>)}</select>
