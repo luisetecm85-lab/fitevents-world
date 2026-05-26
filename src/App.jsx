@@ -518,7 +518,7 @@ function CalendarView({evs,setSel,setView,isMobile}){
       {["Todos","CrossFit","Hyrox","OCR","Fuerza","Fitness Funcional"].map(d=><button key={d} onClick={()=>{setFDisc(d);setSelDay(null);}} style={BT2(fDisc===d)}>{d}</button>)}
     </div>
     <div style={{display:"flex",gap:16,alignItems:"flex-start",flexDirection:isMobile?"column":"row"}}>
-      <div style={{width:isMobile?"100%":480,flexShrink:0}}>
+      <div style={{width:isMobile?"100%":"55%",flexShrink:0}}>
         <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:12,overflow:"hidden"}}>
           <div style={{padding:"12px 16px",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
             <button onClick={prevMonth} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",color:"#fff",width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:14}}>‹</button>
