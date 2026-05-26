@@ -513,56 +513,60 @@ function CalendarView({evs,setSel,setView,isMobile}){
   const nextMonth=()=>{setCurDate(new Date(year,month+1,1));setSelDay(null);};
   const BT2=(a)=>({background:a?"#FF6500":"#1a1a1a",color:a?"#fff":"#777",border:`1px solid ${a?"#FF6500":"rgba(255,255,255,0.08)"}`,padding:"3px 10px",borderRadius:20,fontSize:11,cursor:"pointer"});
   return<div>
-    <div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase",textAlign:"center"}}>Calendario</div>
+    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:12,letterSpacing:1,textTransform:"uppercase",textAlign:"center"}}>Calendario</div>
     <div style={{display:"flex",gap:6,marginBottom:12,flexWrap:"wrap",alignItems:"center",justifyContent:"center"}}>
       {["Todos","CrossFit","Hyrox","OCR","Fuerza","Fitness Funcional"].map(d=><button key={d} onClick={()=>{setFDisc(d);setSelDay(null);}} style={BT2(fDisc===d)}>{d}</button>)}
     </div>
-    <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:12,overflow:"hidden",marginBottom:16,maxWidth:680,margin:"0 auto 16px"}}>
-      <div style={{padding:"12px 16px",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
-        <button onClick={prevMonth} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",color:"#fff",width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:14}}>‹</button>
-        <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:18,fontWeight:800,textTransform:"uppercase"}}>{monthNames[month]} {year}</span>
-        <button onClick={nextMonth} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",color:"#fff",width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:14}}>›</button>
-      </div>
-      <div style={{padding:"10px 12px"}}>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:3,marginBottom:3}}>
-          {["L","M","X","J","V","S","D"].map(d=><div key={d} style={{textAlign:"center",fontSize:10,color:"#555",fontWeight:700,padding:"3px 0"}}>{d}</div>)}
-        </div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:3}}>
-          {Array.from({length:firstDay}).map((_,i)=><div key={"e"+i}/>)}
-          {Array.from({length:daysInMonth}).map((_,i)=>{
-            const day=i+1,dayEvs=evsByDay[day]||[],hasSel=selDay===day;
-            return<div key={day} onClick={()=>setSelDay(hasSel?null:day)} style={{height:44,borderRadius:6,background:hasSel?"rgba(255,101,0,0.2)":dayEvs.length?"#1e1e1e":"#141414",border:hasSel?"1px solid #FF6500":dayEvs.length?"1px solid #2a2a2a":"1px solid transparent",cursor:dayEvs.length?"pointer":"default",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"flex-start",padding:"3px 2px",transition:"all 0.15s"}}>
-              <span style={{fontSize:10,color:hasSel?"#FF6500":dayEvs.length?"#fff":"#444",fontWeight:dayEvs.length?700:400}}>{day}</span>
-              {dayEvs.length>0&&<div style={{display:"flex",gap:2,marginTop:2,flexWrap:"wrap",justifyContent:"center"}}>
-                {dayEvs.slice(0,4).map((e,i)=><div key={i} style={{width:5,height:5,borderRadius:"50%",background:DISC_COLORS_CAL[e.disc]||"#555"}}/>)}
-                {dayEvs.length>4&&<div style={{width:5,height:5,borderRadius:"50%",background:"#555"}}/>}
-              </div>}
-            </div>;
-          })}
-        </div>
-      </div>
-      <div style={{padding:"6px 12px 8px",display:"flex",gap:10,flexWrap:"wrap",borderTop:"1px solid rgba(255,255,255,0.04)"}}>
-        {Object.entries(DISC_COLORS_CAL).map(([d,c])=><span key={d} style={{display:"flex",alignItems:"center",gap:4,fontSize:10,color:"#555"}}><span style={{width:7,height:7,borderRadius:"50%",background:c,display:"inline-block"}}/>{d}</span>)}
-      </div>
-    </div>
-    <div>
-      <div style={{maxWidth:680,margin:"0 auto"}}><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:800,letterSpacing:1,textTransform:"uppercase",marginBottom:10,color:"#FF6500"}}>
-        {selDay?`${selDay} de ${monthNames[month]} · ${selEvents.length} eventos`:`Todos los eventos de ${monthNames[month]} · ${selEvents.length} eventos`}
-      </div>
-      {selEvents.length===0?<div style={{color:"#444",fontSize:13,textAlign:"center",padding:"20px 0"}}>Sin eventos {selDay?`el día ${selDay}`:""} este mes</div>:
-      <div style={{display:"flex",flexDirection:"column",gap:6}}>
-        {selEvents.sort((a,b)=>a.date.localeCompare(b.date)).map(ev=>{const oa=overall(ev.ratings);return<div key={ev.id} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",borderLeft:`3px solid ${DISC_COLORS_CAL[ev.disc]||"#555"}`,borderRadius:8,padding:"10px 14px",display:"flex",gap:10,alignItems:"center",cursor:"pointer"}} onClick={()=>{setSel(ev);setView("det");}}>
-          <EventLogo ev={ev} size={32}/>
-          <div style={{flex:1}}>
-            <div style={{display:"flex",gap:4,marginBottom:2,flexWrap:"wrap",alignItems:"center"}}><Badge disc={ev.disc} sm/>{ev.verified&&<VBadge sm/>}</div>
-            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:800,textTransform:"uppercase"}}>{ev.name}</div>
-            <div style={{fontSize:11,color:"#888"}}>{ev.city} · {fd(ev.date)} · {ev.price===0?"Gratis":`${ev.price}€`}</div>
+    <div style={{display:"flex",gap:16,alignItems:"flex-start",flexDirection:isMobile?"column":"row"}}>
+      <div style={{width:isMobile?"100%":480,flexShrink:0}}>
+        <div style={{background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:12,overflow:"hidden"}}>
+          <div style={{padding:"12px 16px",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
+            <button onClick={prevMonth} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",color:"#fff",width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:14}}>‹</button>
+            <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:18,fontWeight:800,textTransform:"uppercase"}}>{monthNames[month]} {year}</span>
+            <button onClick={nextMonth} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",color:"#fff",width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:14}}>›</button>
           </div>
-          {oa>0&&<div style={{textAlign:"center",minWidth:32}}><div style={{fontSize:16,fontWeight:900,color:"#FF6500",fontFamily:"'Barlow Condensed',sans-serif"}}>{f1(oa)}</div><Stars n={oa} sz={8}/></div>}
-        </div>;})}
-      </div>}
+          <div style={{padding:"10px 12px"}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:3,marginBottom:3}}>
+              {["L","M","X","J","V","S","D"].map(d=><div key={d} style={{textAlign:"center",fontSize:10,color:"#555",fontWeight:700,padding:"3px 0"}}>{d}</div>)}
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:3}}>
+              {Array.from({length:firstDay}).map((_,i)=><div key={"e"+i}/>)}
+              {Array.from({length:daysInMonth}).map((_,i)=>{
+                const day=i+1,dayEvs=evsByDay[day]||[],hasSel=selDay===day;
+                return<div key={day} onClick={()=>setSelDay(hasSel?null:day)} style={{height:46,borderRadius:6,background:hasSel?"rgba(255,101,0,0.2)":dayEvs.length?"#1e1e1e":"#141414",border:hasSel?"1px solid #FF6500":dayEvs.length?"1px solid #2a2a2a":"1px solid transparent",cursor:dayEvs.length?"pointer":"default",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"flex-start",padding:"3px 2px",transition:"all 0.15s"}}>
+                  <span style={{fontSize:10,color:hasSel?"#FF6500":dayEvs.length?"#fff":"#444",fontWeight:dayEvs.length?700:400}}>{day}</span>
+                  {dayEvs.length>0&&<div style={{display:"flex",gap:2,marginTop:2,flexWrap:"wrap",justifyContent:"center"}}>
+                    {dayEvs.slice(0,4).map((e,i)=><div key={i} style={{width:5,height:5,borderRadius:"50%",background:DISC_COLORS_CAL[e.disc]||"#555"}}/>)}
+                    {dayEvs.length>4&&<div style={{width:5,height:5,borderRadius:"50%",background:"#555"}}/>}
+                  </div>}
+                </div>;
+              })}
+            </div>
+          </div>
+          <div style={{padding:"6px 12px 8px",display:"flex",gap:10,flexWrap:"wrap",borderTop:"1px solid rgba(255,255,255,0.04)"}}>
+            {Object.entries(DISC_COLORS_CAL).map(([d,c])=><span key={d} style={{display:"flex",alignItems:"center",gap:4,fontSize:10,color:"#555"}}><span style={{width:7,height:7,borderRadius:"50%",background:c,display:"inline-block"}}/>{d}</span>)}
+          </div>
+        </div>
+      </div>
+      <div style={{flex:1,minWidth:0}}>
+        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:800,letterSpacing:1,textTransform:"uppercase",marginBottom:10,color:"#FF6500"}}>
+          {selDay?`${selDay} de ${monthNames[month]} · ${selEvents.length} eventos`:`${monthNames[month]} ${year} · ${selEvents.length} eventos`}
+        </div>
+        {selEvents.length===0?<div style={{color:"#444",fontSize:13,textAlign:"center",padding:"40px 0",background:"#161616",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10}}>Sin eventos {selDay?`el día ${selDay}`:""} este mes</div>:
+        <div style={{display:"flex",flexDirection:"column",gap:6,maxHeight:isMobile?"auto":520,overflowY:isMobile?"visible":"auto"}}>
+          {selEvents.sort((a,b)=>a.date.localeCompare(b.date)).map(ev=>{const oa=overall(ev.ratings);return<div key={ev.id} style={{background:"#1a1a1a",border:"1px solid #2a2a2a",borderLeft:`3px solid ${DISC_COLORS_CAL[ev.disc]||"#555"}`,borderRadius:8,padding:"9px 12px",display:"flex",gap:10,alignItems:"center",cursor:"pointer",flexShrink:0}} onClick={()=>{setSel(ev);setView("det");}}>
+            <EventLogo ev={ev} size={30}/>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{display:"flex",gap:4,marginBottom:2,flexWrap:"wrap",alignItems:"center"}}><Badge disc={ev.disc} sm/>{ev.verified&&<VBadge sm/>}</div>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:12,fontWeight:800,textTransform:"uppercase",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ev.name}</div>
+              <div style={{fontSize:10,color:"#888"}}>{ev.city} · {fd(ev.date)} · {ev.price===0?"Gratis":`${ev.price}€`}</div>
+            </div>
+            {oa>0&&<div style={{textAlign:"center",minWidth:28,flexShrink:0}}><div style={{fontSize:14,fontWeight:900,color:"#FF6500",fontFamily:"'Barlow Condensed',sans-serif"}}>{f1(oa)}</div><Stars n={oa} sz={7}/></div>}
+          </div>;})}
+        </div>}
+      </div>
     </div>
-  </div></div>;
+  </div>;
 }
 function CmpSearchBox({evs,selectedId,otherId,onSelect,label}){
   const[q,setQ]=useState("");const[open,setOpen]=useState(false);
