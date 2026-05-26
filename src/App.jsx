@@ -889,7 +889,7 @@ useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window
                 <p style={{color:"#888",fontSize:12,marginBottom:7}}>Inicia sesion para valorar</p>
                 <button onClick={()=>setView("auth")} style={{...BT("p"),padding:"5px 13px"}}>Iniciar sesión</button>
               </div>:hasR?<div style={{background:"rgba(76,175,80,0.07)",border:"1px solid rgba(76,175,80,0.15)",borderRadius:8,padding:"10px 14px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                <div style={{fontSize:12,color:"#4CAF50",fontWeight:700}}>✓ Ya has valorado este evento</div>
+                <div style={{fontSize:12,color:"#4CAF50",fontWeight:700}}>✓ Ya has valorado este evento</div><div style={{marginTop:10,display:"grid",gridTemplateColumns:"1fr 1fr",gap:"3px 11px"}}>{SCORE_KEYS.map(k=>{const r=ev.ratings.find(x=>x.user===me.u);return<div key={k} style={{marginBottom:4}}><div style={{fontSize:11,color:"#888"}}>{SLABELS[k]}: <strong style={{color:"#FF6500"}}>{r?.scores?.[k]||"—"}/5</strong></div>{STOOLTIPS[k]&&<div style={{fontSize:10,color:"#555",fontStyle:"italic"}}>{STOOLTIPS[k]}</div>}</div>;})}</div>
                 <button onClick={()=>deleteRate(ev)} style={{background:"rgba(239,83,80,0.12)",color:"#EF5350",border:"1px solid rgba(239,83,80,0.25)",padding:"4px 10px",borderRadius:5,fontSize:11,fontWeight:700,cursor:"pointer"}}>Eliminar y repetir</button>
               </div>:
               <div>
