@@ -531,7 +531,7 @@ function CalendarView({evs,setSel,setView}){
           {Array.from({length:firstDay}).map((_,i)=><div key={"e"+i}/>)}
           {Array.from({length:daysInMonth}).map((_,i)=>{
             const day=i+1,dayEvs=evsByDay[day]||[],hasSel=selDay===day;
-            return<div key={day} onClick={()=>setSelDay(hasSel?null:day)} style={{aspectRatio:"1",borderRadius:6,background:hasSel?"rgba(255,101,0,0.2)":dayEvs.length?"#1e1e1e":"#141414",border:hasSel?"1px solid #FF6500":dayEvs.length?"1px solid #2a2a2a":"1px solid transparent",cursor:dayEvs.length?"pointer":"default",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"flex-start",padding:"3px 2px",transition:"all 0.15s"}}>
+            return<div key={day} onClick={()=>setSelDay(hasSel?null:day)} style={{height:44,borderRadius:6,background:hasSel?"rgba(255,101,0,0.2)":dayEvs.length?"#1e1e1e":"#141414",border:hasSel?"1px solid #FF6500":dayEvs.length?"1px solid #2a2a2a":"1px solid transparent",cursor:dayEvs.length?"pointer":"default",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"flex-start",padding:"3px 2px",transition:"all 0.15s"}}>
               <span style={{fontSize:10,color:hasSel?"#FF6500":dayEvs.length?"#fff":"#444",fontWeight:dayEvs.length?700:400}}>{day}</span>
               {dayEvs.length>0&&<div style={{display:"flex",gap:2,marginTop:2,flexWrap:"wrap",justifyContent:"center"}}>
                 {dayEvs.slice(0,4).map((e,i)=><div key={i} style={{width:5,height:5,borderRadius:"50%",background:DISC_COLORS_CAL[e.disc]||"#555"}}/>)}
