@@ -32,7 +32,7 @@ const PC={
   "Málaga":{lat:36.72,lon:-4.42},"Murcia":{lat:37.98,lon:-1.13},"Navarra":{lat:42.82,lon:-1.65},
   "Pontevedra":{lat:42.43,lon:-8.64},"Salamanca":{lat:40.97,lon:-5.66},"Tenerife":{lat:28.46,lon:-16.25},
   "Sevilla":{lat:37.39,lon:-5.99},"Tarragona":{lat:41.12,lon:1.25},"Valencia":{lat:39.47,lon:-0.37},
-  "Valladolid":{lat:41.65,lon:-4.72},"Zamora":{lat:41.50,lon:-5.75},"Zaragoza":{lat:41.65,lon:-0.89},
+  "Valladolid":{lat:41.65,lon:-4.72},"Zamora":{lat:41.50,lon:-5.75},"Zaragoza":{lat:41.65,lon:-0.89},"Cáceres":{lat:39.47,lon:-6.37},"Ourense":{lat:42.34,lon:-7.86},"Teruel":{lat:40.34,lon:-1.10},"Jaén":{lat:37.77,lon:-3.79},"Segovia":{lat:40.94,lon:-4.12},"Burgos":{lat:42.34,lon:-3.70},"A Coruña":{lat:43.37,lon:-8.40},"Palencia":{lat:42.01,lon:-4.53},"Soria":{lat:41.76,lon:-2.46},"Huelva":{lat:37.26,lon:-6.95},"Cuenca":{lat:40.07,lon:-2.14},"Andorra":{lat:42.50,lon:1.52},"Ceuta":{lat:35.89,lon:-5.31},"Melilla":{lat:35.29,lon:-2.94},
   "Estocolmo":{lat:59.33,lon:18.07},"San Jose CA":{lat:37.34,lon:-121.89},
   "Toledo":{lat:39.86,lon:-4.02},"Cádiz":{lat:36.53,lon:-6.29},
   "Portugal":{lat:39.50,lon:-8.00},
