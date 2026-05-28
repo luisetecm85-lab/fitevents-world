@@ -509,7 +509,7 @@ function LandingPage({setView,evs,me}){
     <div style={{position:"relative",height:"100vh",minHeight:520,display:"flex",flexDirection:"column",overflow:"hidden"}}>
       <div style={{position:"absolute",inset:0,background:"url('/hero.png') center 20%/cover no-repeat"}}/>
       <div style={{position:"absolute",inset:0,background:"linear-gradient(to right,#0f0f0f 35%,rgba(15,15,15,0.75) 60%,rgba(15,15,15,0.15) 100%)"}}/>
-      <div style={{position:"relative",zIndex:2,flex:1,display:"flex",alignItems:"center",padding:"0 6vw",marginTop:"-160px"}}>
+      <div style={{position:"relative",zIndex:2,flex:1,display:"flex",alignItems:"center",padding:"0 6vw",marginTop:"-220px"}}>
         <div style={{maxWidth:560}}>
           <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(60px,8vw,90px)",lineHeight:0.88,letterSpacing:4,textTransform:"uppercase",marginBottom:20,color:"#F5F5F5"}}>
             DESCUBRE.<br/>COMPARA.<br/><span style={{color:"#FF6B00"}}>COMPITE.</span>
@@ -871,7 +871,7 @@ useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window
     {showAdmin&&<AdminPanel evs={evs} setEvs={setEvs} onClose={()=>setShowAdmin(false)} sponsors={sponsors} setSponsors={setSponsors}/>}
 
     <header style={{background:"#0d0d0d",borderBottom:"1px solid #1e1e1e",padding:isMobile?"0 8px":"0 20px",height:isMobile?50:62,display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,flexShrink:0}}>
-      <div style={{position:isMobile?"static":"absolute",left:isMobile?"auto":"50%",transform:isMobile?"none":"translateX(-50%)",flex:isMobile?1:0,display:"flex",justifyContent:"center",cursor:"pointer"}} onClick={()=>setView("home")}><img src="/logo-horizontal.png" alt="FitEvents World" style={{height:isMobile?44:70,width:"auto"}}/></div>
+      <div style={{position:isMobile?"static":"absolute",left:isMobile?"auto":"50%",transform:isMobile?"none":"translateX(-50%)",flex:isMobile?1:0,display:"flex",justifyContent:"center",cursor:"pointer"}} onClick={()=>setView("home")}><img src="/logo-horizontal.png" alt="FitEvents World" style={{height:isMobile?44:160,width:"auto"}}/></div>
       <div style={{display:"flex",gap:7,alignItems:"center",marginLeft:"auto"}}>
         {!isMobile&&<button onClick={()=>setShowContact(true)} style={{background:"rgba(0,210,100,0.15)",color:"#00D264",border:"1px solid rgba(0,210,100,0.35)",padding:"4px 11px",borderRadius:6,fontSize:11,fontWeight:700}}>✓ Verificar evento</button>}{installPrompt&&<button onClick={()=>{installPrompt.prompt();installPrompt.userChoice.then(()=>setInstallPrompt(null));}} style={{background:"rgba(77,166,255,0.15)",color:"#4DA6FF",border:"1px solid rgba(77,166,255,0.35)",padding:"4px 11px",borderRadius:6,fontSize:11,fontWeight:700}}>📲 Instalar app</button>}
         {me&&!isMobile&&<span style={{fontSize:11,color:"#777"}}>Hola, <strong style={{color:"#FF6500"}}>{me.name}</strong></span>}
