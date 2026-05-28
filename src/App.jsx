@@ -507,7 +507,7 @@ function LandingPage({setView,evs,me}){
   ];
   return<div style={{minHeight:"100vh",background:"#0f0f0f",fontFamily:"'Inter',sans-serif"}}>
     <div style={{position:"relative",height:"100vh",minHeight:520,display:"flex",flexDirection:"column",overflow:"hidden"}}>
-      <div style={{position:"absolute",inset:0,background:"url('/hero.jpg') center/cover no-repeat"}}/>
+      <div style={{position:"absolute",inset:0,background:"url('/hero.png') center/cover no-repeat"}}/>
       <div style={{position:"absolute",inset:0,background:"linear-gradient(to right,#0f0f0f 35%,rgba(15,15,15,0.75) 60%,rgba(15,15,15,0.15) 100%)"}}/>
       <div style={{position:"relative",zIndex:2,flex:1,display:"flex",alignItems:"center",padding:"0 6vw"}}>
         <div style={{maxWidth:560}}>
@@ -515,7 +515,7 @@ function LandingPage({setView,evs,me}){
             <span style={{width:6,height:6,borderRadius:"50%",background:"#FF6500",display:"inline-block"}}/>
             El directorio del fitness competitivo
           </div>
-          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(60px,8vw,90px)",lineHeight:0.88,letterSpacing:4,textTransform:"uppercase",marginBottom:20,color:"#F5F5F5"}}>
+          <img src="/logo.png" alt="FitEvents World" style={{height:80,width:"auto",marginBottom:20,display:"block"}}/><div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(60px,8vw,90px)",lineHeight:0.88,letterSpacing:4,textTransform:"uppercase",marginBottom:20,color:"#F5F5F5"}}>
             DESCUBRE.<br/>COMPARA.<br/><span style={{color:"#FF6B00"}}>COMPITE.</span>
           </div>
           <p style={{fontSize:15,color:"#aaa",lineHeight:1.7,marginBottom:32,maxWidth:400}}>La plataforma de eventos fitness y competiciones en España y Portugal.</p>
