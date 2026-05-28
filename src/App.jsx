@@ -509,9 +509,9 @@ function LandingPage({setView,evs,me}){
     <div style={{position:"relative",height:"100vh",minHeight:520,display:"flex",flexDirection:"column",overflow:"hidden"}}>
       <div style={{position:"absolute",inset:0,background:"url('/hero.png') center 20%/cover no-repeat"}}/>
       <div style={{position:"absolute",inset:0,background:"linear-gradient(to right,#0f0f0f 35%,rgba(15,15,15,0.75) 60%,rgba(15,15,15,0.15) 100%)"}}/>
-      <div style={{position:"relative",zIndex:2,flex:1,display:"flex",alignItems:"center",padding:"0 6vw",marginTop:"-120px"}}>
+      <div style={{position:"relative",zIndex:2,flex:1,display:"flex",alignItems:"center",padding:"0 6vw",marginTop:"-80px"}}>
         <div style={{maxWidth:560}}>
-          <img src="/logo-horizontal.png" alt="FitEvents World" style={{height:90,width:"auto",marginBottom:20,display:"block"}}/><div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(60px,8vw,90px)",lineHeight:0.88,letterSpacing:4,textTransform:"uppercase",marginBottom:20,color:"#F5F5F5"}}>
+          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(60px,8vw,90px)",lineHeight:0.88,letterSpacing:4,textTransform:"uppercase",marginBottom:20,color:"#F5F5F5"}}>
             DESCUBRE.<br/>COMPARA.<br/><span style={{color:"#FF6B00"}}>COMPITE.</span>
           </div>
           <p style={{fontSize:15,color:"#aaa",lineHeight:1.7,marginBottom:32,maxWidth:400}}>La plataforma de eventos fitness y competiciones en España y Portugal.</p>
@@ -522,7 +522,7 @@ function LandingPage({setView,evs,me}){
         </div>
       </div>
       <div style={{position:"relative",zIndex:2,display:"flex",gap:0,borderTop:"1px solid #1b1b1b",background:"rgba(15,15,15,0.95)",justifyContent:"center",width:"100%"}}>
-        {[{n:evs.length+"+",l:"Eventos"},{n:"2",l:"Países"},{n:"6",l:"Disciplinas"},{n:"850+",l:"Rankings"}].map((s,i)=><div key={i} style={{padding:"18px 32px",borderRight:"1px solid #1b1b1b"}}><div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:34,color:"#FF6B00",letterSpacing:2,lineHeight:1}}>{s.n}</div><div style={{fontSize:11,color:"#555",textTransform:"uppercase",letterSpacing:2,marginTop:3,fontWeight:600}}>{s.l}</div></div>)}
+        {[{n:evs.length+"+",l:"Eventos"},{n:"2",l:"Países"},{n:"6",l:"Disciplinas"},{n:"850+",l:"Rankings"}].map((s,i)=><div key={i} style={{padding:"14px 20px",borderRight:"1px solid #1b1b1b",textAlign:"center",flex:1}}><div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:28,color:"#FF6B00",letterSpacing:2,lineHeight:1}}>{s.n}</div><div style={{fontSize:10,color:"#555",textTransform:"uppercase",letterSpacing:1,marginTop:3,fontWeight:600}}>{s.l}</div></div>)}
       </div>
     </div>
     <div id="few-how" style={{padding:"60px 6vw",background:"#0f0f0f"}}>
@@ -871,7 +871,7 @@ useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window
     {showAdmin&&<AdminPanel evs={evs} setEvs={setEvs} onClose={()=>setShowAdmin(false)} sponsors={sponsors} setSponsors={setSponsors}/>}
 
     <header style={{background:"#0d0d0d",borderBottom:"1px solid #1e1e1e",padding:isMobile?"0 8px":"0 20px",height:isMobile?50:62,display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,flexShrink:0}}>
-      <div style={{position:isMobile?"static":"absolute",left:isMobile?"auto":"50%",transform:isMobile?"none":"translateX(-50%)",flex:isMobile?1:0,display:"flex",justifyContent:"center",cursor:"pointer"}} onClick={()=>setView("home")}><img src="/logo-horizontal.png" alt="FitEvents World" style={{height:isMobile?32:42,width:"auto"}}/></div>
+      <div style={{position:isMobile?"static":"absolute",left:isMobile?"auto":"50%",transform:isMobile?"none":"translateX(-50%)",flex:isMobile?1:0,display:"flex",justifyContent:"center",cursor:"pointer"}} onClick={()=>setView("home")}><img src="/logo-horizontal.png" alt="FitEvents World" style={{height:isMobile?40:55,width:"auto"}}/></div>
       <div style={{display:"flex",gap:7,alignItems:"center",marginLeft:"auto"}}>
         {!isMobile&&<button onClick={()=>setShowContact(true)} style={{background:"rgba(0,210,100,0.15)",color:"#00D264",border:"1px solid rgba(0,210,100,0.35)",padding:"4px 11px",borderRadius:6,fontSize:11,fontWeight:700}}>✓ Verificar evento</button>}{installPrompt&&<button onClick={()=>{installPrompt.prompt();installPrompt.userChoice.then(()=>setInstallPrompt(null));}} style={{background:"rgba(77,166,255,0.15)",color:"#4DA6FF",border:"1px solid rgba(77,166,255,0.35)",padding:"4px 11px",borderRadius:6,fontSize:11,fontWeight:700}}>📲 Instalar app</button>}
         {me&&!isMobile&&<span style={{fontSize:11,color:"#777"}}>Hola, <strong style={{color:"#FF6500"}}>{me.name}</strong></span>}
