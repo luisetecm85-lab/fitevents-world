@@ -507,11 +507,11 @@ function LandingPage({setView,evs,me}){
   ];
   return<div style={{minHeight:"100vh",background:"#0f0f0f",fontFamily:"'Inter',sans-serif"}}>
     <div style={{position:"relative",height:"100vh",minHeight:520,display:"flex",flexDirection:"column",overflow:"hidden"}}>
-      <div style={{position:"absolute",inset:0,background:"url('/hero.png') center/cover no-repeat"}}/>
+      <div style={{position:"absolute",inset:0,background:"url('/hero.png') center 20%/cover no-repeat"}}/>
       <div style={{position:"absolute",inset:0,background:"linear-gradient(to right,#0f0f0f 35%,rgba(15,15,15,0.75) 60%,rgba(15,15,15,0.15) 100%)"}}/>
-      <div style={{position:"relative",zIndex:2,flex:1,display:"flex",alignItems:"center",padding:"0 6vw",marginTop:"-60px"}}>
+      <div style={{position:"relative",zIndex:2,flex:1,display:"flex",alignItems:"center",padding:"0 6vw",marginTop:"-120px"}}>
         <div style={{maxWidth:560}}>
-          <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}><img src="/logo.png" alt="FitEvents World" style={{height:60,width:"auto"}}/><span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:28,letterSpacing:3,color:"#F5F5F5"}}>FITEVENTS <span style={{color:"#FF6B00"}}>WORLD</span></span></div><div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(255,107,0,0.12)",border:"1px solid rgba(255,107,0,0.3)",padding:"4px 14px",borderRadius:20,fontSize:11,fontWeight:700,color:"#FF6500",letterSpacing:1,textTransform:"uppercase",marginBottom:16}}><span style={{width:6,height:6,borderRadius:"50%",background:"#FF6500",display:"inline-block"}}/>El directorio del fitness competitivo</div><div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(60px,8vw,90px)",lineHeight:0.88,letterSpacing:4,textTransform:"uppercase",marginBottom:20,color:"#F5F5F5"}}>
+          <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}><img src="/logo.png" alt="FitEvents World" style={{height:80,width:"auto"}}/><span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:32,letterSpacing:3,color:"#F5F5F5"}}>FITEVENTS <span style={{color:"#FF6B00"}}>WORLD</span></span></div><div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(255,107,0,0.12)",border:"1px solid rgba(255,107,0,0.3)",padding:"4px 14px",borderRadius:20,fontSize:11,fontWeight:700,color:"#FF6500",letterSpacing:1,textTransform:"uppercase",marginBottom:16}}><span style={{width:6,height:6,borderRadius:"50%",background:"#FF6500",display:"inline-block"}}/>El directorio del fitness competitivo</div><div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(60px,8vw,90px)",lineHeight:0.88,letterSpacing:4,textTransform:"uppercase",marginBottom:20,color:"#F5F5F5"}}>
             DESCUBRE.<br/>COMPARA.<br/><span style={{color:"#FF6B00"}}>COMPITE.</span>
           </div>
           <p style={{fontSize:15,color:"#aaa",lineHeight:1.7,marginBottom:32,maxWidth:400}}>La plataforma de eventos fitness y competiciones en España y Portugal.</p>
@@ -521,7 +521,7 @@ function LandingPage({setView,evs,me}){
           </div>
         </div>
       </div>
-      <div style={{position:"relative",zIndex:2,display:"flex",gap:0,borderTop:"1px solid #1b1b1b",background:"rgba(15,15,15,0.95)"}}>
+      <div style={{position:"relative",zIndex:2,display:"flex",gap:0,borderTop:"1px solid #1b1b1b",background:"rgba(15,15,15,0.95)",justifyContent:"center",width:"100%"}}>
         {[{n:evs.length+"+",l:"Eventos"},{n:"2",l:"Países"},{n:"6",l:"Disciplinas"},{n:"850+",l:"Rankings"}].map((s,i)=><div key={i} style={{padding:"18px 32px",borderRight:"1px solid #1b1b1b"}}><div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:34,color:"#FF6B00",letterSpacing:2,lineHeight:1}}>{s.n}</div><div style={{fontSize:11,color:"#555",textTransform:"uppercase",letterSpacing:2,marginTop:3,fontWeight:600}}>{s.l}</div></div>)}
       </div>
     </div>
@@ -794,7 +794,7 @@ export default function App(){const isMobile=useIsMobile();
   const[me,setMe]=useState(null);
   const[aMode,setAMode]=useState("login");const[aF,setAF]=useState({u:"",name:"",p:"",p2:""});
   const[aErr,setAErr]=useState("");const[aOk,setAOk]=useState("");
-  const[view,setView]=useState("list");const[sel,setSel]=useState(null);
+  const[view,setView]=useState("home");const[sel,setSel]=useState(null);
   const[fDisc,setFDisc]=useState("Todos");const[fCountry,setFCountry]=useState("Todos");
   const[fCities,setFCities]=useState([]);const[search,setSearch]=useState("");const[sort,setSort]=useState("date");
   const[maxP,setMaxP]=useState(500);const[onlyFut,setOnlyFut]=useState(true);const[onlyNew,setOnlyNew]=useState(false);
