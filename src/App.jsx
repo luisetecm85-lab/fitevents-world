@@ -497,6 +497,56 @@ function AdminPanel({evs,setEvs,onClose,sponsors,setSponsors}){
   </>;
 }
 
+function LandingPage({setView,evs,me}){
+  const discStats=[
+    {name:"CrossFit",color:"#FF6500",count:evs.filter(e=>e.disc==="CrossFit").length},
+    {name:"Hyrox",color:"#4DA6FF",count:evs.filter(e=>e.disc==="Hyrox").length},
+    {name:"OCR",color:"#4CAF50",count:evs.filter(e=>e.disc==="OCR").length},
+    {name:"Fuerza",color:"#B56AFF",count:evs.filter(e=>e.disc==="Fuerza").length},
+    {name:"Fitness Funcional",color:"#FFB300",count:evs.filter(e=>e.disc==="Fitness Funcional").length},
+  ];
+  return<div style={{minHeight:"100vh",background:"#0f0f0f",fontFamily:"'Inter',sans-serif"}}>
+    <div style={{position:"relative",height:"100vh",minHeight:520,display:"flex",flexDirection:"column",overflow:"hidden"}}>
+      <div style={{position:"absolute",inset:0,background:"url('/hero.jpg') center/cover no-repeat"}}/>
+      <div style={{position:"absolute",inset:0,background:"linear-gradient(to right,#0f0f0f 35%,rgba(15,15,15,0.75) 60%,rgba(15,15,15,0.15) 100%)"}}/>
+      <div style={{position:"relative",zIndex:2,flex:1,display:"flex",alignItems:"center",padding:"0 6vw"}}>
+        <div style={{maxWidth:560}}>
+          <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(255,107,0,0.12)",border:"1px solid rgba(255,107,0,0.3)",padding:"4px 14px",borderRadius:20,fontSize:11,fontWeight:700,color:"#FF6500",letterSpacing:1,textTransform:"uppercase",marginBottom:20}}>
+            <span style={{width:6,height:6,borderRadius:"50%",background:"#FF6500",display:"inline-block"}}/>
+            El directorio del fitness competitivo
+          </div>
+          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(60px,8vw,90px)",lineHeight:0.88,letterSpacing:4,textTransform:"uppercase",marginBottom:20,color:"#F5F5F5"}}>
+            DESCUBRE.<br/>COMPARA.<br/><span style={{color:"#FF6B00"}}>COMPITE.</span>
+          </div>
+          <p style={{fontSize:15,color:"#aaa",lineHeight:1.7,marginBottom:32,maxWidth:400}}>La plataforma de eventos fitness y competiciones en España y Portugal.</p>
+          <div style={{display:"flex",gap:14,flexWrap:"wrap"}}>
+            <button onClick={()=>setView("list")} style={{background:"#FF6B00",color:"#fff",border:"2px solid #FF6B00",padding:"13px 28px",borderRadius:5,fontSize:13,fontWeight:700,cursor:"pointer",letterSpacing:1,textTransform:"uppercase",display:"inline-flex",alignItems:"center",gap:10}}>EXPLORAR EVENTOS <span style={{fontSize:16}}>→</span></button>
+            <button onClick={()=>document.getElementById('few-how').scrollIntoView({behavior:'smooth'})} style={{background:"transparent",color:"#F5F5F5",border:"2px solid #F5F5F5",padding:"13px 28px",borderRadius:5,fontSize:13,fontWeight:700,cursor:"pointer",letterSpacing:1,textTransform:"uppercase"}}>CÓMO FUNCIONA</button>
+          </div>
+        </div>
+      </div>
+      <div style={{position:"relative",zIndex:2,display:"flex",gap:0,borderTop:"1px solid #1b1b1b",background:"rgba(15,15,15,0.95)"}}>
+        {[{n:evs.length+"+",l:"Eventos"},{n:"2",l:"Países"},{n:"6",l:"Disciplinas"},{n:"850+",l:"Rankings"}].map((s,i)=><div key={i} style={{padding:"18px 32px",borderRight:"1px solid #1b1b1b"}}><div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:34,color:"#FF6B00",letterSpacing:2,lineHeight:1}}>{s.n}</div><div style={{fontSize:11,color:"#555",textTransform:"uppercase",letterSpacing:2,marginTop:3,fontWeight:600}}>{s.l}</div></div>)}
+      </div>
+    </div>
+    <div id="few-how" style={{padding:"60px 6vw",background:"#0f0f0f"}}>
+      <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:36,letterSpacing:3,textTransform:"uppercase",textAlign:"center",marginBottom:8,color:"#F5F5F5"}}>Disciplinas disponibles</div>
+      <div style={{fontSize:13,color:"#555",textAlign:"center",marginBottom:36,letterSpacing:1}}>Encuentra tu próxima competición</div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:12,maxWidth:800,margin:"0 auto 60px"}}>
+        {discStats.map((d,i)=><div key={i} style={{background:"#161616",border:"1px solid #1e1e1e",borderTop:`3px solid ${d.color}`,borderRadius:8,padding:"20px 16px",textAlign:"center",cursor:"pointer"}} onClick={()=>setView("list")}><div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:17,letterSpacing:1,color:d.color,marginBottom:4}}>{d.name}</div><div style={{fontSize:24,fontWeight:700,color:"#F5F5F5",lineHeight:1}}>{d.count}</div><div style={{fontSize:10,color:"#444",marginTop:3,letterSpacing:1,textTransform:"uppercase"}}>eventos</div></div>)}
+      </div>
+      <div style={{maxWidth:800,margin:"0 auto"}}>
+        <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:36,letterSpacing:3,textTransform:"uppercase",textAlign:"center",marginBottom:36,color:"#F5F5F5"}}>Cómo funciona</div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:16}}>
+          {[{n:"01",t:"Explora eventos",d:"Busca entre +380 eventos por disciplina, ciudad o fecha.",c:"#FF6B00"},{n:"02",t:"Compara y valora",d:"Lee opiniones reales de atletas y comparte tu experiencia.",c:"#4DA6FF"},{n:"03",t:"Compite",d:"Encuentra tu próximo reto y únete a la comunidad.",c:"#4CAF50"}].map((s,i)=><div key={i} style={{background:"#161616",border:"1px solid #1e1e1e",borderRadius:10,padding:"24px 20px"}}><div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:42,color:s.c,lineHeight:1,marginBottom:10}}>{s.n}</div><div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:18,letterSpacing:1,textTransform:"uppercase",color:"#F5F5F5",marginBottom:8}}>{s.t}</div><div style={{fontSize:13,color:"#888",lineHeight:1.6}}>{s.d}</div></div>)}
+        </div>
+        <div style={{textAlign:"center",marginTop:48}}>
+          <button onClick={()=>setView(me?"list":"auth")} style={{background:"#FF6B00",color:"#fff",border:"2px solid #FF6B00",padding:"14px 40px",borderRadius:5,fontSize:14,fontWeight:700,cursor:"pointer",letterSpacing:1,textTransform:"uppercase",display:"inline-flex",alignItems:"center",gap:10}}>{me?"VER EVENTOS":"UNIRME GRATIS"} <span style={{fontSize:17}}>→</span></button>
+        </div>
+      </div>
+    </div>
+  </div>;
+}
 function CalendarView({evs,setSel,setView,isMobile}){
   const[curDate,setCurDate]=useState(new Date());
   const[selDay,setSelDay]=useState(null);
@@ -796,7 +846,7 @@ useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window
   const PL=(a)=>({background:a?"#FF6500":"#1a1a1a",color:a?"#fff":"#777",border:`1px solid ${a?"#FF6500":"rgba(255,255,255,0.08)"}`,padding:"4px 9px",borderRadius:20,fontSize:12,cursor:"pointer"});
   const IN={width:"100%",padding:"8px 11px",marginBottom:9};
   const CRD={};
-  const TABS=[{id:"list",l:"Eventos"},{id:"map",l:"Mapa"},{id:"cal",l:"Calendario"},{id:"rnk",l:"Ranking"},{id:"cmp",l:"Comparar"},{id:"add",l:"+ Anadir"},...(me?[{id:"prof",l:me.name}]:[{id:"auth",l:"Entrar"}])];
+  const TABS=[{id:"home",l:"Inicio"},{id:"list",l:"Eventos"},{id:"map",l:"Mapa"},{id:"cal",l:"Calendario"},{id:"rnk",l:"Ranking"},{id:"cmp",l:"Comparar"},{id:"add",l:"+ Anadir"},...(me?[{id:"prof",l:me.name}]:[{id:"auth",l:"Entrar"}])];
 
   const listWithAds=useMemo(()=>{if(!isMobile)return filtered.map(ev=>({type:"ev",ev}));const r=[];filtered.forEach((ev,i)=>{r.push({type:"ev",ev});if((i+1)%4===0&&i<filtered.length-1)r.push({type:"ad"});});return r;},[filtered,isMobile]);
 
@@ -1005,7 +1055,7 @@ useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window
         </div>
       </div>}
 
-      {view==="cal"&&<CalendarView evs={evs} setSel={setSel} setView={setView} isMobile={isMobile}/>}{view==="rnk"&&<div>
+      {view==="home"&&<LandingPage setView={setView} evs={evs} me={me}/>}{view==="cal"&&<CalendarView evs={evs} setSel={setSel} setView={setView} isMobile={isMobile}/>}{view==="rnk"&&<div>
         <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Ranking</div>
         <div style={{display:"flex",gap:5,marginBottom:12,flexWrap:"wrap",alignItems:"center"}}>
           <select value={rkDisc} onChange={e=>setRkDisc(e.target.value)} style={{padding:"6px 7px"}}>{DISCIPLINES.map(d=><option key={d}>{d}</option>)}</select>
