@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fitevents-v6';
+const CACHE_NAME = 'fitevents-v7';
 const urlsToCache = ['/'];
 
 self.addEventListener('install', e => {
