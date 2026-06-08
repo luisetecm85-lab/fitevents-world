@@ -779,7 +779,7 @@ export default function App(){const isMobile=useIsMobile();
       const snap=await getDocs(collection(db,"events"));
       if(snap.empty){
         const batch=writeBatch(db);
-        EVENTS.forEach(ev=>{batch.set(doc(db,"events",String(ev.id)),ev);});
+        EVENTS.forEach(ev=>{batch.set(doc(db,"events",String(ev.id)),ev,{merge:true});});
         await batch.commit();
       }
     };
