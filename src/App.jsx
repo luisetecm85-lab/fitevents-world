@@ -505,7 +505,7 @@ function LandingPage({setView,evs,me}){
     {name:"Fuerza",color:"#B56AFF",count:evs.filter(e=>e.disc==="Fuerza").length},
     {name:"Fitness Funcional",color:"#FFB300",count:evs.filter(e=>e.disc==="Fitness Funcional").length},
   ];
-  return<div style={{minHeight:"100vh",background:"#0f0f0f",fontFamily:"'Inter',sans-serif"}}>
+  return<div style={{background:"#0f0f0f",fontFamily:"'Inter',sans-serif"}}>
     <div style={{position:"relative",height:"100vh",minHeight:520,display:"flex",flexDirection:"column",overflow:"hidden"}}>
       <div style={{position:"absolute",inset:0,background:"url('/hero.png') center 20%/cover no-repeat"}}/>
       <div style={{position:"absolute",inset:0,background:"linear-gradient(to right,#0f0f0f 35%,rgba(15,15,15,0.75) 60%,rgba(15,15,15,0.15) 100%)"}}/>
