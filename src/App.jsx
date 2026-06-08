@@ -1051,7 +1051,7 @@ useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window
         </div>
       </div>}
 
-      {view==="home"&&<LandingPage setView={setView} evs={evs} me={me}/>}{view==="cal"&&<CalendarView evs={evs} setSel={setSel} setView={setView} isMobile={isMobile}/>}{view==="rnk"&&<div>
+      {view==="cal"&&<CalendarView evs={evs} setSel={setSel} setView={setView} isMobile={isMobile}/>}{view==="rnk"&&<div>
         <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Ranking</div>
         <div style={{display:"flex",gap:5,marginBottom:12,flexWrap:"wrap",alignItems:"center"}}>
           <select value={rkDisc} onChange={e=>setRkDisc(e.target.value)} style={{padding:"6px 7px"}}>{DISCIPLINES.map(d=><option key={d}>{d}</option>)}</select>
@@ -1189,6 +1189,7 @@ useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window
 
       </main>
 <div style={{width:isMobile?0:140,flexShrink:0,padding:isMobile?"0":"16px 10px",background:"#080808",overflow:"hidden"}}><div style={{background:"#111",border:"1px dashed #1e1e1e",borderRadius:10,height:600,display:"flex",alignItems:"center",justifyContent:"center",position:"sticky",top:80}}><span style={{fontSize:9,color:"#2a2a2a",letterSpacing:2,textTransform:"uppercase",writingMode:"vertical-rl"}}>Publicidad</span></div></div>    </div>
+    {view==="home"&&<LandingPage setView={setView} evs={evs} me={me}/>}
     <footer style={{background:"#141414",borderTop:"1px solid rgba(255,255,255,0.04)",padding:"9px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:7}}>
       <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:12,color:"#444"}}>FitEvents World 2026</span><div style={{display:"flex",gap:10,alignItems:"center",marginTop:4,flexWrap:"wrap"}}><button onClick={()=>setView("legal-privacy")} style={{background:"none",border:"none",color:"#555",fontSize:11,cursor:"pointer",padding:0}}>Política de Privacidad</button><span style={{color:"#333",fontSize:11}}>·</span><button onClick={()=>setView("legal-terms")} style={{background:"none",border:"none",color:"#555",fontSize:11,cursor:"pointer",padding:0}}>Términos de Uso</button><span style={{color:"#333",fontSize:11}}>·</span><button onClick={()=>setView("legal-cookies")} style={{background:"none",border:"none",color:"#555",fontSize:11,cursor:"pointer",padding:0}}>Cookies</button><span style={{color:"#333",fontSize:11}}>·</span><button onClick={()=>setView("legal-aviso")} style={{background:"none",border:"none",color:"#555",fontSize:11,cursor:"pointer",padding:0}}>Aviso Legal</button></div>{installPrompt&&<button onClick={()=>{installPrompt.prompt();installPrompt.userChoice.then(()=>setInstallPrompt(null));}} style={{background:"none",border:"none",color:"#4DA6FF",fontSize:11,cursor:"pointer",padding:0,marginTop:4}}>📲 Instalar app</button>}
       <div style={{display:"flex",gap:10,alignItems:"center"}}>
