@@ -1051,7 +1051,9 @@ useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window
         </div>
       </div>}
 
-      {view==="home"&&<LandingPage setView={setView} evs={evs} me={me}/>}{view==="cal"&&<CalendarView evs={evs} setSel={setSel} setView={setView} isMobile={isMobile}/>}{view==="rnk"&&<div>
+      {view==="home"&&<LandingPage setView={setView} evs={evs} me={me}/>}
+      {view==="cal"&&<CalendarView evs={evs} setSel={setSel} setView={setView} isMobile={isMobile}/>}
+      {view==="rnk"&&<div>
         <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:900,marginBottom:16,letterSpacing:1,textTransform:"uppercase"}}>Ranking</div>
         <div style={{display:"flex",gap:5,marginBottom:12,flexWrap:"wrap",alignItems:"center"}}>
           <select value={rkDisc} onChange={e=>setRkDisc(e.target.value)} style={{padding:"6px 7px"}}>{DISCIPLINES.map(d=><option key={d}>{d}</option>)}</select>
