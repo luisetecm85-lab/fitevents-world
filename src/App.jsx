@@ -878,7 +878,7 @@ useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window
         {isAdmin&&<button onClick={()=>setShowAdmin(true)} style={{background:"none",border:"none",color:"#888",fontSize:20,padding:"2px 5px"}} title="Admin">⚙</button>}
       </div>
     </header>
-    <nav style={{background:"#0d0d0d",borderBottom:"1px solid #1e1e1e",padding:"0 10px",display:"flex",overflowX:"auto",flexShrink:0,justifyContent:"center",scrollbarWidth:"none"}}>
+    <nav style={{background:"#0d0d0d",borderBottom:"1px solid #1e1e1e",padding:"0 10px",display:"flex",overflowX:"auto",flexShrink:0,justifyContent:isMobile?"flex-start":"center",scrollbarWidth:"none"}}>
       {TABS.map(t=><button key={t.id} onClick={()=>setView(t.id)} style={{background:"transparent",color:(view===t.id||(view==="det"&&t.id==="list"))?"#fff":"#999",border:"none",padding:isMobile?"8px 6px":"11px 16px",borderBottom:(view===t.id||(view==="det"&&t.id==="list"))?"2px solid #FF6500":"2px solid transparent",borderRadius:0,cursor:"pointer",whiteSpace:"nowrap",fontSize:isMobile?11:15,fontWeight:700,letterSpacing:0.5,fontFamily:"Barlow Condensed,sans-serif"}}>{t.id==="prof"?<span><span style={{color:"#4DA6FF"}}>👤</span><span style={{color:(view==="prof")?"#fff":"#999"}}> {t.l}</span></span>:t.l}</button>)}
     </nav>
     <div style={{display:"flex",flex:1}}>
