@@ -522,7 +522,7 @@ function LandingPage({setView,evs,me}){
         </div>
       </div>
       <div style={{position:"relative",zIndex:2,display:"flex",gap:0,borderTop:"1px solid #1b1b1b",background:"rgba(15,15,15,0.95)",justifyContent:"center",width:"100%"}}>
-        {[{n:evs.length+"+",l:"Eventos"},{n:[...new Set(evs.map(e=>e.country))].length+"+",l:"Países"},{n:"6",l:"Disciplinas"},{n:evs.filter(e=>e.verified).length,l:"Verificados"}].map((s,i)=><div key={i} style={{padding:"14px 20px",borderRight:"1px solid #1b1b1b",textAlign:"center",flex:1}}><div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:28,color:"#FF6B00",letterSpacing:2,lineHeight:1}}>{s.n}</div><div style={{fontSize:10,color:"#555",textTransform:"uppercase",letterSpacing:1,marginTop:3,fontWeight:600}}>{s.l}</div></div>)}
+        {[{n:evs.length,l:"Eventos"},{n:[...new Set(evs.map(e=>e.country))].length,l:"Países"},{n:"6",l:"Disciplinas"},{n:evs.filter(e=>e.verified).length,l:"Verificados"}].map((s,i)=><div key={i} style={{padding:"14px 20px",borderRight:"1px solid #1b1b1b",textAlign:"center",flex:1}}><div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:28,color:"#FF6B00",letterSpacing:2,lineHeight:1}}>{s.n}</div><div style={{fontSize:10,color:"#555",textTransform:"uppercase",letterSpacing:1,marginTop:3,fontWeight:600}}>{s.l}</div></div>)}
       </div>
     </div>
     <div id="few-how" style={{padding:"60px 6vw",background:"#0f0f0f"}}>
