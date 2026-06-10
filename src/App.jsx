@@ -506,7 +506,7 @@ function LandingPage({setView,evs,me}){
     {name:"Fitness Funcional",color:"#FFB300",count:evs.filter(e=>e.disc==="Fitness Funcional").length},
   ];
   return<div style={{background:"#0f0f0f",fontFamily:"'Inter',sans-serif"}}>
-    <div style={{position:"relative",minHeight:"calc(100vh - 110px)",display:"flex",flexDirection:"column",overflow:"hidden"}}>
+    <div style={{position:"relative",height:"calc(100vh - 110px)",display:"flex",flexDirection:"column",overflow:"hidden"}}>
       <div style={{position:"absolute",inset:0,background:"url('/hero.png') center 20%/cover no-repeat"}}/>
       <div style={{position:"absolute",inset:0,background:"linear-gradient(to right,#0f0f0f 35%,rgba(15,15,15,0.75) 60%,rgba(15,15,15,0.15) 100%)"}}/>
       <div style={{position:"relative",zIndex:2,flex:1,display:"flex",alignItems:"center",padding:"0 6vw",marginTop:"0"}}>
@@ -1188,7 +1188,9 @@ useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e);};window
       </div>}
 
       </main>
-width:view==="home"?0:isMobile?0:140,flexShrink:0,padding:isMobile?"0":"16px 10px",background:"#080808",overflow:"hidden"    <footer style={{background:"#141414",borderTop:"1px solid rgba(255,255,255,0.04)",padding:"9px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:7}}>
+<div style={{width:view==="home"?0:isMobile?0:140,flexShrink:0,padding:isMobile?"0":"16px 10px",background:"#080808",overflow:"hidden"}}><div style={{background:"#111",border:"1px dashed #1e1e1e",borderRadius:10,height:600,display:"flex",alignItems:"center",justifyContent:"center",position:"sticky",top:80}}><span style={{fontSize:9,color:"#2a2a2a",letterSpacing:2,textTransform:"uppercase",writingMode:"vertical-rl"}}>Publicidad</span></div></div>
+    </div>
+    <footer style={{background:"#141414",borderTop:"1px solid rgba(255,255,255,0.04)",padding:"9px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:7}}>
       <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:12,color:"#444"}}>FitEvents World 2026</span><div style={{display:"flex",gap:10,alignItems:"center",marginTop:4,flexWrap:"wrap"}}><button onClick={()=>setView("legal-privacy")} style={{background:"none",border:"none",color:"#555",fontSize:11,cursor:"pointer",padding:0}}>Política de Privacidad</button><span style={{color:"#333",fontSize:11}}>·</span><button onClick={()=>setView("legal-terms")} style={{background:"none",border:"none",color:"#555",fontSize:11,cursor:"pointer",padding:0}}>Términos de Uso</button><span style={{color:"#333",fontSize:11}}>·</span><button onClick={()=>setView("legal-cookies")} style={{background:"none",border:"none",color:"#555",fontSize:11,cursor:"pointer",padding:0}}>Cookies</button><span style={{color:"#333",fontSize:11}}>·</span><button onClick={()=>setView("legal-aviso")} style={{background:"none",border:"none",color:"#555",fontSize:11,cursor:"pointer",padding:0}}>Aviso Legal</button></div>{installPrompt&&<button onClick={()=>{installPrompt.prompt();installPrompt.userChoice.then(()=>setInstallPrompt(null));}} style={{background:"none",border:"none",color:"#4DA6FF",fontSize:11,cursor:"pointer",padding:0,marginTop:4}}>📲 Instalar app</button>}
       <div style={{display:"flex",gap:10,alignItems:"center"}}>
         <button onClick={()=>setShowContact(true)} style={{background:"none",border:"none",color:"#FF6500",fontSize:11,fontWeight:700,padding:0}}>✓ Verificar mi evento</button>
